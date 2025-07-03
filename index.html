@@ -1,70 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yahan Pu - Astrophysics</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: auto;
-      padding: 2rem;
-      line-height: 1.6;
-    }
-    h1,h2,h3 { color: #003366; }
-    a { color: #1a0dab; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .project { margin-bottom: 1.5rem; }
-    /* 新增：名字左侧，照片右侧 */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-    }
-    .header img {
-    width: 30%;
-    height: auto;
-    border-radius: 8px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Yahan Pu - Astrophysics</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    line-height: 1.6;
+    background: #f9f9f9;
   }
-  </style>
+  .hero {
+    background: url('banner.jpg') center/cover no-repeat;
+    height: 200px;
+  }
+  .container {
+    display: flex;
+    max-width: 1000px;
+    margin: -50px auto 0 auto;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .left {
+    flex: 1;
+    padding: 2rem;
+    text-align: center;
+    border-right: 1px solid #ddd;
+  }
+  .left img {
+    width: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+  .right {
+    flex: 2;
+    padding: 2rem;
+  }
+  h1,h2 { color: #003366; }
+</style>
 </head>
 <body>
-  <div class="header">
-    <h1>Yahan Pu</h1>
-    <img src="yahanpu.jpg" alt="Yahan Pu Photo">
+
+<div class="hero"></div>
+
+<div class="container">
+  <div class="left">
+    <img src="yahanpu.jpg" alt="Yahan Pu">
+    <h2>Yahan Pu</h2>
+    <p>Applied Physics Undergraduate, USTB</p>
+    <p>Incoming visiting student at UC Berkeley, 2026 fall</p>
+    <p>Email: yahanpu.astro@gmail.com</p>
+    <p><a href="https://github.com/yhpu0401">GitHub</a></p>
   </div>
 
-  <p><strong>Applied Physics Undergraduate, University of Science and Technology Beijing (USTB)
-</strong><br/>
-    Incoming visiting student at UC Berkeley, 2026 fall</p>
+  <div class="right">
+    <h1>About Me</h1>
+    <p>I am passionate about galaxy formation and viscoelastic fluid dynamics...</p>
 
-  <h2>Research Interests</h2>
-  <ul>
-    <li>Galaxy formation</li>
-    <li>Viscoelastic fluid dynamics</li>
-  </ul>
+    <h2>Key statistics of my work</h2>
+    <ul>
+      <li>Research on galaxy mergers (IllustrisTNG)</li>
+      <li>Paper on FENE-P convection under review (PoF)</li>
+      <li>Upcoming submission to RAA</li>
+    </ul>
 
-  <h2>Projects</h2>
-  <div class="project">
-    <h3>Galaxy Merger Analysis in TNG100</h3>
-    <p>Analyzed merger trees and infall mass ratios using IllustrisTNG data. Visualized orbital evolution and identified major/minor mergers.</p>
-    <p><a href="link-to-poster-or-github">Project repo / Poster</a></p>
+    <h2>Publications / Preprints</h2>
+    <ul>
+      <li>Paper on natural convection in PoF (under review)</li>
+      <li>Upcoming paper on galaxy mergers (RAA)</li>
+    </ul>
   </div>
-  <div class="project">
-    <h3>Natural Convection in FENE-P Fluids</h3>
-    <p>Simulated viscoelastic polymer solution convection under differential heating with OpenFOAM. Paper submitted to <em>Physics of Fluids</em>.</p>
-  </div>
+</div>
 
-  <h2>Publications / Preprints</h2>
-  <ul>
-    <li>Paper on natural convection in PoF (under review)</li>
-    <li>Upcoming paper on galaxy mergers (to be submitted to RAA)</li>
-  </ul>
-
-  <h2>Contact</h2>
-  <p>Email: yahanpu.astro@gmail.com<br/>
-     GitHub: <a href="https://github.com/yhpu0401">yhpu0401</a></p>
 </body>
 </html>
