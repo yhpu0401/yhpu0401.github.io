@@ -20,6 +20,7 @@
     margin-top: -60px;
   }
   .name-section h1 {
+    font-size: 3rem;
     background: white;
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -52,11 +53,15 @@
   }
   .left img {
     width: 150px;
-    border-radius: 50%;
+    border-radius: 8px; /* 正方形带轻微圆角 */
     margin-bottom: 1rem;
   }
-  .left h2 {
-    margin-top: 0;
+  .left p strong {
+    font-size: 1.1rem;
+  }
+  .left p span {
+    font-size: 0.9rem;
+    color: #555;
   }
   .middle h2, .right h2 {
     margin-top: 0;
@@ -107,8 +112,8 @@
 <div class="container">
   <div class="left">
     <img src="yahanpu.jpg" alt="Yahan Pu Photo">
-    <h2>Applied Physics Undergraduate</h2>
-    <p>USTB, Beijing</p>
+    <p><strong>University of Science and Technology Beijing</strong><br>
+      <span>Applied Physics Undergraduate</span></p>
     <p>Incoming visiting student at UC Berkeley, 2026 fall</p>
     <hr>
     <p>Email:<br>yahanpu.astro@gmail.com</p>
@@ -146,7 +151,7 @@
     <ul>
       <li><a href="#">About me</a></li>
       <li><a href="#">Blog</a></li>
-      <li><a href="my_cv11.pdf" target="_blank">CV</a></li>
+      <li><a href="my_cv.pdf" target="_blank">CV</a></li>
       <li><a href="#">Design</a></li>
       <li><a href="#">Education</a></li>
       <li><a href="#">Research</a></li>
