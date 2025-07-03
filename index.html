@@ -28,20 +28,27 @@
   }
   .container {
     display: flex;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 2rem auto;
     background: white;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
-  .left, .right {
+  .left, .middle, .right {
     padding: 2rem;
   }
   .left {
     flex: 1;
     border-right: 1px solid #eee;
     text-align: center;
+  }
+  .middle {
+    flex: 2;
+    border-right: 1px solid #eee;
+  }
+  .right {
+    flex: 1;
   }
   .left img {
     width: 150px;
@@ -51,10 +58,7 @@
   .left h2 {
     margin-top: 0;
   }
-  .right {
-    flex: 2;
-  }
-  .right h2 {
+  .middle h2, .right h2 {
     margin-top: 0;
     color: #003366;
   }
@@ -64,14 +68,30 @@
     border-radius: 8px;
     margin-top: 1rem;
   }
-  /* 手机响应式 */
-  @media(max-width: 768px) {
+  .right ul {
+    list-style: none;
+    padding: 0;
+  }
+  .right ul li {
+    margin-bottom: 0.5rem;
+  }
+  .right ul li a {
+    text-decoration: none;
+    color: #1a0dab;
+  }
+  .right ul li a:hover {
+    text-decoration: underline;
+  }
+  @media(max-width: 900px) {
     .container {
       flex-direction: column;
     }
-    .left {
+    .middle {
       border-right: none;
       border-bottom: 1px solid #eee;
+    }
+    .left, .middle, .right {
+      border-right: none;
     }
   }
 </style>
@@ -88,17 +108,17 @@
   <div class="left">
     <img src="yahanpu.jpg" alt="Yahan Pu Photo">
     <h2>Applied Physics Undergraduate</h2>
-    <p>University of Science and Technology Beijing (USTB)</p>
+    <p>USTB, Beijing</p>
     <p>Incoming visiting student at UC Berkeley, 2026 fall</p>
     <hr>
     <p>Email:<br>yahanpu.astro@gmail.com</p>
     <p>GitHub:<br><a href="https://github.com/yhpu0401">yhpu0401</a></p>
   </div>
 
-  <div class="right">
+  <div class="middle">
     <h2>About Me</h2>
     <p>I am passionate about galaxy formation and viscoelastic fluid dynamics. My work includes analyzing galaxy mergers in TNG100 and simulating FENE-P fluid convection using OpenFOAM.</p>
-    
+
     <h2>Key statistics of my work</h2>
     <div class="stats">
       <ul>
@@ -118,6 +138,19 @@
     <ul>
       <li>Galaxy Merger Analysis in TNG100</li>
       <li>Natural Convection in FENE-P Fluids</li>
+    </ul>
+  </div>
+
+  <div class="right">
+    <h2>Pages</h2>
+    <ul>
+      <li><a href="#">About me</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">CV</a></li>
+      <li><a href="#">Design</a></li>
+      <li><a href="#">Education</a></li>
+      <li><a href="#">Research</a></li>
+      <li><a href="#">Publications</a></li>
     </ul>
   </div>
 </div>
