@@ -5,15 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yahan Pu - Astrophysics</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 2rem; line-height: 1.6; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      line-height: 1.6;
+    }
     h1,h2,h3 { color: #003366; }
     a { color: #1a0dab; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .project { margin-bottom: 1.5rem; }
+    /* 新增：名字左侧，照片右侧 */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .header img {
+      max-height: 100px;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
-  <h1>Yahan Pu</h1>
+  <div class="header">
+    <h1>Yahan Pu</h1>
+    <img src="3361751495308_.pic_hd.jpg" alt="Yahan Pu Photo">
+  </div>
+
   <p><strong>Applied Physics Undergraduate, University of Science and Technology Beijing (USTB)
 </strong><br/>
     Incoming visiting student at UC Berkeley, 2026 fall</p>
