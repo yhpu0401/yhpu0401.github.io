@@ -1,76 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Yahan Pu - Astrophysics</title>
 <style>
   body {
     font-family: Arial, sans-serif;
-    margin: 0; padding: 0;
-    line-height: 1.6;
+    margin: 0;
     background: #f9f9f9;
+    color: #333;
   }
   .hero {
     background: url('banner.jpg') center/cover no-repeat;
-    height: 200px;
+    height: 220px;
+  }
+  .name-section {
+    text-align: center;
+    margin-top: -60px;
+  }
+  .name-section h1 {
+    background: white;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
   .container {
     display: flex;
     max-width: 1000px;
-    margin: -50px auto 0 auto;
+    margin: 2rem auto;
     background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .left, .right {
+    padding: 2rem;
   }
   .left {
     flex: 1;
-    padding: 2rem;
+    border-right: 1px solid #eee;
     text-align: center;
-    border-right: 1px solid #ddd;
   }
   .left img {
     width: 150px;
     border-radius: 50%;
     margin-bottom: 1rem;
   }
+  .left h2 {
+    margin-top: 0;
+  }
   .right {
     flex: 2;
-    padding: 2rem;
   }
-  h1,h2 { color: #003366; }
+  .right h2 {
+    margin-top: 0;
+    color: #003366;
+  }
+  .stats {
+    background: #f0f4f8;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+  /* 手机响应式 */
+  @media(max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+    .left {
+      border-right: none;
+      border-bottom: 1px solid #eee;
+    }
+  }
 </style>
 </head>
 <body>
 
 <div class="hero"></div>
 
+<div class="name-section">
+  <h1>Yahan Pu</h1>
+</div>
+
 <div class="container">
   <div class="left">
-    <img src="yahanpu.jpg" alt="Yahan Pu">
-    <h2>Yahan Pu</h2>
-    <p>Applied Physics Undergraduate, USTB</p>
+    <img src="yahanpu.jpg" alt="Yahan Pu Photo">
+    <h2>Applied Physics Undergraduate</h2>
+    <p>University of Science and Technology Beijing (USTB)</p>
     <p>Incoming visiting student at UC Berkeley, 2026 fall</p>
-    <p>Email: yahanpu.astro@gmail.com</p>
-    <p><a href="https://github.com/yhpu0401">GitHub</a></p>
+    <hr>
+    <p>Email:<br>yahanpu.astro@gmail.com</p>
+    <p>GitHub:<br><a href="https://github.com/yhpu0401">yhpu0401</a></p>
   </div>
 
   <div class="right">
-    <h1>About Me</h1>
-    <p>I am passionate about galaxy formation and viscoelastic fluid dynamics...</p>
-
+    <h2>About Me</h2>
+    <p>I am passionate about galaxy formation and viscoelastic fluid dynamics. My work includes analyzing galaxy mergers in TNG100 and simulating FENE-P fluid convection using OpenFOAM.</p>
+    
     <h2>Key statistics of my work</h2>
+    <div class="stats">
+      <ul>
+        <li>Paper on natural convection submitted to Physics of Fluids (under review)</li>
+        <li>Upcoming paper on galaxy mergers to be submitted to RAA</li>
+        <li>Multiple visualization projects on galaxy merger orbits</li>
+      </ul>
+    </div>
+
+    <h2>Research Interests</h2>
     <ul>
-      <li>Research on galaxy mergers (IllustrisTNG)</li>
-      <li>Paper on FENE-P convection under review (PoF)</li>
-      <li>Upcoming submission to RAA</li>
+      <li>Galaxy formation and evolution</li>
+      <li>Viscoelastic fluid dynamics</li>
     </ul>
 
-    <h2>Publications / Preprints</h2>
+    <h2>Projects</h2>
     <ul>
-      <li>Paper on natural convection in PoF (under review)</li>
-      <li>Upcoming paper on galaxy mergers (RAA)</li>
+      <li>Galaxy Merger Analysis in TNG100</li>
+      <li>Natural Convection in FENE-P Fluids</li>
     </ul>
   </div>
 </div>
