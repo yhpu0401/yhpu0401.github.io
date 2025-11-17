@@ -1,164 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Yahan Pu - Astrophysics</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yahan Pu — Astrophysics</title>
+<meta name="description" content="Yahan Pu — computational astrophysics: galaxy mergers, disks & multiplicity; viscoelastic flows." />
+
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f9f9f9;
-    color: #333;
+  :root{
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #475569;
+    --brand: #1e3a8a; /* indigo-900 */
+    --accent: #2563eb; /* blue-600 */
+    --ring: rgba(37,99,235,.25);
+    --border: #e5e7eb;
   }
-  .hero {
-    background: url('banner.jpg') center/cover no-repeat;
-    height: 220px;
-  }
-  .name-section {
-    text-align: center;
-    margin-top: -60px;
-  }
-  .name-section h1 {
-    font-size: 3rem;
-    background: white;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  .container {
-    display: flex;
-    max-width: 1200px;
-    margin: 2rem auto;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  .left, .middle, .right {
-    padding: 2rem;
-  }
-  .left {
-    flex: 1;
-    border-right: 1px solid #eee;
-    text-align: center;
-  }
-  .middle {
-    flex: 2;
-    border-right: 1px solid #eee;
-  }
-  .right {
-    flex: 1;
-  }
-  .left img {
-    width: 150px;
-    border-radius: 8px; /* 正方形带轻微圆角 */
-    margin-bottom: 1rem;
-  }
-  .left p strong {
-    font-size: 1.1rem;
-  }
-  .left p span {
-    font-size: 0.9rem;
-    color: #555;
-  }
-  .middle h2, .right h2 {
-    margin-top: 0;
-    color: #003366;
-  }
-  .stats {
-    background: #f0f4f8;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 1rem;
-  }
-  .right ul {
-    list-style: none;
-    padding: 0;
-  }
-  .right ul li {
-    margin-bottom: 0.5rem;
-  }
-  .right ul li a {
-    text-decoration: none;
-    color: #1a0dab;
-  }
-  .right ul li a:hover {
-    text-decoration: underline;
-  }
-  @media(max-width: 900px) {
-    .container {
-      flex-direction: column;
+  @media (prefers-color-scheme: dark) {
+    :root{
+      --bg:#0b1020;
+      --card:#0f172a;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --brand:#a5b4fc;
+      --accent:#60a5fa;
+      --ring:rgba(96,165,250,.25);
+      --border:#1f2937;
     }
-    .middle {
-      border-right: none;
-      border-bottom: 1px solid #eee;
-    }
-    .left, .middle, .right {
-      border-right: none;
-    }
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+    background:var(--bg); color:var(--text);
+  }
+
+  /* Hero */
+  .hero{
+    min-height:180px;
+    background: radial-gradient(1200px 380px at 50% -120px, var(--accent) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(37,99,235,.10), transparent 60%);
+    display:flex; align-items:flex-end; justify-content:center; padding:32px 16px 12px;
+  }
+  .name{
+    display:inline-flex; gap:.65rem; align-items:center;
+    background:var(--card); color:var(--brand);
+    padding:.55rem 1rem; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.08);
+    font-weight:800; font-size:2rem; letter-spacing:.2px;
+  }
+
+  /* Layout */
+  .wrap{max-width:1200px; margin:-36px auto 64px; padding:0 16px}
+  .grid{
+    display:grid; grid-template-columns: 300px 1fr 280px; gap:18px;
+  }
+  @media (max-width: 980px){
+    .grid{grid-template-columns:1fr; gap:14px}
+  }
+
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.06);
+  }
+
+  /* Left card */
+  .profile{ text-align:center }
+  .avatar{
+    width:150px; height:150px; object-fit:cover; border-radius:14px; display:block; margin:6px auto 12px;
+    border:1px solid var(--border);
+  }
+  .tag{ display:inline-block; padding:.2rem .55rem; border:1px solid var(--border); border-radius:999px; font-size:.85rem; color:var(--muted)}
+  .meta{ margin:.6rem 0; color:var(--muted) }
+  .meta strong{ color:var(--text) }
+
+  .contact{ margin-top:10px; text-align:left; font-size:.96rem }
+  .contact a{ color:var(--accent); text-decoration:none }
+  .contact a:hover{ text-decoration:underline }
+
+  hr.sep{ border:none; border-top:1px dashed var(--border); margin:12px 0 }
+
+  /* Middle column */
+  h2{
+    margin:6px 0 8px; font-size:1.2rem; letter-spacing:.3px; color:var(--brand)
+  }
+  p{ margin:8px 0 }
+  ul{ margin:8px 0 2px 1.1rem }
+  li{ margin:.35rem 0 }
+  .pill{
+    display:inline-block; padding:.2rem .55rem; border-radius:999px; background:rgba(37,99,235,.10); color:var(--accent); font-weight:600; font-size:.8rem; margin-right:.35rem
+  }
+  .statbox{
+    background: linear-gradient(180deg, rgba(37,99,235,.08), transparent);
+    border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin:8px 0 10px;
+  }
+  .links a{ color:var(--accent); text-decoration:none }
+  .links a:hover{ text-decoration:underline }
+
+  /* Right column */
+  .list-plain{ list-style:none; padding:0; margin:0 }
+  .list-plain li{ margin:.55rem 0 }
+  .list-plain a{ color:var(--accent); text-decoration:none }
+  .list-plain a:hover{ text-decoration:underline }
+
+  /* Small nice details */
+  a.button{
+    display:inline-block; border:1px solid var(--border); color:var(--text); background:var(--card);
+    padding:.45rem .7rem; border-radius:10px; text-decoration:none; transition: box-shadow .2s, transform .02s;
+  }
+  a.button:hover{ box-shadow:0 0 0 6px var(--ring) }
+  a.button:active{ transform:translateY(1px) }
+
+  .footer{
+    max-width:1200px; margin:22px auto 54px; padding:0 16px; color:var(--muted); font-size:.9rem;
+    display:flex; justify-content:space-between; gap:10px;
   }
 </style>
 </head>
 <body>
 
-<div class="hero"></div>
-
-<div class="name-section">
-  <h1>Yahan Pu</h1>
-</div>
-
-<div class="container">
-  <div class="left">
-    <img src="yahanpu.jpg" alt="Yahan Pu Photo">
-    <p><strong>University of Science and Technology Beijing</strong><br>
-      <span>Applied Physics Undergraduate</span></p>
-    <p>Incoming visiting student at UC Berkeley, 2026 fall</p>
-    <hr>
-    <p>Email:<br>yahanpu.astro@gmail.com</p>
-    <p>GitHub:<br><a href="https://github.com/yhpu0401">yhpu0401</a></p>
+<header class="hero" role="banner" aria-label="Header">
+  <div class="name" aria-label="Name">
+    <span>Yahan Pu</span><span class="pill">Astrophysics</span>
   </div>
+</header>
 
-  <div class="middle">
-    <h2>About Me</h2>
-    <p>I am passionate about galaxy formation and viscoelastic fluid dynamics. My work includes analyzing galaxy mergers in TNG100 and simulating FENE-P fluid convection using OpenFOAM.</p>
+<main class="wrap" role="main">
+  <section class="grid" aria-label="Main content grid">
+    <!-- LEFT: profile -->
+    <aside class="card profile" aria-label="Profile">
+      <img class="avatar" src="yahanpu.jpg" alt="Photo of Yahan Pu">
+      <div class="meta"><strong>University of Science and Technology Beijing</strong><br/><span>Applied Physics, B.S. (Expected Jun 2026)</span></div>
+      <div class="tag">Visiting Student, UC&nbsp;Berkeley · Fall&nbsp;2025</div>
 
-    <h2>Key statistics of my work</h2>
-    <div class="stats">
+      <hr class="sep" />
+
+      <div class="contact">
+        <p><strong>Email</strong><br><a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a></p>
+        <p><strong>GitHub</strong><br><a href="https://github.com/yhpu0401" target="_blank" rel="noopener">github.com/yhpu0401</a></p>
+        <p><strong>Location</strong><br>Berkeley, CA & Beijing, CN</p>
+      </div>
+
+      <hr class="sep" />
+      <div class="contact">
+        <p><strong>Download</strong><br>
+          <a class="button" href="my_cv.pdf" target="_blank" rel="noopener">CV (PDF)</a>
+          <a class="button" href="Statement_of_purpose.pdf" target="_blank" rel="noopener">SOP</a>
+        </p>
+      </div>
+    </aside>
+
+    <!-- MIDDLE: about / news / research / projects -->
+    <section class="card" aria-label="Content">
+      <h2>About Me</h2>
+      <p>
+        I am a computationally minded astrophysics student working at the interface of
+        <strong>galaxy dynamics</strong> and <strong>small-scale structure formation</strong>.
+        Recently I built a full pipeline on <em>IllustrisTNG</em> to match hydrodynamic and DMO runs
+        and measure how baryons change <em>infall times</em>, <em>orbital shapes</em>, and <em>collision angles</em>
+        of satellite mergers. Earlier, I led a viscoelastic-flow project (FENE-P in OpenFOAM) that became a
+        <strong>first-author paper in Physics of Fluids (2025)</strong>.
+      </p>
+
+      <div class="statbox">
+        <ul>
+          <li>1× first-author paper published: <em>Physics of Fluids</em> (2025)</li>
+          <li>1× co-authored submission in review (PoF, viscoelastic convection with embedded cylinders)</li>
+          <li>Galaxy-merger paper draft targeting <em>Research in Astronomy and Astrophysics</em></li>
+        </ul>
+      </div>
+
+      <h2>News</h2>
       <ul>
-        <li>Paper on natural convection submitted to Physics of Fluids (under review)</li>
-        <li>Upcoming paper on galaxy mergers to be submitted to RAA</li>
-        <li>Multiple visualization projects on galaxy merger orbits</li>
+        <li><strong>Nov 2025</strong> — Berkeley visiting term in full swing; expanding TNG merger-matching to robustly handle near-merger identity swaps and resolution cuts.</li>
+        <li><strong>Oct 2025</strong> — First-author PoF paper online; second PoF manuscript submitted (co-author).</li>
       </ul>
-    </div>
 
-    <h2>Research Interests</h2>
-    <ul>
-      <li>Galaxy formation and evolution</li>
-      <li>Viscoelastic fluid dynamics</li>
-    </ul>
+      <h2>Research Interests</h2>
+      <ul>
+        <li>Galaxy mergers & orbital dynamics (hydro vs. DMO, infall, pericenter, angular-momentum transport)</li>
+        <li>Disks, multiplicity, and the architectures of stellar/planetary systems</li>
+        <li>Numerical methods: verification/validation, diagnostics, uncertainty propagation</li>
+      </ul>
 
-    <h2>Projects</h2>
-    <ul>
-      <li>Galaxy Merger Analysis in TNG100</li>
-      <li>Natural Convection in FENE-P Fluids</li>
-    </ul>
-  </div>
+      <h2>Selected Publications</h2>
+      <ul class="links">
+        <li><strong>Pu, Y.</strong>, Guo, B., Si, X. (2025). <em>Natural convection of dilute polymer solution in a differentially heated square cavity with different thermal boundary conditions</em>. <u>Physics of Fluids</u>. [<a href="Publication.pdf" target="_blank" rel="noopener">pdf</a>]</li>
+        <li>Guo, Y., Guo, B., <strong>Pu, Y.</strong>, Si, X. <em>Numerical investigation of viscoelastic thermal convection in entangled polymer solutions: elliptical cylinder effects within a square enclosure</em>. <span>(under review, PoF)</span></li>
+      </ul>
 
-  <div class="right">
-    <h2>Pages</h2>
-    <ul>
-      <li><a href="#">About me</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="my_cv.pdf" target="_blank">CV</a></li>
-      <li><a href="#">Design</a></li>
-      <li><a href="#">Education</a></li>
-      <li><a href="#">Research</a></li>
-      <li><a href="#">Publications</a></li>
-    </ul>
-  </div>
-</div>
+      <h2>Projects</h2>
+      <ul class="links">
+        <li><strong>TNG Matched-Merger Pipeline</strong> — cross-identifies host–satellite pairs in hydro & DMO runs; computes infall time, pericenter, and collision-angle distributions; robust filters for resolution and near-merger identity issues. [<a href="https://github.com/yhpu0401" target="_blank" rel="noopener">code</a>]</li>
+        <li><strong>FENE-P Natural Convection</strong> — OpenFOAM solvers; mesh/timestep convergence; diagnostics to distinguish numerical artifacts vs. physical instabilities. [<a href="Publication.pdf" target="_blank" rel="noopener">paper</a>]</li>
+      </ul>
+    </section>
 
+    <!-- RIGHT: quick links -->
+    <nav class="card" aria-label="Site navigation">
+      <h2>Pages</h2>
+      <ul class="list-plain">
+        <li><a href="#about">About</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="my_cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="slides.pdf" target="_blank" rel="noopener">Slides</a></li>
+        <li><a href="portfolio.html">Design</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+
+      <hr class="sep" />
+      <h2>Contact</h2>
+      <ul class="list-plain">
+        <li><strong>Email:</strong> <a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a></li>
+        <li><strong>GitHub:</strong> <a href="https://github.com/yhpu0401" target="_blank" rel="noopener">@yhpu0401</a></li>
+      </ul>
+    </nav>
+  </section>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div>© <span id="y">2025</span> Yahan Pu</div>
+  <div>Last updated: Nov 2025 · Built with vanilla HTML/CSS</div>
+</footer>
+
+<script>
+  // keep the year current automatically
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
