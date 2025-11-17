@@ -5,64 +5,245 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yahan Pu | Computational Astrophysics</title>
 <meta name="description" content="Yahan (Hanna) Pu — computational astrophysics: disk–planet/binary interactions, TNG orbits, multi-physics simulations.">
+
 <style>
   :root{
-  --bg:#f9f9f9;  
-  --ink:#333;    
-  --muted:#666;
-}
+    /* 整体浅灰背景 + 深色文字 */
+    --bg:#f3f4f7;
+    --ink:#151824;
+    --muted:#7b8090;
+
+    /* 卡片 & 边框银灰色 */
+    --card:#ffffff;
+    --line:#d6dae5;
+
+    /* 品牌色 / 强调色 */
+    --brand:#3357c8;
+    --accent:#c9a46a;
+    --pill:#f6f7fb;
+  }
+
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
-  a{color:var(--brand);text-decoration:none}
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:var(--bg);
+    color:var(--ink);
+    font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  }
+
+  a{
+    color:var(--brand);
+    text-decoration:none;
+  }
   a:hover{text-decoration:underline}
-  .wrap{max-width:1100px;margin:auto;padding:24px}
+
+  .wrap{
+    max-width:1100px;
+    margin:auto;
+    padding:24px;
+  }
+
+  /* 顶部金属卡片 */
   header{
-  position:relative;border-radius:18px;overflow:hidden;min-height:240px;
-  background:linear-gradient(120deg,#0b2a4d 0%, #0e2240 50%, #1b2d55 100%);
+    position:relative;
+    border-radius:22px;
+    overflow:hidden;
+    min-height:220px;
+    background:linear-gradient(135deg,#ffffff 0%,#f4f5f9 40%,#e4e7f2 100%);
+    border:1px solid rgba(210,214,230,0.9);
+    box-shadow:
+      0 18px 45px rgba(15,23,42,0.12),
+      0 0 0 1px rgba(255,255,255,0.7) inset;
   }
+
   .hero{
-    display:grid;grid-template-columns:160px 1fr;gap:22px;align-items:end;padding:28px;
+    display:grid;
+    grid-template-columns:160px 1fr;
+    gap:22px;
+    align-items:end;
+    padding:24px 28px 24px;
   }
+
   .me{
-    width:160px;height:160px;border-radius:18px;object-fit:cover;border:2px solid var(--line);background:#102038;
+    width:160px;
+    height:160px;
+    border-radius:18px;
+    object-fit:cover;
+    border:1px solid var(--line);
+    background:#f5f6fb;
   }
-  h1{margin:0 0 6px;font-size:34px;letter-spacing:.4px}
-  .tagline{color:var(--muted);margin:0 0 12px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
+
+  h1{
+    margin:0 0 6px;
+    font-size:34px;
+    letter-spacing:.4px;
+  }
+
+  .tagline{
+    color:var(--muted);
+    margin:0 0 12px;
+  }
+
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
   .chip{
-    font-size:13px;padding:6px 10px;border-radius:999px;background:var(--pill);border:1px solid var(--line);color:#cfe4ff;
+    font-size:13px;
+    padding:6px 11px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.9);
+    border:1px solid rgba(204,209,224,0.9);
+    color:#333a52;
+    backdrop-filter:blur(10px);
   }
-  .links{display:flex;gap:14px;margin-top:10px}
+
+  .links{
+    display:flex;
+    gap:14px;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+
   .btn{
-    display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);
-    background:rgba(255,255,255,.03);color:var(--ink);font-weight:600
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 14px;
+    border-radius:11px;
+    border:1px solid rgba(210,215,232,0.95);
+    background:linear-gradient(135deg,#ffffff 0%,#f5f6fb 50%,#e8ebf5 100%);
+    color:#192136;
+    font-weight:600;
+    box-shadow:0 8px 18px rgba(15,23,42,0.08);
   }
-  .btn:hover{background:rgba(255,255,255,.06)}
-  main{margin-top:22px;display:grid;grid-template-columns: 2.1fr 1fr;gap:22px}
+
+  .btn:hover{
+    background:linear-gradient(135deg,#ffffff 0%,#f8f9fd 40%,#edf0fa 100%);
+    text-decoration:none;
+  }
+
+  main{
+    margin-top:22px;
+    display:grid;
+    grid-template-columns: 2.1fr 1fr;
+    gap:22px;
+  }
+
+  /* section 大卡片 */
   section{
-    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px
+    background:var(--card);
+    border-radius:16px;
+    padding:20px;
+    border:1px solid var(--line);
+    box-shadow:0 10px 28px rgba(15,23,42,0.08);
   }
-  h2{margin:0 0 12px;font-size:18px;letter-spacing:.3px}
+
+  h2{
+    margin:0 0 12px;
+    font-size:18px;
+    letter-spacing:.3px;
+  }
+
   .grid{display:grid;gap:14px}
-  .kpi{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
-  .k{background:#0d1c36;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-  .k b{display:block;font-size:18px}
   .list{display:grid;gap:12px}
+
+  /* 内部小卡片：金属渐变 */
   .card{
-    border:1px solid var(--line);border-radius:10px;padding:14px;background:#0d1d3a;
+    border-radius:12px;
+    padding:14px 16px;
+    background:linear-gradient(145deg,#ffffff 0%,#f7f8fc 50%,#eceff7 100%);
+    border:1px solid rgba(215,219,232,0.95);
+    box-shadow:
+      0 8px 18px rgba(15,23,42,0.04),
+      0 0 0 1px rgba(255,255,255,0.7) inset;
   }
-  .card h3{margin:0 0 6px;font-size:16px}
-  .meta{color:var(--muted);font-size:13px}
-  .pillset{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-  .pill{background:#11264a;color:#cfe4ff;border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:12px}
-  ul.tidy{margin:4px 0 0 18px}
-  .two-col{display:grid;gap:12px}
+
+  .card h3{
+    margin:0 0 6px;
+    font-size:16px;
+  }
+
+  .meta{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:6px;
+  }
+
+  .kpi{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+
+  .k{
+    background:linear-gradient(135deg,#ffffff 0%,#f7f8fd 60%,#e9edf7 100%);
+    border:1px solid rgba(215,219,232,0.95);
+    border-radius:10px;
+    padding:10px 12px;
+    box-shadow:
+      0 6px 16px rgba(15,23,42,0.05),
+      0 0 0 1px rgba(255,255,255,0.7) inset;
+    font-size:13px;
+  }
+
+  .k b{
+    display:block;
+    font-size:18px;
+    margin-bottom:2px;
+  }
+
+  .pillset{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+
+  .pill{
+    background:rgba(248,249,253,0.95);
+    color:#353c55;
+    border:1px solid rgba(210,215,230,0.95);
+    border-radius:999px;
+    padding:4px 9px;
+    font-size:12px;
+  }
+
+  ul.tidy{
+    margin:4px 0 0 18px;
+    padding:0;
+  }
+
+  .two-col{
+    display:grid;
+    gap:12px;
+  }
+
   @media (max-width: 920px){
-    .hero{grid-template-columns:1fr;align-items:start}
-    .me{width:120px;height:120px}
-    main{grid-template-columns:1fr}
+    .hero{
+      grid-template-columns:1fr;
+      align-items:start;
+    }
+    .me{
+      width:120px;
+      height:120px;
+    }
+    main{
+      grid-template-columns:1fr;
+    }
   }
-  footer{color:var(--muted);text-align:center;margin:18px 0 8px}
+
+  footer{
+    color:var(--muted);
+    text-align:center;
+    margin:18px 0 8px;
+    font-size:13px;
+  }
 </style>
 </head>
 <body>
@@ -71,7 +252,7 @@
   <!-- HERO -->
   <header>
     <div class="hero">
-      <img class="me" src="yahan.jpg" alt="Portrait of Yahan Pu">
+      <img class="me" src="yahanpu.jpg" alt="Portrait of Yahan Pu">
       <div>
         <h1>Yahan (Hanna) Pu</h1>
         <p class="tagline">Computational astrophysics — disks, orbits, and data-facing simulations.</p>
@@ -146,7 +327,7 @@
           <h3>Viscoelastic convection (FENE-P)</h3>
           <p class="meta">Advisor: Prof. Xinhui Si (USTB) • Physics of Fluids</p>
           <p>
-            Implemented/validated OpenFOAM solvers for coupled Navier–Stokes & polymer stress; mapped how elasticity
+            Implemented/validated OpenFOAM solvers for coupled Navier–Stokes &amp; polymer stress; mapped how elasticity
             reshapes boundary layers and heat transport; emphasized <b>convergence, diagnostics, and artifact rejection</b>.
           </p>
           <div class="pillset">
@@ -157,7 +338,7 @@
     </section>
 
     <section>
-      <h2>Publications & Drafts</h2>
+      <h2>Publications &amp; Drafts</h2>
       <div class="list">
         <div class="card">
           <h3>Natural convection of dilute polymer solution…</h3>
@@ -168,7 +349,7 @@
           </ul>
         </div>
         <div class="card">
-          <h3>Hydro vs. DMO orbits & collision angles in TNG</h3>
+          <h3>Hydro vs. DMO orbits &amp; collision angles in TNG</h3>
           <p class="meta">First-author draft — targeting RAA</p>
           <ul class="tidy">
             <li><a href="#" target="_blank">manuscript (draft)</a></li>
@@ -183,12 +364,12 @@
       <h2>Skills</h2>
       <div class="grid">
         <div class="card">
-          <h3>Languages & Tools</h3>
+          <h3>Languages &amp; Tools</h3>
           <p>Python, C/C++, MATLAB, Linux, LaTeX</p>
           <p class="meta">IllustrisTNG, OpenFOAM, radiative transfer tools</p>
         </div>
         <div class="card">
-          <h3>Data & Inference</h3>
+          <h3>Data &amp; Inference</h3>
           <p>Survey handling (flags/selection), orbit statistics, model–data comparison</p>
         </div>
         <div class="card">
@@ -203,12 +384,12 @@
     </section>
 
     <section>
-      <h2>Advising & Collaboration Fit</h2>
+      <h2>Advising &amp; Collaboration Fit</h2>
       <div class="two-col">
         <div class="card">
           <h3>Berkeley faculty of interest</h3>
           <ul class="tidy">
-            <li>Eugene Chiang — disk structure & planet formation</li>
+            <li>Eugene Chiang — disk structure &amp; planet formation</li>
             <li>Courtney Dressing — exoplanet demographics</li>
             <li>Dan Weisz — resolved stellar populations</li>
             <li>Daniel Kasen — radiation-hydrodynamics</li>
@@ -226,9 +407,11 @@
 
     <section>
       <h2>Contact</h2>
-      <p><b>Email:</b> <a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a><br>
-         <b>GitHub:</b> <a href="https://github.com/yhpu0401" target="_blank" rel="noopener">yhpu0401</a><br>
-         <b>Location:</b> Berkeley, CA & Beijing, China</p>
+      <p>
+        <b>Email:</b> <a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a><br>
+        <b>GitHub:</b> <a href="https://github.com/yhpu0401" target="_blank" rel="noopener">yhpu0401</a><br>
+        <b>Location:</b> Berkeley, CA &amp; Beijing, China
+      </p>
     </section>
   </main>
 
@@ -236,5 +419,6 @@
     © Yahan Pu · Last updated 2025
   </footer>
 </div>
+
 </body>
 </html>
