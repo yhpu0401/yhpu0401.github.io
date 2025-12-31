@@ -204,6 +204,27 @@
     text-align:right;
     white-space:nowrap;
   }
+  /* Contact section: left "More about me" card + right Contact card */
+.contact-grid{
+  display:grid;
+  grid-template-columns: 1fr 1.5fr; /* 左小右大 */
+  gap:12px;
+  align-items:stretch;
+}
+
+/* Make the button look nice in the small card */
+.more-card .btn{
+  margin-top:8px;
+  width:fit-content;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 920px){
+  .contact-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 
   @media (max-width: 920px){
     .hero{ grid-template-columns:1fr; align-items:start; }
