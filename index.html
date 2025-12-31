@@ -202,23 +202,10 @@
     white-space:nowrap;
   }
 
-  /* Contact: More about me card + Contact card side-by-side */
-  .contact-grid{
-    display:grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap:12px;
-    align-items:stretch;
-  }
-  .more-card .btn{
-    margin-top:8px;
-    width:fit-content;
-  }
-
   @media (max-width: 920px){
     .hero{ grid-template-columns:1fr; align-items:start; }
     .me{ width:120px; height:120px; }
     main{ grid-template-columns:1fr; }
-    .contact-grid{ grid-template-columns:1fr; }
   }
 
   footer{
@@ -357,6 +344,16 @@
     <section>
       <h2>Skills</h2>
       <div class="grid">
+
+        <!-- NEW: More about me goes here (fills right-column space) -->
+        <div class="card">
+          <h3>More about me</h3>
+          <p class="meta">Notes &amp; extras</p>
+          <a class="btn" href="https://yhpu0401.github.io/more/" target="_blank" rel="noopener">
+            Visit →
+          </a>
+        </div>
+
         <div class="card">
           <h3>Languages &amp; Tools</h3>
           <p>Python, C/C++, MATLAB, Linux, LaTeX</p>
@@ -379,28 +376,13 @@
       </div>
     </section>
 
-    <!-- Contact + More about me (left card) -->
     <section>
       <h2>Contact</h2>
-
-      <div class="contact-grid">
-        <div class="card more-card">
-          <h3>More about me</h3>
-          <p class="meta">Notes &amp; extras</p>
-          <a class="btn" href="https://yhpu0401.github.io/more/" target="_blank" rel="noopener">
-            Visit →
-          </a>
-        </div>
-
-        <div class="card">
-          <h3>Get in touch</h3>
-          <p>
-            <b>Email:</b> <a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a><br>
-            <b>GitHub:</b> <a href="https://github.com/yhpu0401" target="_blank" rel="noopener">yhpu0401</a><br>
-            <b>Location:</b> Berkeley, CA &amp; Beijing, China
-          </p>
-        </div>
-      </div>
+      <p>
+        <b>Email:</b> <a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a><br>
+        <b>GitHub:</b> <a href="https://github.com/yhpu0401" target="_blank" rel="noopener">yhpu0401</a><br>
+        <b>Location:</b> Berkeley, CA &amp; Beijing, China
+      </p>
     </section>
   </main>
 
