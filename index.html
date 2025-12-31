@@ -186,6 +186,7 @@
     padding:0;
   }
 
+  /* Berkeley grades layout (two-column) */
   .grade-table{
     display:grid;
     grid-template-columns: 1fr auto;
@@ -193,43 +194,31 @@
     align-items:center;
     margin-top:6px;
   }
-  .grade-row{
-    display:contents;
-  }
-  .grade-course{
-    color:#1c2233;
-  }
+  .grade-row{ display:contents; }
+  .grade-course{ color:#1c2233; }
   .grade-grade{
     font-weight:700;
     text-align:right;
     white-space:nowrap;
   }
-  /* Contact section: left "More about me" card + right Contact card */
-.contact-grid{
-  display:grid;
-  grid-template-columns: 1fr 1.5fr; /* 左小右大 */
-  gap:12px;
-  align-items:stretch;
-}
 
-/* Make the button look nice in the small card */
-.more-card .btn{
-  margin-top:8px;
-  width:fit-content;
-}
-
-/* Mobile: stack vertically */
-@media (max-width: 920px){
+  /* Contact: More about me card + Contact card side-by-side */
   .contact-grid{
-    grid-template-columns:1fr;
+    display:grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap:12px;
+    align-items:stretch;
   }
-}
-
+  .more-card .btn{
+    margin-top:8px;
+    width:fit-content;
+  }
 
   @media (max-width: 920px){
     .hero{ grid-template-columns:1fr; align-items:start; }
     .me{ width:120px; height:120px; }
     main{ grid-template-columns:1fr; }
+    .contact-grid{ grid-template-columns:1fr; }
   }
 
   footer{
@@ -390,13 +379,28 @@
       </div>
     </section>
 
+    <!-- Contact + More about me (left card) -->
     <section>
       <h2>Contact</h2>
-      <p>
-        <b>Email:</b> <a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a><br>
-        <b>GitHub:</b> <a href="https://github.com/yhpu0401" target="_blank" rel="noopener">yhpu0401</a><br>
-        <b>Location:</b> Berkeley, CA &amp; Beijing, China
-      </p>
+
+      <div class="contact-grid">
+        <div class="card more-card">
+          <h3>More about me</h3>
+          <p class="meta">Notes &amp; extras</p>
+          <a class="btn" href="https://yhpu0401.github.io/more/" target="_blank" rel="noopener">
+            Visit →
+          </a>
+        </div>
+
+        <div class="card">
+          <h3>Get in touch</h3>
+          <p>
+            <b>Email:</b> <a href="mailto:yahanpu.astro@gmail.com">yahanpu.astro@gmail.com</a><br>
+            <b>GitHub:</b> <a href="https://github.com/yhpu0401" target="_blank" rel="noopener">yhpu0401</a><br>
+            <b>Location:</b> Berkeley, CA &amp; Beijing, China
+          </p>
+        </div>
+      </div>
     </section>
   </main>
 
