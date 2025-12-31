@@ -39,6 +39,7 @@
     padding:24px;
   }
 
+  /* 顶部金属卡片 */
   header{
     position:relative;
     border-radius:22px;
@@ -127,6 +128,7 @@
     gap:22px;
   }
 
+  /* section 大卡片 */
   section{
     background:var(--card);
     border-radius:16px;
@@ -144,6 +146,7 @@
   .grid{display:grid;gap:14px}
   .list{display:grid;gap:12px}
 
+  /* 内部小卡片：金属渐变 */
   .card{
     border-radius:12px;
     padding:14px 16px;
@@ -184,6 +187,26 @@
   ul.tidy{
     margin:4px 0 0 18px;
     padding:0;
+  }
+
+  /* Berkeley grades layout (two-column) */
+  .grade-table{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap:10px 14px;
+    align-items:center;
+    margin-top:6px;
+  }
+  .grade-row{
+    display:contents;
+  }
+  .grade-course{
+    color:#1c2233;
+  }
+  .grade-grade{
+    font-weight:700;
+    text-align:right;
+    white-space:nowrap;
   }
 
   @media (max-width: 920px){
@@ -228,7 +251,7 @@
   <main>
     <!-- LEFT COLUMN -->
 
-    <!-- Publications moved to the top (replaces About) -->
+    <!-- Publications moved to top (replaces About) -->
     <section>
       <h2>Publications &amp; Drafts</h2>
       <div class="list">
@@ -298,29 +321,30 @@
       </div>
     </section>
 
-    <!-- Original Publications spot replaced with Berkeley courses + grades -->
+    <!-- Original Publications spot replaced with Berkeley courses + grades (single card, no SOCIOL 198) -->
     <section>
       <h2>UC Berkeley Coursework &amp; Grades (Fall 2025)</h2>
       <div class="list">
         <div class="card">
-          <h3>Courses</h3>
+          <h3>Courses &amp; Final Grades</h3>
           <p class="meta">UCB Extension Concurrent Enrollment</p>
-          <ul class="tidy">
-            <li>ASTRON 128 — Astronomy Data Science Laboratory (4.0)</li>
-            <li>ASTRON 160 — Stellar Physics (4.0)</li>
-            <li>ASTRON C162 — Planetary Astrophysics (4.0)</li>
-            <li>SOCIOL 198 — Directed Group Study for Undergraduates (1.0)</li>
-          </ul>
-        </div>
 
-        <div class="card">
-          <h3>Final Grades</h3>
-          <ul class="tidy">
-            <li>ASTRON 128 — <b>A+</b></li>
-            <li>ASTRON 160 — <b>A</b></li>
-            <li>ASTRON C162 — <b>A</b></li>
-            <li>SOCIOL 198 — <b>P</b></li>
-          </ul>
+          <div class="grade-table">
+            <div class="grade-row">
+              <div class="grade-course">Astronomy Data Science Laboratory <span class="meta">(ASTRON 128)</span></div>
+              <div class="grade-grade">A+</div>
+            </div>
+
+            <div class="grade-row">
+              <div class="grade-course">Stellar Physics <span class="meta">(ASTRON 160)</span></div>
+              <div class="grade-grade">A</div>
+            </div>
+
+            <div class="grade-row">
+              <div class="grade-course">Planetary Astrophysics <span class="meta">(ASTRON C162)</span></div>
+              <div class="grade-grade">A</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
