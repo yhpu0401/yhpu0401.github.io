@@ -1,130 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>My Hobbies</title>
 
 <style>
   :root{
     --bg:#f3f4f7;
-    --ink:#151824;
-    --muted:#7b8090;
-
     --card:#ffffff;
-    --line:#d6dae5;
-
-    --brand:#3357c8;
+    --line:#d9dde7;
+    --text:#171a24;
+    --muted:#747b8c;
+    --blue:#3559c7;
   }
 
   *{
     box-sizing:border-box;
   }
 
-  html,body{
+  body{
     margin:0;
-    padding:0;
     background:var(--bg);
-    color:var(--ink);
-    font:16px/1.7 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:var(--text);
+    line-height:1.7;
   }
 
-  .wrap{
-    max-width:1100px;
+  .container{
+    max-width:980px;
     margin:auto;
-    padding:24px;
+    padding:28px;
   }
 
-  header{
-    position:relative;
-    border-radius:22px;
-    overflow:hidden;
-    min-height:240px;
-    background:linear-gradient(135deg,#ffffff 0%,#f4f5f9 40%,#e4e7f2 100%);
-    border:1px solid rgba(210,214,230,0.9);
-    box-shadow:
-      0 18px 45px rgba(15,23,42,0.12),
-      0 0 0 1px rgba(255,255,255,0.7) inset;
-  }
-
+  /* Header */
   .hero{
-    padding:40px 40px 32px;
+    background:linear-gradient(135deg,#ffffff 0%,#f4f5f9 45%,#e9edf7 100%);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:42px;
+    box-shadow:
+      0 14px 35px rgba(15,23,42,0.08),
+      0 0 0 1px rgba(255,255,255,0.7) inset;
   }
 
   h1{
     margin:0 0 10px;
     font-size:42px;
+    font-weight:700;
     letter-spacing:.3px;
   }
 
-  .tagline{
+  .intro{
+    margin:0;
+    max-width:650px;
     color:var(--muted);
-    font-size:18px;
-    max-width:700px;
+    font-size:17px;
   }
 
-  main{
+  /* Layout */
+  .content{
     margin-top:24px;
     display:grid;
     gap:22px;
   }
 
-  section{
-    background:var(--card);
-    border-radius:18px;
-    padding:24px;
-    border:1px solid var(--line);
-    box-shadow:0 10px 28px rgba(15,23,42,0.08);
-  }
-
-  h2{
-    margin:0 0 18px;
-    font-size:24px;
-    color:#1c2233;
-  }
-
+  /* Cards */
   .card{
-    border-radius:16px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
     overflow:hidden;
-    background:linear-gradient(145deg,#ffffff 0%,#f7f8fc 50%,#eceff7 100%);
-    border:1px solid rgba(215,219,232,0.95);
-    box-shadow:
-      0 8px 18px rgba(15,23,42,0.04),
-      0 0 0 1px rgba(255,255,255,0.7) inset;
-    margin-bottom:20px;
+    box-shadow:0 10px 28px rgba(15,23,42,0.06);
   }
 
   .card img{
     width:100%;
     display:block;
-    object-fit:cover;
     max-height:420px;
+    object-fit:cover;
   }
 
-  .card-content{
-    padding:22px;
+  .card-body{
+    padding:24px;
   }
 
-  .card h3{
+  h2{
     margin:0 0 10px;
-    font-size:24px;
-    color:var(--brand);
+    font-size:26px;
+    color:var(--blue);
   }
 
-  .card p{
+  p{
     margin:0;
-    color:#2f3548;
-    font-size:17px;
+    color:#2f3547;
+    font-size:16px;
   }
 
   footer{
-    color:var(--muted);
     text-align:center;
-    margin:20px 0 10px;
+    color:var(--muted);
     font-size:13px;
+    margin:24px 0 8px;
   }
 
-  @media (max-width: 768px){
+  @media (max-width:768px){
 
     .hero{
       padding:30px 24px;
@@ -134,7 +115,11 @@
       font-size:34px;
     }
 
-    .card h3{
+    .card-body{
+      padding:20px;
+    }
+
+    h2{
       font-size:22px;
     }
   }
@@ -143,96 +128,92 @@
 
 <body>
 
-<div class="wrap">
+<div class="container">
 
-  <header>
-    <div class="hero">
-      <h1>My Hobbies</h1>
+  <!-- Header -->
+  <div class="hero">
 
-      <p class="tagline">
-        Sports and art are an important part of my life.
-        They help me stay creative, focused, and motivated.
-      </p>
-    </div>
-  </header>
+    <h1>My Hobbies</h1>
 
-  <main>
+    <p class="intro">
+      Outside of academics and research, I enjoy activities that combine
+      creativity, movement, focus, and self-expression.
+    </p>
+
+  </div>
+
+  <!-- Content -->
+  <div class="content">
 
     <!-- Figure Skating -->
-    <section>
-      <h2>Figure Skating</h2>
+    <div class="card">
 
-      <div class="card">
-        <img src="figure_skating.jpg" alt="Figure Skating">
+      <img src="figure_skating.jpg" alt="Figure Skating">
 
-        <div class="card-content">
-          <h3>On the Ice</h3>
+      <div class="card-body">
 
-          <p>
-            Figure skating is one of my favorite hobbies.
-            I enjoy the combination of athleticism and artistic expression,
-            as well as the feeling of speed and freedom on the ice.
-            Skating challenges both physical control and creativity,
-            making it a sport that I deeply enjoy.
-          </p>
-        </div>
+        <h2>Figure Skating</h2>
+
+        <p>
+          Figure skating is one of my favorite hobbies.
+          I love the feeling of speed and freedom on the ice,
+          as well as the combination of athleticism and artistic expression.
+          Skating allows me to challenge myself while enjoying music and movement.
+        </p>
+
       </div>
-    </section>
+    </div>
 
     <!-- Tennis -->
-    <section>
-      <h2>Tennis</h2>
+    <div class="card">
 
-      <div class="card">
-        <div class="card-content">
-          <h3>Energy and Focus</h3>
+      <div class="card-body">
 
-          <p>
-            Tennis helps me stay active and focused.
-            I enjoy the fast pace of the game,
-            the strategy behind each point,
-            and the constant challenge of improving technique and endurance.
-          </p>
-        </div>
+        <h2>Tennis</h2>
+
+        <p>
+          Tennis helps me stay active and focused.
+          I enjoy the fast pace of the game,
+          the strategy behind every match,
+          and the process of continuously improving my technique and endurance.
+        </p>
+
       </div>
-    </section>
+    </div>
 
     <!-- Swimming -->
-    <section>
-      <h2>Swimming</h2>
+    <div class="card">
 
-      <div class="card">
-        <div class="card-content">
-          <h3>Calm and Strength</h3>
+      <div class="card-body">
 
-          <p>
-            Swimming is both relaxing and refreshing for me.
-            It allows me to clear my mind while building stamina and physical strength.
-            I especially enjoy the peaceful atmosphere in the water.
-          </p>
-        </div>
+        <h2>Swimming</h2>
+
+        <p>
+          Swimming is both relaxing and refreshing for me.
+          It allows me to clear my mind while improving physical strength and stamina.
+          I especially enjoy the calm feeling of being in the water.
+        </p>
+
       </div>
-    </section>
+    </div>
 
     <!-- Painting -->
-    <section>
-      <h2>Painting</h2>
+    <div class="card">
 
-      <div class="card">
-        <div class="card-content">
-          <h3>Creativity and Expression</h3>
+      <div class="card-body">
 
-          <p>
-            Painting gives me a way to express creativity and emotions.
-            I enjoy experimenting with colors, composition,
-            and different artistic styles.
-            It is one of the hobbies that helps me relax the most.
-          </p>
-        </div>
+        <h2>Painting</h2>
+
+        <p>
+          Painting gives me a way to express creativity and emotions.
+          I enjoy experimenting with colors and different artistic styles,
+          and it helps me relax outside of daily academic work.
+        </p>
+
       </div>
-    </section>
+    </div>
 
-  </main>
+  </div>
 
   <footer>
     © 2026 Personal Hobby Page
