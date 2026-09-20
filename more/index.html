@@ -12,18 +12,27 @@
   --bg:#f5f5f3;
   --text:#111111;
   --muted:#777777;
+  --line:#ddddda;
 }
 
 *{
   box-sizing:border-box;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
+
   font-family:
     Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     system-ui,
     sans-serif;
 }
@@ -34,6 +43,11 @@ body{
   padding:80px 28px;
 }
 
+
+/* =====================
+   HEADER
+===================== */
+
 header{
   margin-bottom:100px;
 }
@@ -41,7 +55,9 @@ header{
 h1{
   font-size:64px;
   line-height:1;
+
   margin:0 0 18px;
+
   font-weight:600;
   letter-spacing:-2px;
 }
@@ -49,18 +65,28 @@ h1{
 .intro{
   font-size:18px;
   color:var(--muted);
-  max-width:520px;
+
+  max-width:540px;
+
   line-height:1.8;
 }
 
+
+/* =====================
+   SECTIONS
+===================== */
+
 .photo-section{
-  margin-bottom:120px;
+  margin-bottom:110px;
 }
 
 .photo-section img{
   width:100%;
+
   border-radius:20px;
+
   display:block;
+
   margin-bottom:28px;
 }
 
@@ -70,31 +96,66 @@ h1{
 
 h2{
   font-size:28px;
+
   margin:0 0 12px;
+
   font-weight:600;
+
   letter-spacing:-0.5px;
 }
 
 p{
   margin:0;
+
   color:var(--muted);
+
   font-size:17px;
+
   line-height:1.9;
 }
 
 
-/* Piano Section */
+/* =====================
+   CURRENT LEVEL
+===================== */
 
-.piano-card{
+.level{
+  display:inline-block;
+
+  margin-top:15px;
+
+  padding:6px 10px;
+
+  border:1px solid var(--line);
+  border-radius:999px;
+
+  background:#ffffff;
+
+  color:#666;
+
+  font-size:12px;
+}
+
+
+/* =====================
+   LEARNING PLAN CARD
+===================== */
+
+.plan-section{
+  margin-top:20px;
+  margin-bottom:120px;
+}
+
+.plan-card{
   display:block;
+
   text-decoration:none;
   color:inherit;
 
-  border:1px solid #ddddda;
-  border-radius:22px;
+  border:1px solid var(--line);
+  border-radius:24px;
 
-  padding:36px;
-  margin-top:28px;
+  padding:38px;
 
   background:#ffffff;
 
@@ -104,40 +165,120 @@ p{
     box-shadow 0.2s ease;
 }
 
-.piano-card:hover{
+.plan-card:hover{
   transform:translateY(-4px);
+
   border-color:#bbbbbb;
-  box-shadow:0 12px 35px rgba(0,0,0,0.06);
+
+  box-shadow:
+    0 14px 40px
+    rgba(0,0,0,0.06);
 }
 
-.piano-title{
-  font-size:26px;
-  font-weight:600;
-  margin-bottom:12px;
-}
+.plan-eyebrow{
+  margin-bottom:10px;
 
-.piano-description{
-  font-size:16px;
-  line-height:1.8;
-  color:var(--muted);
-}
-
-.piano-link{
-  display:inline-block;
-  margin-top:24px;
-
-  font-size:15px;
-  font-weight:500;
-
-  color:#111;
-}
-
-
-footer{
-  padding-top:40px;
   color:#999;
+
+  font-size:11px;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+}
+
+.plan-title{
+  font-size:28px;
+
+  font-weight:600;
+
+  margin-bottom:14px;
+
+  letter-spacing:-0.4px;
+}
+
+.plan-description{
+  max-width:590px;
+
+  color:var(--muted);
+
+  font-size:16px;
+
+  line-height:1.8;
+}
+
+
+/* Activities inside card */
+
+.activities{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap:10px;
+
+  margin-top:25px;
+}
+
+.activity{
+  padding:13px 14px;
+
+  border-radius:12px;
+
+  background:#f5f5f2;
+
+  font-size:13px;
+
+  line-height:1.5;
+}
+
+.activity strong{
+  display:block;
+
+  margin-bottom:2px;
+
+  color:#222;
+
   font-size:14px;
 }
+
+.activity span{
+  color:#777;
+}
+
+
+/* Link */
+
+.plan-link{
+  display:inline-block;
+
+  margin-top:28px;
+
+  color:#111;
+
+  font-size:15px;
+
+  font-weight:500;
+}
+
+
+/* =====================
+   FOOTER
+===================== */
+
+footer{
+  padding-top:20px;
+
+  color:#999;
+
+  font-size:14px;
+}
+
+
+/* =====================
+   MOBILE
+===================== */
 
 @media(max-width:768px){
 
@@ -149,8 +290,12 @@ footer{
     padding:50px 22px;
   }
 
-  .piano-card{
+  .plan-card{
     padding:28px;
+  }
+
+  .activities{
+    grid-template-columns:1fr;
   }
 
 }
@@ -158,9 +303,15 @@ footer{
 </style>
 </head>
 
+
 <body>
 
 <div class="container">
+
+
+  <!-- =====================
+       HEADER
+  ====================== -->
 
   <header>
 
@@ -170,82 +321,127 @@ footer{
 
     <p class="intro">
       Outside of research and academics,
-      I enjoy activities that combine movement,
-      creativity, and self-expression.
+      I enjoy learning new skills through movement,
+      music, creativity, and consistent practice.
     </p>
 
   </header>
 
 
-  <!-- Figure Skating -->
+
+  <!-- =====================
+       FIGURE SKATING
+  ====================== -->
 
   <section class="photo-section">
 
-    <img src="figure_skating.jpg" alt="Figure Skating">
+    <img
+      src="figure_skating.jpg"
+      alt="Figure Skating"
+    >
 
     <div class="text">
 
-      <h2>Figure Skating</h2>
+      <h2>
+        Figure Skating
+      </h2>
 
       <p>
-        Figure skating is one of my favorite hobbies.
-        I love the combination of athleticism,
-        music, and artistic expression.
+        Figure skating is one of my favorite sports.
+        I enjoy the combination of balance,
+        movement, music, and technical precision.
+        I am currently working on one-foot slaloms,
+        backward crossovers, edge control,
+        and gradually progressing toward turns
+        and more advanced footwork.
       </p>
+
+      <div class="level">
+        Current focus · One-foot slaloms & backward crossovers
+      </div>
 
     </div>
 
   </section>
 
 
-  <!-- Tennis -->
+
+  <!-- =====================
+       TENNIS
+  ====================== -->
 
   <section class="photo-section">
 
     <div class="text">
 
-      <h2>Tennis</h2>
+      <h2>
+        Tennis
+      </h2>
 
       <p>
-        Tennis helps me stay focused and active.
-        I enjoy the rhythm, strategy,
-        and energy of the game.
+        I recently started learning tennis.
+        I am currently building the fundamentals
+        of my forehand and backhand,
+        while gradually developing footwork,
+        consistency, and rally control.
       </p>
+
+      <div class="level">
+        Current focus · Forehand & backhand fundamentals
+      </div>
 
     </div>
 
   </section>
 
 
-  <!-- Swimming -->
+
+  <!-- =====================
+       SWIMMING
+  ====================== -->
 
   <section class="photo-section">
 
     <div class="text">
 
-      <h2>Swimming</h2>
+      <h2>
+        Swimming
+      </h2>
 
       <p>
         Swimming gives me a sense of calm and balance.
-        It is one of the most relaxing activities for me.
+        I am comfortable with breaststroke
+        and am currently learning freestyle,
+        focusing on body position,
+        breathing, kicking, and stroke coordination.
       </p>
+
+      <div class="level">
+        Current focus · Freestyle technique
+      </div>
 
     </div>
 
   </section>
 
 
-  <!-- Painting -->
+
+  <!-- =====================
+       PAINTING
+  ====================== -->
 
   <section class="photo-section">
 
     <div class="text">
 
-      <h2>Painting</h2>
+      <h2>
+        Painting
+      </h2>
 
       <p>
-        Painting allows me to express creativity
-        outside of science and research.
+        Painting gives me a different way
+        to explore creativity outside of
+        science, research, and physical training.
       </p>
 
     </div>
@@ -253,46 +449,162 @@ footer{
   </section>
 
 
-  <!-- Piano -->
+
+  <!-- =====================
+       PIANO
+  ====================== -->
 
   <section class="photo-section">
 
     <div class="text">
 
-      <h2>Piano</h2>
+      <h2>
+        Piano
+      </h2>
 
       <p>
         I am learning classical piano through
-        sight-reading, music theory, technical exercises,
-        and classical repertoire.
+        sight-reading, music theory,
+        technical exercises, and classical repertoire.
+
+        My long-term goal is to build
+        a systematic classical foundation
+        rather than learning pieces only through memorization.
       </p>
+
+      <div class="level">
+        Current focus · Sight-reading & classical foundations
+      </div>
 
     </div>
 
-    <a class="piano-card" href="./piano/">
+  </section>
 
-      <div class="piano-title">
-        Piano Study Plan 🎹
+
+
+  <!-- =====================
+       COMPLETE LEARNING PLAN
+  ====================== -->
+
+  <section class="plan-section">
+
+    <a
+      class="plan-card"
+      href="./study_plan/"
+    >
+
+      <div class="plan-eyebrow">
+        Personal Learning System
       </div>
 
-      <div class="piano-description">
-        My structured piano learning plan, including
-        music theory, sight-reading, scales, chords,
-        Czerny, Hanon, Bach, and an 8-week daily practice schedule.
+
+      <div class="plan-title">
+        Learning & Training Plan
       </div>
 
-      <div class="piano-link">
-        Open Piano Study Plan →
+
+      <div class="plan-description">
+
+        My structured 8-week learning system
+        for piano and sports.
+
+        The plan includes daily practice,
+        skill progression, training schedules,
+        learning resources,
+        progress tracking,
+        and automatic rescheduling
+        when a session is missed.
+
       </div>
+
+
+
+      <div class="activities">
+
+
+        <div class="activity">
+
+          <strong>
+            🎹 Piano
+          </strong>
+
+          <span>
+            Sight-reading · theory · scales ·
+            Hanon · Czerny · classical repertoire
+          </span>
+
+        </div>
+
+
+        <div class="activity">
+
+          <strong>
+            ⛸ Figure Skating
+          </strong>
+
+          <span>
+            Slaloms · backward crossovers ·
+            edges · turns · spin preparation
+          </span>
+
+        </div>
+
+
+        <div class="activity">
+
+          <strong>
+            🏊 Swimming
+          </strong>
+
+          <span>
+            Freestyle breathing · kicking ·
+            stroke technique · 25–50 m progression
+          </span>
+
+        </div>
+
+
+        <div class="activity">
+
+          <strong>
+            🎾 Tennis
+          </strong>
+
+          <span>
+            Forehand · backhand · footwork ·
+            rallies · serve fundamentals
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="plan-link">
+
+        Open Learning & Training Plan →
+
+      </div>
+
 
     </a>
 
   </section>
 
 
+
+  <!-- =====================
+       FOOTER
+  ====================== -->
+
   <footer>
+
     © 2026 Yahan Pu
+
   </footer>
+
 
 </div>
 
