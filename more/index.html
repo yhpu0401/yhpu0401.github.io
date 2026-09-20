@@ -82,6 +82,57 @@ p{
   line-height:1.9;
 }
 
+
+/* Piano Section */
+
+.piano-card{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+
+  border:1px solid #ddddda;
+  border-radius:22px;
+
+  padding:36px;
+  margin-top:28px;
+
+  background:#ffffff;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.piano-card:hover{
+  transform:translateY(-4px);
+  border-color:#bbbbbb;
+  box-shadow:0 12px 35px rgba(0,0,0,0.06);
+}
+
+.piano-title{
+  font-size:26px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.piano-description{
+  font-size:16px;
+  line-height:1.8;
+  color:var(--muted);
+}
+
+.piano-link{
+  display:inline-block;
+  margin-top:24px;
+
+  font-size:15px;
+  font-weight:500;
+
+  color:#111;
+}
+
+
 footer{
   padding-top:40px;
   color:#999;
@@ -98,7 +149,12 @@ footer{
     padding:50px 22px;
   }
 
+  .piano-card{
+    padding:28px;
+  }
+
 }
+
 </style>
 </head>
 
@@ -120,6 +176,7 @@ footer{
 
   </header>
 
+
   <!-- Figure Skating -->
 
   <section class="photo-section">
@@ -140,6 +197,7 @@ footer{
 
   </section>
 
+
   <!-- Tennis -->
 
   <section class="photo-section">
@@ -158,6 +216,7 @@ footer{
 
   </section>
 
+
   <!-- Swimming -->
 
   <section class="photo-section">
@@ -175,6 +234,7 @@ footer{
 
   </section>
 
+
   <!-- Painting -->
 
   <section class="photo-section">
@@ -191,6 +251,44 @@ footer{
     </div>
 
   </section>
+
+
+  <!-- Piano -->
+
+  <section class="photo-section">
+
+    <div class="text">
+
+      <h2>Piano</h2>
+
+      <p>
+        I am learning classical piano through
+        sight-reading, music theory, technical exercises,
+        and classical repertoire.
+      </p>
+
+    </div>
+
+    <a class="piano-card" href="./piano/">
+
+      <div class="piano-title">
+        Piano Study Plan 🎹
+      </div>
+
+      <div class="piano-description">
+        My structured piano learning plan, including
+        music theory, sight-reading, scales, chords,
+        Czerny, Hanon, Bach, and an 8-week daily practice schedule.
+      </div>
+
+      <div class="piano-link">
+        Open Piano Study Plan →
+      </div>
+
+    </a>
+
+  </section>
+
 
   <footer>
     © 2026 Yahan Pu
