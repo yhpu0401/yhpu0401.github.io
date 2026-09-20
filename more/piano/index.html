@@ -1,567 +1,301 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>钢琴乐理 × 读谱：8周学习计划</title>
-  <style>
-    :root{
-      --bg:#f7f7f5;
-      --card:#ffffff;
-      --text:#202124;
-      --muted:#666;
-      --border:#dedede;
-      --accent:#2f5d50;
-      --accent-bg:#e7f0ed;
-      --soft:#f1f2ef;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.6;
-    }
-    .wrap{
-      width:min(1100px,92%);
-      margin:32px auto 60px;
-    }
-    h1,h2,h3{line-height:1.25}
-    h1{font-size:clamp(28px,5vw,46px);margin:0 0 10px}
-    .subtitle{color:var(--muted);margin-bottom:28px}
-    .hero{
-      display:grid;
-      grid-template-columns:1.4fr .8fr;
-      gap:16px;
-      margin-bottom:20px;
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-    }
-    .eyebrow{
-      color:var(--muted);
-      letter-spacing:.12em;
-      font-size:12px;
-      text-transform:uppercase;
-    }
-    .tabs{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin:18px 0;
-    }
-    button{
-      font:inherit;
-      cursor:pointer;
-    }
-    .tab,.week-btn,.day-btn{
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:10px 14px;
-      background:#fff;
-      color:var(--text);
-    }
-    .tab.active,.week-btn.active,.day-btn.active{
-      background:var(--accent-bg);
-      border-color:var(--accent);
-    }
-    .panel{display:none}
-    .panel.active{display:block}
-    details{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:15px 16px;
-      margin-bottom:10px;
-    }
-    summary{
-      cursor:pointer;
-      font-weight:700;
-    }
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-    }
-    .weeks{
-      display:grid;
-      grid-template-columns:repeat(8,1fr);
-      gap:8px;
-      margin:18px 0;
-    }
-    .days{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:16px;
-    }
-    .task{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      padding:12px;
-      background:var(--soft);
-      border-radius:12px;
-      margin:8px 0;
-    }
-    .task input{margin-top:5px}
-    .small{font-size:13px;color:var(--muted)}
-    .links{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    .resource{
-      display:block;
-      background:var(--card);
-      color:var(--text);
-      text-decoration:none;
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:16px;
-      transition:.15s ease;
-    }
-    .resource:hover{
-      transform:translateY(-1px);
-      border-color:#aaa;
-    }
-    .resource span{
-      display:block;
-      color:var(--muted);
-      font-size:13px;
-      margin-top:4px;
-    }
-    .goal{
-      border-left:4px solid var(--accent);
-      padding-left:12px;
-    }
-    .footer{
-      margin-top:24px;
-      font-size:13px;
-      color:var(--muted);
-      text-align:center;
-    }
-    @media(max-width:760px){
-      .hero,.grid2,.links{grid-template-columns:1fr}
-      .weeks{grid-template-columns:repeat(4,1fr)}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piano Study Plan — Yahan Pu</title>
+<style>
+:root{
+  --bg:#f5f5f2;--card:#fff;--text:#171717;--muted:#737373;--line:#deded8;
+  --accent:#385d50;--accentSoft:#e8efec;--done:#edf4ee;--weekend:#eeeeea;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65}
+.wrap{width:min(1180px,94%);margin:auto;padding:56px 0 80px}
+a{color:inherit}
+header{max-width:820px;margin-bottom:40px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(38px,6vw,68px);line-height:1;margin:10px 0 18px;letter-spacing:-2px}
+.lead{font-size:18px;color:var(--muted);max-width:730px}
+.topline{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px}
+.pill{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:white;font-size:13px}
+.progressbox{margin:24px 0 30px}
+.progressrow{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:8px}
+.progress{height:10px;background:#e5e5df;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.section-title{font-size:28px;margin:44px 0 8px;letter-spacing:-.5px}
+.section-sub{color:var(--muted);margin:0 0 18px}
+.calendar-shell{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;overflow:hidden}
+.weekheads{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-bottom:7px}
+.weekheads div{font-size:12px;text-align:center;color:var(--muted);padding:5px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.daycard{position:relative;min-height:118px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:10px;text-align:left;cursor:pointer;transition:.15s;overflow:hidden}
+.daycard:hover{border-color:#aaa;transform:translateY(-1px)}
+.daycard.selected{outline:2px solid var(--accent);outline-offset:1px}
+.daycard.done{background:var(--done)}
+.daycard.weekend{background:var(--weekend)}
+.daytop{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.date{font-weight:700;font-size:14px}
+.weeknum{font-size:10px;color:var(--muted)}
+.short{font-size:12px;line-height:1.35;margin-top:9px;color:#444}
+.checkwrap{position:absolute;right:8px;bottom:7px;display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.daycheck{width:18px;height:18px;accent-color:var(--accent)}
+.detail{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,4vw,36px)}
+.detail-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:24px}
+.detail h2{font-size:30px;margin:0 0 5px}
+.detail-date{color:var(--muted)}
+.bigcheck{display:flex;align-items:center;gap:8px;white-space:nowrap;border:1px solid var(--line);padding:9px 12px;border-radius:12px;background:#fafafa}
+.bigcheck input{width:20px;height:20px;accent-color:var(--accent)}
+.block{padding:22px 0;border-bottom:1px solid var(--line)}
+.block:last-child{border-bottom:0}
+.label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.block h3{font-size:21px;margin:0 0 10px}
+.callout{background:var(--accentSoft);border-radius:14px;padding:16px 18px;margin:12px 0}
+.links{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.linkbtn{display:inline-flex;align-items:center;min-height:42px;padding:9px 13px;border:1px solid var(--line);border-radius:11px;text-decoration:none;background:#fff;font-size:14px}
+.linkbtn:hover{border-color:#999}
+.tasklist{display:grid;gap:9px;margin-top:10px}
+.taskrow{display:flex;gap:11px;align-items:flex-start;padding:13px 14px;background:#f3f3ef;border-radius:12px}
+.taskrow input{margin-top:4px;width:17px;height:17px;accent-color:var(--accent)}
+.taskrow b{display:block}
+.taskrow span{font-size:13px;color:var(--muted)}
+.library{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.theorycard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+.theorycard h3{margin:0 0 8px;font-size:18px}
+.theorycard p{margin:7px 0;color:#555;font-size:14px}
+.theorycard .links{margin-top:10px}
+.resources{display:flex;flex-wrap:wrap;gap:10px}
+footer{margin-top:50px;color:var(--muted);font-size:13px}
+@media(max-width:820px){
+  .calendar-shell{overflow-x:auto}
+  .weekheads,.calendar{min-width:760px}
+  .library{grid-template-columns:1fr}
+  .detail-head{flex-direction:column}
+}
+@media(max-width:520px){
+  .wrap{width:92%;padding-top:34px}
+  h1{letter-spacing:-1px}
+  .detail h2{font-size:25px}
+}
+</style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="eyebrow">Piano Study Plan</div>
-    <h1>钢琴乐理 × 读谱：8周学习网站</h1>
-    <p class="subtitle">
-      适合已经能独立弹一些简化曲目、但读谱较弱，并希望长期走传统古典路线的学习者。
-    </p>
+<main class="wrap">
+<header>
+  <div class="eyebrow">Classical Piano · 8 Week Foundation</div>
+  <h1>Piano Study Plan</h1>
+  <p class="lead">目标：把较弱的读谱能力补起来，同时开始传统古典路线。先学会看懂谱、节奏、音程、音阶、调号和和弦，再把这些知识直接放进 Czerny、Hanon、Anna Magdalena 与 Burgmüller 中。</p>
+  <div class="topline">
+    <span class="pill">开始：2026/09/21</span>
+    <span class="pill">8 周</span>
+    <span class="pill">周一–周五约 60 min</span>
+    <span class="pill">周末休息 / 补课</span>
+  </div>
+</header>
 
-    <section class="hero">
-      <div class="card">
-        <div class="eyebrow">你的当前重点</div>
-        <h2>读谱重建 + 传统古典基础</h2>
-        <p>
-          前8周把读谱放在第一优先级，同时保留音阶、Hanon、Czerny 和正式作品，
-          避免只靠肌肉记忆背曲子。
-        </p>
-      </div>
-      <div class="card">
-        <h3>每天约 60 分钟</h3>
-        <p>视奏15 + 乐理10 + 音阶/和弦10 + Hanon 5 + Czerny 10 + 作品10</p>
-        <p class="small">只有30分钟：视奏10 + 乐理5 + 音阶5 + Czerny/作品10。</p>
-      </div>
-    </section>
+<section class="progressbox">
+  <div class="progressrow"><b>学习进度</b><span id="progressText">0 / 40 study days</span></div>
+  <div class="progress"><div id="progressBar"></div></div>
+</section>
 
-    <nav class="tabs">
-      <button class="tab active" data-tab="theory">乐理地图</button>
-      <button class="tab" data-tab="plan">8周每日计划</button>
-      <button class="tab" data-tab="resources">视频 / 网站</button>
-      <button class="tab" data-tab="roadmap">长期路线</button>
-    </nav>
+<h2 class="section-title">Calendar</h2>
+<p class="section-sub">在日历里勾选完成。点击任意一天，下面立即出现当天的详细课程、视频、练习和曲目。</p>
 
-    <section id="theory" class="panel active">
-      <h2>你需要掌握的乐理</h2>
-      <p class="small">前8周先掌握 1–8 的基础，后面的内容随曲目逐渐加入。</p>
+<div class="calendar-shell">
+  <div class="weekheads"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+  <div class="calendar" id="calendar"></div>
+</div>
 
-      <details open>
-        <summary>1. 记谱与读谱</summary>
-        <p><b>具体内容：</b>五线谱、高音谱号、低音谱号、大谱表、中央C、加线、音名 C–B、landmark notes。</p>
-        <p class="goal"><b>目标：</b>看到常见音符后，逐渐不再一个格子一个格子数，而是直接对应琴键。</p>
-      </details>
+<section id="detail" class="detail" aria-live="polite"></section>
 
-      <details>
-        <summary>2. 节奏与拍号</summary>
-        <p><b>具体内容：</b>全音符、二分、四分、八分、十六分音符；休止符；附点；tie；2/4、3/4、4/4、6/8。</p>
-        <p class="goal"><b>目标：</b>即使弹错音，拍子也尽量不停。</p>
-      </details>
+<h2 class="section-title">Music Theory Library</h2>
+<p class="section-sub">这里不是只列名词。每一个概念下面直接给出“是什么、为什么、视频、讲解与在线练习”。</p>
+<div class="library" id="library"></div>
 
-      <details>
-        <summary>3. 音程</summary>
-        <p><b>具体内容：</b>2度到8度；step / skip；旋律音程与和声音程；major / minor / perfect 的概念。</p>
-        <p class="goal"><b>目标：</b>开始按“方向 + 距离”读谱，而不是把每个音拆开翻译。</p>
-      </details>
+<h2 class="section-title">Scores</h2>
+<p class="section-sub">计划中用到的公共领域/开放乐谱入口。</p>
+<div class="resources">
+  <a class="linkbtn" target="_blank" rel="noopener" href="https://imslp.org/wiki/Klavierb%C3%BCchlein_f%C3%BCr_Anna_Magdalena_Bach_1722_%28Bach%2C_Johann_Sebastian%29">Anna Magdalena Notebook ↗</a>
+  <a class="linkbtn" target="_blank" rel="noopener" href="https://imslp.org/wiki/25_Etudes_Faciles%2C_Op.100_%28Burgmuller%2C_Johann_Friedrich%29">Burgmüller Op.100 ↗</a>
+  <a class="linkbtn" target="_blank" rel="noopener" href="https://imslp.org/wiki/The_Virtuoso_Pianist_%28Hanon%2C_Charles-Louis%29">Hanon ↗</a>
+  <a class="linkbtn" target="_blank" rel="noopener" href="https://imslp.org/wiki/Practical_Exercises_for_Beginners%2C_Op.599_%28Czerny%2C_Carl%29">Czerny Op.599 ↗</a>
+</div>
 
-      <details>
-        <summary>4. 音阶与调</summary>
-        <p><b>具体内容：</b>大调结构；自然、和声、旋律小调；scale degree；relative / parallel keys。</p>
-        <p class="goal"><b>目标：</b>理解调的结构，而不只是背按键。</p>
-      </details>
+<footer>© 2026 Yahan Pu · Progress is saved locally in this browser.</footer>
+</main>
 
-      <details>
-        <summary>5. 调号与五度圈</summary>
-        <p><b>具体内容：</b>升号和降号的顺序、常见调号、五度圈、相对大小调。</p>
-        <p class="goal"><b>目标：</b>看到调号能较快判断作品的基本调性。</p>
-      </details>
+<script>
+const TOPICS = {"staff": {"title": "五线谱、谱号与大谱表", "what": "五线谱是用音符在五条线与四个间上表示音高的系统。钢琴通常同时使用高音谱号和低音谱号，两者合在一起叫 Grand Staff（大谱表）。中央 C 位于两套谱表之间，是初学读谱最重要的参照点之一。", "explain": "你现在不需要把所有音用口诀一次背完。先建立几个 landmark notes（地标音）：中央C、右手G、右手高C、左手F、左手低C。读谱时先找到最近的地标音，再判断音符是向上还是向下、相隔几度。最终目标是看到音符直接对应键盘位置。", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=48s"}, "treble": {"title": "高音谱号与右手地标音", "what": "高音谱号主要覆盖钢琴中高音区。与其逐个背 E-G-B-D-F，不如先牢牢记住几个常见位置，再用音程关系阅读周围的音。", "explain": "今天重点认中央C、G4、C5。拿到陌生谱时，先圈出这些地标音。其余音先看它离地标音有几步，而不是从C开始一个个数。", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=558s"}, "bass": {"title": "低音谱号与左手地标音", "what": "低音谱号主要覆盖钢琴中低音区。左手读谱慢往往不是手的问题，而是低音谱号还没有形成直接反应。", "explain": "今天重点认中央C、F3、C3。读一个音以后，尽量继续看后面音符的方向与间距，不要每个音都重新从中央C数。", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=1119s"}, "duration": {"title": "音符时值", "what": "音符不仅告诉你弹哪个音，也告诉你这个音保持多久。常见时值包括全音符、二分音符、四分音符、八分音符和十六分音符。", "explain": "在 4/4 拍中，可以先把四分音符理解为 1 拍：二分音符通常占2拍，全音符占4拍，两个八分音符合计1拍。今天先把音高放到次要位置，练习稳定数拍。", "learn": "https://www.musictheory.net/lessons/11", "exercise": "https://www.musictheory.net/exercises/note", "video": "https://www.youtube.com/watch?v=yFAcDynQdeQ"}, "time": {"title": "小节与拍号", "what": "拍号告诉你每个小节如何组织拍子。4/4 表示每小节以四分音符为一拍、通常有4拍；3/4 常见于圆舞曲；2/4 更紧凑。", "explain": "拍号不是速度。速度由 tempo 决定，拍号决定重拍与弱拍的组织方式。视奏前必须先看拍号，再开始弹。", "learn": "https://www.musictheory.net/lessons/12", "exercise": "https://www.musictheory.net/exercises", "video": "https://www.youtube.com/watch?v=yFAcDynQdeQ"}, "rests": {"title": "休止符", "what": "休止符表示“这段时间不发声”，但拍子仍然继续。它不是可以随意跳过的空白。", "explain": "看到休止符时，手可以不按键，但嘴里或心里的拍子必须继续。今天练习时故意把休止符数出来，例如“1、2、空、4”。", "learn": "https://www.musictheory.net/lessons/13", "exercise": "https://www.musictheory.net/exercises", "video": "https://www.youtube.com/watch?v=yFAcDynQdeQ"}, "dots": {"title": "附点、延音线与连奏线", "what": "附点把一个音符原本的时值增加一半。Tie（延音线）连接两个相同音高并把时值相加；Slur（连奏线）覆盖一组不同音高，提示它们作为一个连贯乐句来演奏。", "explain": "例如附点二分音符在4/4中通常保持3拍。看到弧线时先判断两端是不是同一个音：同音通常是 tie；不同音通常是 slur。", "learn": "https://www.musictheory.net/lessons/14", "exercise": "https://www.musictheory.net/exercises", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=1880s"}, "eighth": {"title": "八分音符与细分", "what": "当一拍被平均分成两个八分音符时，可以用“1 & 2 & 3 & 4 &”来保持稳定细分。", "explain": "不要遇到八分音符就突然加速。节拍器保持不变，让每一拍内部平均分成两个位置。先拍手，再上琴。", "learn": "https://www.musictheory.net/lessons/11", "exercise": "https://www.musictheory.net/exercises", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2297s"}, "intervals": {"title": "音程：读谱提速的核心", "what": "音程是两个音之间的距离。二度、三度、四度、五度等描述两个音在音名上的跨度。视奏时，音程让你从“逐音识别”升级成“看形状和距离”。", "explain": "例如 C→D 是二度，C→E 是三度，C→G 是五度。谱面上相邻线/间通常形成二度；线到下一条线、间到下一个间通常形成三度。先判断方向，再判断距离。", "learn": "https://www.musictheory.net/lessons/30", "exercise": "https://www.musictheory.net/exercises/interval", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo"}, "interval_quality": {"title": "音程性质：大、小、纯", "what": "同样是“三度”，实际半音数可以不同，因此有大三度与小三度。四度、五度、八度常用“纯”来描述。", "explain": "现在不用一次背完所有半音数。先在键盘上听和弹：C–E 是大三度，C–E♭ 是小三度，C–F 是纯四度，C–G 是纯五度。", "learn": "https://www.musictheory.net/lessons/31", "exercise": "https://www.musictheory.net/exercises/keyboard-interval", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo"}, "steps": {"title": "半音、全音与升降号", "what": "半音是钢琴上相邻两个琴键之间的最小常用距离；两个半音组成一个全音。♯ 通常把音升高半音，♭ 通常降低半音，♮ 取消此前的升降变化。", "explain": "注意 E–F 和 B–C 中间没有黑键，所以它们本身就是半音。理解这一点以后，大小调音阶公式才会真正清楚。", "learn": "https://www.musictheory.net/lessons/20", "exercise": "https://www.musictheory.net/exercises/keyboard", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k"}, "major": {"title": "大调音阶", "what": "大调音阶由固定的全音/半音排列构成：全–全–半–全–全–全–半（W-W-H-W-W-W-H）。", "explain": "C大调刚好全部是白键，所以非常适合观察这个结构。G大调为了保持同样结构需要 F♯；F大调则需要 B♭。不要只背指法，也要知道为什么出现这些升降号。", "learn": "https://www.musictheory.net/lessons/21", "exercise": "https://www.musictheory.net/exercises/scale", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k"}, "triad": {"title": "三和弦", "what": "三和弦通常由根音、三度音和五度音组成。C–E–G 是 C 大三和弦；A–C–E 是 A 小三和弦。", "explain": "视奏时如果能把 C–E–G 看成一个 C chord，而不是三个独立音，读取速度会快很多。今天同时练“看、弹、听”。", "learn": "https://www.musictheory.net/lessons/40", "exercise": "https://www.musictheory.net/exercises/chord", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM"}, "inversion": {"title": "和弦转位", "what": "同一个三和弦的三个音可以重新排列。根音在最低是原位；三音在最低是第一转位；五音在最低是第二转位。", "explain": "C–E–G、E–G–C、G–C–E 都属于 C 大三和弦。学习转位会让你更容易识别左手伴奏和更紧凑的和弦连接。", "learn": "https://www.musictheory.net/lessons/42", "exercise": "https://www.musictheory.net/exercises/keyboard-chord", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM"}, "diatonic": {"title": "I、IV、V：最基础的功能和声", "what": "在一个调内，可以从每一级音向上叠三度形成和弦，并用罗马数字标记。C大调里 I=C-E-G，IV=F-A-C，V=G-B-D。", "explain": "I 听起来最稳定；V 往往有强烈回到 I 的倾向。弹 I–IV–V–I，并注意“稳定→离开→紧张→回家”的听感。", "learn": "https://www.musictheory.net/lessons/43", "exercise": "https://www.musictheory.net/exercises/keyboard-chord", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM"}, "minor": {"title": "小调音阶", "what": "小调不是简单的“悲伤版本大调”。常见有自然小调、和声小调和旋律小调三种形式。A自然小调与C大调使用相同调号。", "explain": "A自然小调：A B C D E F G A；A和声小调把第7级 G 升为 G♯，加强回到 A 的倾向；旋律小调在古典教学中上行常升高第6、7级，下行常还原。", "learn": "https://www.musictheory.net/lessons/22", "exercise": "https://www.musictheory.net/exercises/scale", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k"}, "keysig": {"title": "调号", "what": "调号是在每行谱表开头固定出现的一组升号或降号，说明作品中哪些音默认需要升高或降低。", "explain": "例如 G大调有一个 F♯，D大调有 F♯、C♯，F大调有一个 B♭。读谱前先看调号，可以避免把升降号当成临时意外。", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig", "video": "https://www.youtube.com/watch?v=WWjK5EASCQw"}, "circle": {"title": "五度圈", "what": "五度圈把12个调按照五度关系排列。顺时针每前进一个调通常多一个升号，逆时针每前进一个调通常多一个降号。", "explain": "它不是需要一次死背的图，而是一张调性地图。先掌握 C→G→D→A 与 C→F→B♭→E♭，再慢慢扩展。", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig", "video": "https://www.youtube.com/watch?v=WWjK5EASCQw"}, "roman": {"title": "罗马数字与调内和弦", "what": "罗马数字用和弦在调中的位置来命名，而不是只写绝对和弦名。这样同一种和声功能可以跨不同调比较。", "explain": "C大调的 I–IV–V 是 C–F–G；G大调的 I–IV–V 是 G–C–D。大写通常表示大三和弦，小写通常表示小三和弦。", "learn": "https://www.musictheory.net/lessons/44", "exercise": "https://www.musictheory.net/exercises/chord", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM"}, "phrase": {"title": "乐句与终止式", "what": "Phrase（乐句）可以理解为音乐中的一句话。Cadence（终止式）常出现在乐句末尾，通过两个或几个和弦产生暂时停顿或结束感。", "explain": "半终止通常停在 V，听起来还没说完；正格终止常见 V→I，结束感更强。学习它们之后，你会更容易决定哪里呼吸、哪里渐弱、哪里不要乱踩踏板。", "learn": "https://www.musictheory.net/lessons/55", "exercise": "https://www.musictheory.net/exercises", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2839s"}, "analysis": {"title": "把乐理用于一首真实作品", "what": "乐理的目的不是做术语测验，而是帮助你看懂正在弹的音乐。分析一首简单作品时，先看调号和拍号，再看乐句、重复、和弦、终止式与力度。", "explain": "今天不要急着弹第一音。先用铅笔标出：调、拍号、重复记号、主要乐句、可能的 I/IV/V、明显的终止位置，再开始练琴。", "learn": "https://www.musictheory.net/lessons", "exercise": "https://www.musictheory.net/exercises", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2839s"}};
+const DAYS = [{"date": "2026-09-21", "day": "周一", "week": 1, "study": true, "topic": "staff", "short": "大谱表 + 中央C", "tech": "C大调五指位；Hanon 1 慢速；Czerny 599 No.1 试读", "piece": "Petzold：Minuet in G, BWV Anh.114——只看前8小节，右手单手读谱", "drill": "先不追速度。圈出中央C；musictheory Note Identification 做10题。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=48s", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note"}, {"date": "2026-09-22", "day": "周二", "week": 1, "study": true, "topic": "treble", "short": "高音谱号地标音", "tech": "C大调五指位；Hanon 1；Czerny 599 No.1", "piece": "BWV Anh.114 前8小节：右手 + 左手分手", "drill": "高音谱号随机认音10题；弹错不要立即低头找手。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=558s", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note"}, {"date": "2026-09-23", "day": "周三", "week": 1, "study": true, "topic": "bass", "short": "低音谱号地标音", "tech": "C大调分手1八度；Hanon 1；Czerny 599 No.1", "piece": "BWV Anh.114 前8小节：左手重点", "drill": "低音谱号随机认音10题；每个音先说名字再弹。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=1119s", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note"}, {"date": "2026-09-24", "day": "周四", "week": 1, "study": true, "topic": "duration", "short": "全/二分/四分音符", "tech": "C大调分手；Hanon 1；Czerny 599 No.1–2", "piece": "BWV Anh.114 前8小节合手，极慢", "drill": "用手拍 4/4：全音符、二分音符、四分音符各4组。", "video": "https://www.youtube.com/watch?v=yFAcDynQdeQ", "learn": "https://www.musictheory.net/lessons/11", "exercise": "https://www.musictheory.net/exercises/note"}, {"date": "2026-09-25", "day": "周五", "week": 1, "study": true, "topic": "staff", "short": "Week 1 读谱复习", "tech": "C大调慢速双手；Hanon 1；Czerny 599 No.2", "piece": "BWV Anh.114 前8小节不断拍弹完", "drill": "30秒预读一段完全陌生的8小节；只弹1–2遍，不背。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=48s", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note"}, {"date": "2026-09-26", "day": "周六", "week": 1, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-09-27", "day": "周日", "week": 1, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-09-28", "day": "周一", "week": 2, "study": true, "topic": "time", "short": "2/4、3/4、4/4", "tech": "C大调2八度分手；Hanon 1–2；Czerny 599 No.2", "piece": "BWV Anh.114 第9–16小节分手", "drill": "拿三段谱，只判断拍号与每小节拍数，不弹。", "video": "https://www.youtube.com/watch?v=yFAcDynQdeQ", "learn": "https://www.musictheory.net/lessons/12", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-09-29", "day": "周二", "week": 2, "study": true, "topic": "rests", "short": "休止符", "tech": "C大调；Hanon 2；Czerny 599 No.2–3", "piece": "BWV Anh.114 第9–16小节合手", "drill": "拍节奏5分钟，休止处嘴里继续数拍。", "video": "https://www.youtube.com/watch?v=yFAcDynQdeQ", "learn": "https://www.musictheory.net/lessons/13", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-09-30", "day": "周三", "week": 2, "study": true, "topic": "dots", "short": "附点、tie、slur", "tech": "C大调；开始G大调五指位；Hanon 2", "piece": "BWV Anh.114：找所有 slur / 乐句线", "drill": "纸上写：附点二分=3拍；附点四分=1.5拍，并在琴上保持。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=1880s", "learn": "https://www.musictheory.net/lessons/14", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-10-01", "day": "周四", "week": 2, "study": true, "topic": "eighth", "short": "八分音符与细分", "tech": "C/G五指位；Hanon 2；Czerny 599 No.3", "piece": "BWV Anh.114 继续合手；难处循环2小节", "drill": "节拍器60：拍 1-&-2-&-3-&-4-&，连续2分钟。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2297s", "learn": "https://www.musictheory.net/lessons/11", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-10-02", "day": "周五", "week": 2, "study": true, "topic": "duration", "short": "Week 2 节奏复习", "tech": "C大调2八度；G大调分手；Hanon 1–2", "piece": "BWV Anh.114 尝试完整慢速演奏", "drill": "陌生8小节：先拍节奏，再弹音高；全程不停拍。", "video": "https://www.youtube.com/watch?v=yFAcDynQdeQ", "learn": "https://www.musictheory.net/lessons/11", "exercise": "https://www.musictheory.net/exercises/note"}, {"date": "2026-10-03", "day": "周六", "week": 2, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-04", "day": "周日", "week": 2, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-05", "day": "周一", "week": 3, "study": true, "topic": "intervals", "short": "二度与三度", "tech": "C/G大调；Hanon 2；Czerny 599 No.3–4", "piece": "Minuet in G minor, BWV Anh.115 前8小节", "drill": "Interval Identification 做10题；谱上圈出所有 step 和 skip。", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "learn": "https://www.musictheory.net/lessons/30", "exercise": "https://www.musictheory.net/exercises/interval"}, {"date": "2026-10-06", "day": "周二", "week": 3, "study": true, "topic": "intervals", "short": "四度与五度", "tech": "C/G大调；Hanon 2–3；Czerny 599 No.4", "piece": "BWV Anh.115 前8小节分手", "drill": "琴上从C开始弹 P4(C-F)、P5(C-G)，再从G、D开始。", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "learn": "https://www.musictheory.net/lessons/30", "exercise": "https://www.musictheory.net/exercises/interval"}, {"date": "2026-10-07", "day": "周三", "week": 3, "study": true, "topic": "interval_quality", "short": "大三度与小三度", "tech": "C/G大调；Hanon 3；Czerny 599 No.4", "piece": "BWV Anh.115 前8小节合手", "drill": "弹 C-E / C-E♭；G-B / G-B♭，比较听感。", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "learn": "https://www.musictheory.net/lessons/31", "exercise": "https://www.musictheory.net/exercises/keyboard-interval"}, {"date": "2026-10-08", "day": "周四", "week": 3, "study": true, "topic": "intervals", "short": "六、七、八度", "tech": "C/G/F五指位；Hanon 3；Czerny 599 No.4–5", "piece": "BWV Anh.115 第9–16小节分手", "drill": "Interval Identification 做15题；先只判断数字，不追求性质。", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "learn": "https://www.musictheory.net/lessons/30", "exercise": "https://www.musictheory.net/exercises/interval"}, {"date": "2026-10-09", "day": "周五", "week": 3, "study": true, "topic": "intervals", "short": "按音程读陌生谱", "tech": "C/G大调；Hanon 2–3；Czerny 599 No.5", "piece": "BWV Anh.115 继续", "drill": "找一段陌生8小节：只标第一个音，后面尽量靠方向+音程读。", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "learn": "https://www.musictheory.net/lessons/30", "exercise": "https://www.musictheory.net/exercises/interval"}, {"date": "2026-10-10", "day": "周六", "week": 3, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-11", "day": "周日", "week": 3, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-12", "day": "周一", "week": 4, "study": true, "topic": "steps", "short": "半音与全音", "tech": "C/G大调；Hanon 3；Czerny 599 No.5", "piece": "BWV Anh.115 完成或继续", "drill": "在键盘从每个白键向上找半音和全音；特别确认 E-F、B-C。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/20", "exercise": "https://www.musictheory.net/exercises/keyboard"}, {"date": "2026-10-13", "day": "周二", "week": 4, "study": true, "topic": "steps", "short": "♯ ♭ ♮", "tech": "C/G大调；Hanon 3；Czerny 599 No.5–6", "piece": "Musette in D, BWV Anh.126：先看调号，前8小节右手", "drill": "随机找5个音，分别弹升半音、降半音、还原。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/20", "exercise": "https://www.musictheory.net/exercises/keyboard"}, {"date": "2026-10-14", "day": "周三", "week": 4, "study": true, "topic": "major", "short": "大调公式", "tech": "C大调2八度双手慢速；Hanon 3–4", "piece": "Musette 前8小节分手", "drill": "在纸上写 W-W-H-W-W-W-H，再在C大调琴键上逐步验证。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/21", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-15", "day": "周四", "week": 4, "study": true, "topic": "major", "short": "G大调：为什么有F♯", "tech": "G大调2八度分手；Hanon 4；Czerny 599 No.6", "piece": "Musette 前8小节合手", "drill": "不用背答案，从G按大调公式自己推导 F♯。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/21", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-16", "day": "周五", "week": 4, "study": true, "topic": "major", "short": "F大调：为什么有B♭", "tech": "F大调2八度分手；Hanon 4；Czerny 599 No.6", "piece": "Musette 继续", "drill": "从F按公式推导 B♭；C/G/F 三个调各写一次。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/21", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-17", "day": "周六", "week": 4, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-18", "day": "周日", "week": 4, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-19", "day": "周一", "week": 5, "study": true, "topic": "triad", "short": "三和弦是什么", "tech": "C/G/F大调；Hanon 4；Czerny 599 No.6–7", "piece": "Burgmüller Op.100 No.1 La Candeur：前8小节右手", "drill": "在琴上弹 C-E-G、F-A-C、G-B-D；每个和弦各重复5次。", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM", "learn": "https://www.musictheory.net/lessons/40", "exercise": "https://www.musictheory.net/exercises/chord"}, {"date": "2026-10-20", "day": "周二", "week": 5, "study": true, "topic": "triad", "short": "大三和弦 vs 小三和弦", "tech": "C/G/F大调；Hanon 4；Czerny 599 No.7", "piece": "La Candeur 前8小节分手", "drill": "弹 C-E-G 与 C-E♭-G；A-C♯-E 与 A-C-E，听出差异。", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM", "learn": "https://www.musictheory.net/lessons/40", "exercise": "https://www.musictheory.net/exercises/chord"}, {"date": "2026-10-21", "day": "周三", "week": 5, "study": true, "topic": "triad", "short": "减三和弦 + 调内三和弦", "tech": "C大调 + C/F/G和弦；Hanon 4", "piece": "La Candeur 前8小节合手", "drill": "用C大调白键从 C、D、E、F、G、A、B 各叠三度形成三和弦。", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM", "learn": "https://www.musictheory.net/lessons/40", "exercise": "https://www.musictheory.net/exercises/chord"}, {"date": "2026-10-22", "day": "周四", "week": 5, "study": true, "topic": "inversion", "short": "三和弦转位", "tech": "C/F/G 原位+转位；Hanon 4–5；Czerny No.7", "piece": "La Candeur 第9–16小节分手", "drill": "弹 C-E-G → E-G-C → G-C-E；每次尽量不看手。", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM", "learn": "https://www.musictheory.net/lessons/42", "exercise": "https://www.musictheory.net/exercises/keyboard-chord"}, {"date": "2026-10-23", "day": "周五", "week": 5, "study": true, "topic": "diatonic", "short": "I–IV–V–I", "tech": "C大调 I-IV-V-I；Hanon 5；Czerny No.7–8", "piece": "La Candeur 继续合手", "drill": "弹 C→F→G→C，听“回家感”；再在G大调试 G→C→D→G。", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM", "learn": "https://www.musictheory.net/lessons/43", "exercise": "https://www.musictheory.net/exercises/keyboard-chord"}, {"date": "2026-10-24", "day": "周六", "week": 5, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-25", "day": "周日", "week": 5, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-10-26", "day": "周一", "week": 6, "study": true, "topic": "minor", "short": "自然小调", "tech": "A自然小调1–2八度；Hanon 5；Czerny No.8", "piece": "La Candeur 完成或继续精修", "drill": "从A到A只弹白键；比较它与C大调虽然同音集合但主音不同。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/22", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-27", "day": "周二", "week": 6, "study": true, "topic": "minor", "short": "和声小调", "tech": "A和声小调；Hanon 5；Czerny No.8", "piece": "Burgmüller Op.100 No.2 Arabesque：前8小节慢速右手", "drill": "A自然小调的G改成G♯；反复弹 E-G♯-B → A-C-E，听解决感。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/22", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-28", "day": "周三", "week": 6, "study": true, "topic": "minor", "short": "旋律小调", "tech": "A旋律小调；Hanon 5；Czerny No.8–9", "piece": "Arabesque 前8小节分手", "drill": "上行 A B C D E F♯ G♯ A；下行按古典常见形式还原。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/22", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-29", "day": "周四", "week": 6, "study": true, "topic": "minor", "short": "相对大小调", "tech": "C↔Am、G↔Em、F↔Dm；Hanon 5", "piece": "Arabesque 前8小节合手", "drill": "每组相对大小调先说共同调号，再分别弹主音三和弦。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/22", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-30", "day": "周五", "week": 6, "study": true, "topic": "minor", "short": "小调复习", "tech": "A/Em/Dm 选两条；Czerny No.9", "piece": "Arabesque 继续；如果太难继续 La Candeur", "drill": "Scale Identification 做10题；写自然/和声/旋律A小调。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/22", "exercise": "https://www.musictheory.net/exercises/scale"}, {"date": "2026-10-31", "day": "周六", "week": 6, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-11-01", "day": "周日", "week": 6, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-11-02", "day": "周一", "week": 7, "study": true, "topic": "keysig", "short": "升号调号", "tech": "G/D/A 大调；Hanon 5；Czerny No.9", "piece": "Arabesque 继续或 Anna Magdalena 复习", "drill": "记升号顺序 F-C-G-D-A-E-B；重点只掌握 G、D、A。", "video": "https://www.youtube.com/watch?v=WWjK5EASCQw", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig"}, {"date": "2026-11-03", "day": "周二", "week": 7, "study": true, "topic": "keysig", "short": "降号调号", "tech": "F/B♭/E♭ 五指或音阶；Hanon 5", "piece": "Musette / Minuet 任选一首复习", "drill": "记降号顺序 B-E-A-D-G-C-F；重点只掌握 F、B♭、E♭。", "video": "https://www.youtube.com/watch?v=WWjK5EASCQw", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig"}, {"date": "2026-11-04", "day": "周三", "week": 7, "study": true, "topic": "circle", "short": "五度圈顺时针", "tech": "C→G→D→A；Czerny No.9–10", "piece": "作品继续", "drill": "自己在纸上画 C→G→D→A，并写每个调的升号数量。", "video": "https://www.youtube.com/watch?v=WWjK5EASCQw", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig"}, {"date": "2026-11-05", "day": "周四", "week": 7, "study": true, "topic": "circle", "short": "五度圈逆时针", "tech": "C→F→B♭→E♭；Hanon 5", "piece": "作品继续", "drill": "自己画降号侧，并给每个大调写出相对小调。", "video": "https://www.youtube.com/watch?v=WWjK5EASCQw", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig"}, {"date": "2026-11-06", "day": "周五", "week": 7, "study": true, "topic": "keysig", "short": "调号快速识别", "tech": "复习6个常见调；Czerny No.10", "piece": "完整演奏本周作品", "drill": "Key Signature Identification 做20题；目标不是满分，而是反应速度。", "video": "https://www.youtube.com/watch?v=WWjK5EASCQw", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig"}, {"date": "2026-11-07", "day": "周六", "week": 7, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-11-08", "day": "周日", "week": 7, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-11-09", "day": "周一", "week": 8, "study": true, "topic": "roman", "short": "罗马数字 I ii iii IV V vi vii°", "tech": "C大调调内三和弦；Hanon 5", "piece": "选择 BWV Anh.114 或 La Candeur 作为毕业分析曲", "drill": "在C大调写出七个三和弦及罗马数字；先会 I、IV、V、vi。", "video": "https://www.youtube.com/watch?v=sapd7mc8SdM", "learn": "https://www.musictheory.net/lessons/44", "exercise": "https://www.musictheory.net/exercises/chord"}, {"date": "2026-11-10", "day": "周二", "week": 8, "study": true, "topic": "phrase", "short": "乐句", "tech": "复习最弱的2个调；Czerny No.10", "piece": "毕业曲：用铅笔划分乐句", "drill": "每弹一句，停下来问：这里听起来像逗号、句号，还是还没说完？", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2839s", "learn": "https://www.musictheory.net/lessons/55", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-11-11", "day": "周三", "week": 8, "study": true, "topic": "phrase", "short": "终止式", "tech": "I–IV–V–I；V–I；任一小调 V–i", "piece": "毕业曲：找可能的终止位置", "drill": "分别弹 V→I 和停在V，对比完成感与未完成感。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2839s", "learn": "https://www.musictheory.net/lessons/55", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-11-12", "day": "周四", "week": 8, "study": true, "topic": "analysis", "short": "完整作品分析", "tech": "复习音阶+和弦；Hanon 1–5任选1条", "piece": "毕业曲：标调号、拍号、重复、乐句、I/IV/V、力度", "drill": "先分析10分钟再弹；今天不要求速度。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2839s", "learn": "https://www.musictheory.net/lessons", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-11-13", "day": "周五", "week": 8, "study": true, "topic": "analysis", "short": "8周毕业测试", "tech": "任选四个已学调各1遍；Czerny选一条复习", "piece": "毕业曲完整慢速演奏并录音", "drill": "30秒预读陌生8–16小节 → 从头到尾不停拍；记录最卡的能力，作为下一阶段目标。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs&t=2839s", "learn": "https://www.musictheory.net/lessons", "exercise": "https://www.musictheory.net/exercises"}, {"date": "2026-11-14", "day": "周六", "week": 8, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}, {"date": "2026-11-15", "day": "周日", "week": 8, "study": false, "short": "休息 / 补课", "topic": null, "tech": "不需要系统技术练习。手累就完全休息。", "piece": "可选：自由弹喜欢的曲子 10–20 分钟，不作为训练任务。", "drill": "如果本周有一天没完成，把那一天的任务移到今天；否则休息。"}];
+const RES = {"anna": "https://imslp.org/wiki/Klavierb%C3%BCchlein_f%C3%BCr_Anna_Magdalena_Bach_1722_%28Bach%2C_Johann_Sebastian%29", "burg": "https://imslp.org/wiki/25_Etudes_Faciles%2C_Op.100_%28Burgmuller%2C_Johann_Friedrich%29", "hanon": "https://imslp.org/wiki/The_Virtuoso_Pianist_%28Hanon%2C_Charles-Louis%29", "czerny": "https://imslp.org/wiki/Practical_Exercises_for_Beginners%2C_Op.599_%28Czerny%2C_Carl%29", "note": "https://www.musictheory.net/exercises/note"};
 
-      <details>
-        <summary>6. 三和弦与转位</summary>
-        <p><b>具体内容：</b>大三和弦、小三和弦、减三和弦、增三和弦；原位、第一转位、第二转位。</p>
-        <p class="goal"><b>目标：</b>把三个音读成一个和弦整体。</p>
-      </details>
+let selectedIndex = 0;
+const calendar = document.getElementById("calendar");
+const detail = document.getElementById("detail");
+const library = document.getElementById("library");
 
-      <details>
-        <summary>7. 功能和声</summary>
-        <p><b>具体内容：</b>I、ii、iii、IV、V、vi、vii°；tonic / predominant / dominant；V7。</p>
-        <p class="goal"><b>目标：</b>能找出简单作品的 I–IV–V–I 等和声骨架。</p>
-      </details>
+function keyFor(date){ return "piano-plan-complete-"+date; }
+function taskKey(date,i){ return "piano-plan-task-"+date+"-"+i; }
+function isDone(date){ return localStorage.getItem(keyFor(date))==="1"; }
 
-      <details>
-        <summary>8. 乐句与终止式</summary>
-        <p><b>具体内容：</b>phrase、authentic cadence、half cadence、plagal cadence、deceptive cadence。</p>
-        <p class="goal"><b>目标：</b>理解音乐中的“逗号”和“句号”。</p>
-      </details>
+function fmtDate(iso){
+  const [y,m,d]=iso.split("-").map(Number);
+  return `${m}/${d}`;
+}
+function fullDate(item){
+  const [y,m,d]=item.date.split("-").map(Number);
+  return `${y}年${m}月${d}日 · ${item.day} · Week ${item.week}`;
+}
 
-      <details>
-        <summary>9. 七和弦与声部进行</summary>
-        <p><b>具体内容：</b>diatonic seventh chords、转位、voice leading、non-chord tones。</p>
-      </details>
-
-      <details>
-        <summary>10. 曲式</summary>
-        <p><b>具体内容：</b>binary、ternary、rondo、variation、sonata form。</p>
-      </details>
-
-      <details>
-        <summary>11. 中高级和声</summary>
-        <p><b>具体内容：</b>modulation、secondary dominant、borrowed chords。</p>
-      </details>
-
-      <details>
-        <summary>12. 复调与对位</summary>
-        <p><b>具体内容：</b>independent voices、imitation、counterpoint、fugue 基础。</p>
-        <p class="goal"><b>目标：</b>以后随 Bach Inventions、Sinfonias、WTC 系统提高。</p>
-      </details>
-    </section>
-
-    <section id="plan" class="panel">
-      <h2>8周 × 每周5天</h2>
-      <p class="small">第6–7天用于休息、补课，或只弹喜欢的曲子。</p>
-
-      <div class="weeks" id="weekButtons"></div>
-
-      <div class="grid2">
-        <div class="card">
-          <h3 id="weekTitle"></h3>
-          <p id="weekTheory"></p>
-          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
-          <p><b>音阶 / 和弦：</b><span id="weekScale"></span></p>
-          <p><b>Hanon：</b><span id="weekHanon"></span></p>
-          <p><b>Czerny：</b><span id="weekCzerny"></span></p>
-          <p><b>作品：</b><span id="weekPiece"></span></p>
-        </div>
-
-        <div class="card">
-          <h3>当天练习</h3>
-          <div class="days" id="dayButtons"></div>
-          <h4 id="dayTopic"></h4>
-          <div id="taskList"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="resources" class="panel">
-      <h2>视频与网站资源</h2>
-      <p class="small">以下都可以直接点击，在新标签页中打开。</p>
-
-      <div class="links">
-        <a class="resource" href="https://www.youtube.com/watch?v=ftoXQsJtKPs" target="_blank" rel="noopener noreferrer">
-          <b>Pianote｜Read Music in 7 Days</b>
-          <span>读谱总课，适合 Week 1–3。</span>
-        </a>
-
-        <a class="resource" href="https://www.youtube.com/watch?v=qtmlozITJqc" target="_blank" rel="noopener noreferrer">
-          <b>Pianote｜Sight Reading Exercises</b>
-          <span>适合每天做陌生谱视奏。</span>
-        </a>
-
-        <a class="resource" href="https://www.youtube.com/watch?v=FefxxV9PVJQ" target="_blank" rel="noopener noreferrer">
-          <b>Pianote｜Music Theory: Rhythm</b>
-          <span>节奏、拍号与基本时值。</span>
-        </a>
-
-        <a class="resource" href="https://www.youtube.com/watch?v=CzMITEddpkM" target="_blank" rel="noopener noreferrer">
-          <b>Pianote｜Music Symbols</b>
-          <span>常见乐谱符号。</span>
-        </a>
-
-        <a class="resource" href="https://www.youtube.com/watch?v=zUTw_I5-x3k" target="_blank" rel="noopener noreferrer">
-          <b>Pianote｜Major & Minor Scales</b>
-          <span>大小调音阶概念。</span>
-        </a>
-
-        <a class="resource" href="https://www.youtube.com/watch?v=J5EDGTyGzQY" target="_blank" rel="noopener noreferrer">
-          <b>Pianote｜Learning Chords Is Easy</b>
-          <span>三和弦基础。</span>
-        </a>
-
-        <a class="resource" href="https://www.youtube.com/watch?v=cvDzjnGQiSo" target="_blank" rel="noopener noreferrer">
-          <b>Pianote｜Circle of Fifths</b>
-          <span>五度圈与调之间的关系。</span>
-        </a>
-
-        <a class="resource" href="https://www.musictheory.net/lessons" target="_blank" rel="noopener noreferrer">
-          <b>musictheory.net｜Lessons</b>
-          <span>非常适合按顺序学谱表、节奏、音程、调号、音阶、和弦。</span>
-        </a>
-
-        <a class="resource" href="https://www.musictheory.net/exercises" target="_blank" rel="noopener noreferrer">
-          <b>musictheory.net｜Exercises</b>
-          <span>认音、调号、音程、和弦等互动练习。</span>
-        </a>
-
-        <a class="resource" href="https://app.hoffmanacademy.com/lessons/piano/sight-reading-steps-repeats/video/" target="_blank" rel="noopener noreferrer">
-          <b>Hoffman Academy｜Sight Reading: Steps & Repeats</b>
-          <span>训练把谱读成 pattern，而不是逐音数。</span>
-        </a>
-      </div>
-    </section>
-
-    <section id="roadmap" class="panel">
-      <h2>长期传统古典路线</h2>
-      <div class="card">
-        <p><b>Technique</b><br>Hanon → Scales / Arpeggios / Chords → targeted advanced technique</p>
-        <p><b>Études</b><br>Czerny Op.599 → Op.849 → Op.299 → Op.740 → Chopin Études</p>
-        <p><b>Bach</b><br>Anna Magdalena → Little Preludes → Two-Part Inventions → Three-Part Sinfonias → French Suites → WTC</p>
-        <p><b>Classical</b><br>Clementi Sonatinas → Mozart Sonatas → Beethoven Sonatas</p>
-        <p><b>Romantic</b><br>Burgmüller Op.100 → Schumann → Chopin Preludes / Waltzes / Nocturnes → Études / Ballades / Scherzos → Liszt / Rachmaninoff</p>
-      </div>
-    </section>
-
-    <p class="footer">建议：读谱比当前演奏水平低很多的谱；技术练习以放松、均匀、固定指法为优先。</p>
-  </main>
-
-  <script>
-    const weeks = [
-      {
-        title:"Week 1｜五线谱与中央C",
-        theory:"大谱表、高低音谱号、landmark notes、全/二分/四分音符、4/4。",
-        scale:"C大调，先分手，再慢速双手",
-        hanon:"No.1",
-        czerny:"Op.599 定位",
-        piece:"Anna Magdalena 简单段落",
-        days:[
-          "找所有 C；理解中央 C；认识高低音谱号",
-          "高音谱号：C4、G4、C5 等 landmark notes",
-          "低音谱号：C4、F3、C3 等 landmark notes",
-          "全音符、二分、四分音符；4/4 拍",
-          "周测：随机认10个音 + 陌生8小节"
-        ]
-      },
-      {
-        title:"Week 2｜节奏",
-        theory:"2/4、3/4、4/4；八分音符；休止符；附点；tie 与 slur。",
-        scale:"C大调双手；G大调五指位置",
-        hanon:"No.1–2",
-        czerny:"Op.599 2–3条",
-        piece:"简单曲目",
-        days:[
-          "2/4、3/4、4/4 三种常见拍号",
-          "八分音符：1 & 2 & 的计数方式",
-          "休止符：不发声，但拍子不能停",
-          "附点；区分 tie 与 slur",
-          "周测：先拍节奏，再弹音高"
-        ]
-      },
-      {
-        title:"Week 3｜音程",
-        theory:"2–8度；step / skip；melodic 与 harmonic interval。",
-        scale:"C / G 大调",
-        hanon:"No.1–2",
-        czerny:"Op.599 2–3条",
-        piece:"Anna Magdalena",
-        days:[
-          "2度和3度：step 与 skip",
-          "4度和5度",
-          "6度、7度、8度",
-          "旋律音程 vs 和声音程",
-          "周测：按方向 + 距离读陌生谱"
-        ]
-      },
-      {
-        title:"Week 4｜调与升降号",
-        theory:"半音、全音；♯、♭、♮；大调公式 W-W-H-W-W-W-H；调号。",
-        scale:"C / G / F 大调",
-        hanon:"No.1–3",
-        czerny:"Op.599 2–3条",
-        piece:"Burgmüller Op.100 No.1",
-        days:[
-          "半音 / 全音；E–F 与 B–C",
-          "构造 G 大调，理解 F♯",
-          "构造 F 大调，理解 B♭",
-          "临时升降号 vs 调号",
-          "周测：写并弹 C / G / F 大调"
-        ]
-      },
-      {
-        title:"Week 5｜三和弦",
-        theory:"major / minor / diminished triad；I–IV–V；原位与转位。",
-        scale:"C / G 音阶 + C / F / G 和弦",
-        hanon:"No.1–4",
-        czerny:"Op.599 2–3条",
-        piece:"Burgmüller No.1–2",
-        days:[
-          "C / F / G 三和弦；听 I–IV–V",
-          "大三和弦 vs 小三和弦",
-          "C大调七个级数上的三和弦",
-          "原位、第一转位、第二转位",
-          "周测：弹 I–IV–V–I；曲中找和弦"
-        ]
-      },
-      {
-        title:"Week 6｜小调",
-        theory:"relative major/minor；natural / harmonic / melodic minor；scale degrees。",
-        scale:"A minor / E minor / D minor",
-        hanon:"No.1–5",
-        czerny:"Op.599 2–3条",
-        piece:"Bach + Burgmüller",
-        days:[
-          "C major ↔ A minor",
-          "A harmonic minor：G♯",
-          "A melodic minor",
-          "G major ↔ E minor；F major ↔ D minor",
-          "周测：写相对小调并弹自然 / 和声小调"
-        ]
-      },
-      {
-        title:"Week 7｜调号与五度圈",
-        theory:"升号/降号顺序；五度圈；相对小调。",
-        scale:"C / G / D / A / F / B♭",
-        hanon:"No.1–5",
-        czerny:"Op.599 2–3条",
-        piece:"Bach + Burgmüller",
-        days:[
-          "C / G / D 调号",
-          "A / E 调号与升号识别",
-          "F / B♭ / E♭ 调号",
-          "自己画一遍五度圈",
-          "周测：8个常见调号快速识别"
-        ]
-      },
-      {
-        title:"Week 8｜第一次分析完整曲目",
-        theory:"phrase；cadence；Roman numerals；binary / ternary；力度与 articulation。",
-        scale:"复习已学调",
-        hanon:"No.1–5",
-        czerny:"Op.599 2–3条",
-        piece:"Anna Magdalena：完整分析 + 演奏",
-        days:[
-          "先标调号、拍号、重复记号",
-          "划分乐句",
-          "找 I / IV / V",
-          "标 dynamics、slur、staccato",
-          "毕业测：30秒预读 → 陌生8–16小节，不停拍"
-        ]
-      }
-    ];
-
-    let currentWeek = 0;
-    let currentDay = 0;
-
-    const weekButtons = document.getElementById("weekButtons");
-    const dayButtons = document.getElementById("dayButtons");
-
-    function renderWeekButtons(){
-      weekButtons.innerHTML = "";
-      weeks.forEach((_,i)=>{
-        const btn = document.createElement("button");
-        btn.className = "week-btn" + (i===currentWeek ? " active" : "");
-        btn.textContent = "W" + (i+1);
-        btn.onclick = ()=>{currentWeek=i;currentDay=0;render();};
-        weekButtons.appendChild(btn);
-      });
-    }
-
-    function renderDayButtons(){
-      dayButtons.innerHTML = "";
-      weeks[currentWeek].days.forEach((_,i)=>{
-        const btn = document.createElement("button");
-        btn.className = "day-btn" + (i===currentDay ? " active" : "");
-        btn.textContent = "Day " + (i+1);
-        btn.onclick = ()=>{currentDay=i;render();};
-        dayButtons.appendChild(btn);
-      });
-    }
-
-    function renderTasks(){
-      const w = weeks[currentWeek];
-      document.getElementById("weekTitle").textContent = w.title;
-      document.getElementById("weekTheory").textContent = w.theory;
-      document.getElementById("weekScale").textContent = w.scale;
-      document.getElementById("weekHanon").textContent = w.hanon;
-      document.getElementById("weekCzerny").textContent = w.czerny;
-      document.getElementById("weekPiece").textContent = w.piece;
-      document.getElementById("dayTopic").textContent = w.days[currentDay];
-
-      const tasks = [
-        ["视奏 15 min", "拿明显低于最高水平的陌生谱。先看调号、拍号、起始音，预读30秒，再慢速弹；错音尽量不停拍。"],
-        ["乐理 10 min", w.days[currentDay] + "。写一次，再到键盘上验证。"],
-        ["音阶 / 和弦 10 min", w.scale + "。慢、均匀、固定指法；不要为了速度紧张。"],
-        ["Hanon 5 min", w.hanon + "。只练放松与均匀，不高抬指砸键。"],
-        ["Czerny 10 min", w.czerny + "。先解决读谱与指法，再合手。"],
-        ["作品 10 min", w.piece + "。眼睛尽量留在谱上；标乐句、力度与重复记号。"]
-      ];
-
-      const box = document.getElementById("taskList");
-      box.innerHTML = "";
-
-      tasks.forEach((t,idx)=>{
-        const label = document.createElement("label");
-        label.className = "task";
-
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        const key = `piano-w${currentWeek}-d${currentDay}-t${idx}`;
-        cb.checked = localStorage.getItem(key)==="1";
-        cb.onchange = ()=>localStorage.setItem(key, cb.checked ? "1":"0");
-
-        const text = document.createElement("div");
-        text.innerHTML = `<b>${t[0]}</b><div class="small">${t[1]}</div>`;
-
-        label.appendChild(cb);
-        label.appendChild(text);
-        box.appendChild(label);
-      });
-    }
-
-    function render(){
-      renderWeekButtons();
-      renderDayButtons();
-      renderTasks();
-    }
-
-    document.querySelectorAll(".tab").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-        document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
-        btn.classList.add("active");
-        document.getElementById(btn.dataset.tab).classList.add("active");
-      });
+function renderCalendar(){
+  calendar.innerHTML="";
+  DAYS.forEach((item,i)=>{
+    const box=document.createElement("div");
+    box.className="daycard"+(item.study?"":" weekend")+(isDone(item.date)?" done":"")+(i===selectedIndex?" selected":"");
+    box.setAttribute("role","button");
+    box.setAttribute("tabindex","0");
+    box.innerHTML=`
+      <div class="daytop"><span class="date">${fmtDate(item.date)}</span><span class="weeknum">W${item.week}</span></div>
+      <div class="short">${item.short}</div>
+      <label class="checkwrap" title="Mark complete">
+        <span>${isDone(item.date)?"Done":"Done?"}</span>
+        <input class="daycheck" type="checkbox" ${isDone(item.date)?"checked":""} aria-label="完成 ${item.date}">
+      </label>`;
+    const cb=box.querySelector("input");
+    cb.addEventListener("click",e=>e.stopPropagation());
+    cb.addEventListener("change",()=>{
+      localStorage.setItem(keyFor(item.date),cb.checked?"1":"0");
+      renderCalendar(); updateProgress(); renderDetail();
     });
+    const select=()=>{selectedIndex=i;renderCalendar();renderDetail();detail.scrollIntoView({behavior:"smooth",block:"start"});};
+    box.addEventListener("click",select);
+    box.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select();}});
+    calendar.appendChild(box);
+  });
+}
 
-    render();
-  </script>
+function renderDetail(){
+  const item=DAYS[selectedIndex];
+  const done=isDone(item.date);
+  if(!item.study){
+    detail.innerHTML=`
+      <div class="detail-head">
+        <div><div class="label">Rest / Catch-up</div><h2>${item.short}</h2><div class="detail-date">${fullDate(item)}</div></div>
+        <label class="bigcheck"><input id="bigDone" type="checkbox" ${done?"checked":""}> 完成</label>
+      </div>
+      <div class="block"><h3>今天怎么安排</h3><div class="callout">${item.drill}</div><p>${item.tech}</p><p>${item.piece}</p></div>`;
+    bindBigDone(item);
+    return;
+  }
+  const t=TOPICS[item.topic];
+  const tasks=[
+    ["视奏 · 15 min","拿明显低于你最高演奏水平的陌生谱。先看调号、拍号和起始音，预读30秒；然后极慢速从头到尾，错音尽量不停拍。"],
+    ["乐理 · 10 min",item.drill],
+    ["音阶 / 技术 · 10 min",item.tech],
+    ["Hanon / Czerny","只在动作放松的前提下练。不要为了“完成数量”硬加速度。"],
+    ["作品 · 15–20 min",item.piece],
+    ["结束 · 2 min","写下一句：今天最卡的是读音、节奏、左右手协调，还是手指动作？下一次先处理它。"]
+  ];
+  detail.innerHTML=`
+    <div class="detail-head">
+      <div>
+        <div class="label">Today's lesson</div>
+        <h2>${item.short}</h2>
+        <div class="detail-date">${fullDate(item)}</div>
+      </div>
+      <label class="bigcheck"><input id="bigDone" type="checkbox" ${done?"checked":""}> 今天完成</label>
+    </div>
+
+    <div class="block">
+      <div class="label">Theory · 今天的乐理是什么？</div>
+      <h3>${t.title}</h3>
+      <p><b>是什么：</b>${t.what}</p>
+      <div class="callout"><b>具体理解：</b>${t.explain}</div>
+      <div class="links">
+        <a class="linkbtn" target="_blank" rel="noopener" href="${t.video}">▶ 今天看这个视频</a>
+        <a class="linkbtn" target="_blank" rel="noopener" href="${t.learn}">读完整乐理讲解 ↗</a>
+        <a class="linkbtn" target="_blank" rel="noopener" href="${t.exercise}">做在线练习 ↗</a>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label">Practice · 今天具体做什么</div>
+      <div class="tasklist" id="taskList"></div>
+    </div>
+
+    <div class="block">
+      <div class="label">Repertoire</div>
+      <h3>今天弹的曲子</h3>
+      <div class="callout">${item.piece}</div>
+      <div class="links">
+        <a class="linkbtn" target="_blank" rel="noopener" href="${item.piece.includes("Burgmüller") ? RES.burg : RES.anna}">打开曲谱 ↗</a>
+        <a class="linkbtn" target="_blank" rel="noopener" href="${RES.czerny}">Czerny Op.599 ↗</a>
+        <a class="linkbtn" target="_blank" rel="noopener" href="${RES.hanon}">Hanon ↗</a>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label">Rule</div>
+      <h3>今天的完成标准</h3>
+      <p>不是“全部弹快”。乐理能解释清楚、在线练习做过、陌生谱没有因为错音不停重来、技术动作放松、作品完成当天指定的小段，就算完成。</p>
+    </div>`;
+  bindBigDone(item);
+  const list=document.getElementById("taskList");
+  tasks.forEach((task,i)=>{
+    const row=document.createElement("label");
+    row.className="taskrow";
+    const checked=localStorage.getItem(taskKey(item.date,i))==="1";
+    row.innerHTML=`<input type="checkbox" ${checked?"checked":""}><div><b>${task[0]}</b><span>${task[1]}</span></div>`;
+    const cb=row.querySelector("input");
+    cb.addEventListener("change",()=>localStorage.setItem(taskKey(item.date,i),cb.checked?"1":"0"));
+    list.appendChild(row);
+  });
+}
+
+function bindBigDone(item){
+  const big=document.getElementById("bigDone");
+  big.addEventListener("change",()=>{
+    localStorage.setItem(keyFor(item.date),big.checked?"1":"0");
+    renderCalendar();updateProgress();
+  });
+}
+
+function updateProgress(){
+  const study=DAYS.filter(x=>x.study);
+  const completed=study.filter(x=>isDone(x.date)).length;
+  document.getElementById("progressText").textContent=`${completed} / ${study.length} study days`;
+  document.getElementById("progressBar").style.width=`${completed/study.length*100}%`;
+}
+
+function renderLibrary(){
+  library.innerHTML="";
+  Object.values(TOPICS).forEach(t=>{
+    const card=document.createElement("article");
+    card.className="theorycard";
+    card.innerHTML=`
+      <h3>${t.title}</h3>
+      <p><b>是什么：</b>${t.what}</p>
+      <p><b>怎么理解：</b>${t.explain}</p>
+      <div class="links">
+        <a class="linkbtn" target="_blank" rel="noopener" href="${t.video}">视频 ▶</a>
+        <a class="linkbtn" target="_blank" rel="noopener" href="${t.learn}">讲解 ↗</a>
+        <a class="linkbtn" target="_blank" rel="noopener" href="${t.exercise}">练习 ↗</a>
+      </div>`;
+    library.appendChild(card);
+  });
+}
+
+// Start on today's date if it falls within the plan; otherwise Day 1.
+const today=new Date();
+const localIso=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+const ti=DAYS.findIndex(x=>x.date===localIso);
+if(ti>=0) selectedIndex=ti;
+
+renderCalendar();
+renderDetail();
+renderLibrary();
+updateProgress();
+</script>
 </body>
 </html>
