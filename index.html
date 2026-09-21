@@ -594,7 +594,9 @@ footer{
 .timeline-actual .tl-time{font-size:10px;opacity:.88}.timeline-actual .tl-name{font-weight:700;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
 .resize-handle{position:absolute;left:0;right:0;height:10px;cursor:ns-resize}.resize-handle.top{top:-2px}.resize-handle.bottom{bottom:-2px}
 .timeline-hint{font-size:12px;color:var(--muted);margin:8px 0 0}.timeline-editor{display:none}
-.tl-name{cursor:text}
+.tl-name{cursor:default;padding-right:42px}
+.edit-name{position:absolute;right:24px;top:3px;width:18px;height:18px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.72);color:#666;font-size:12px;line-height:18px;text-align:center;cursor:pointer;opacity:.72;z-index:9}
+.edit-name:hover{opacity:1;background:#fff}
 .inline-name-input{width:calc(100% - 22px);min-width:0;border:0;border-radius:4px;padding:1px 4px;font:inherit;font-weight:700;color:inherit;background:rgba(255,255,255,.92);outline:2px solid rgba(56,93,80,.28)}
 .timeline-plan .inline-name-input{color:#222}.timeline-actual .inline-name-input{color:#222}
 .block-delete{position:absolute;right:3px;top:3px;width:18px;height:18px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.72);color:#777;font-size:14px;line-height:18px;text-align:center;cursor:pointer;opacity:0;z-index:8}
@@ -2010,14 +2012,14 @@ function renderTimeline(date){
   const hours=document.getElementById("timelineHours"),canvas=document.getElementById("timelineCanvas");
   hours.innerHTML=Array.from({length:25},(_,h)=>`<div class="timeline-hour-label" style="top:${Math.min(h*60,1438)}px">${h===24?"24:00":String(h).padStart(2,"0")+":00"}</div>`).join("");
   const plans=loadPlannedTimes(date);let html=plans.map((p,i)=>{const g=blockGeom(p.start,p.end);return `<div class="timeline-plan ${i===selectedPlanRow?'selected':''}" data-pi="${i}" style="top:${g.top}px;height:${g.height}px"><span class="resize-handle top" data-resize="start"></span><div class="tl-time">${p.start}–${p.end}</div><div class="tl-name" title="Double-click to rename">${esc(p.activity||"Planned activity")}</div><button type="button" class="block-delete" aria-label="Delete planned activity" title="Delete">×</button><span class="resize-handle bottom" data-resize="end"></span></div>`}).join("");
-  const rows=loadActualTimes(date);html+=rows.map((r,i)=>{const g=blockGeom(r.start,r.end);return `<div class="timeline-actual ${i===selectedTimeRow?'selected':''}" data-i="${i}" style="top:${g.top}px;height:${g.height}px"><span class="resize-handle top" data-resize="start"></span><div class="tl-time">${r.start}–${r.end}</div><div class="tl-name" title="Double-click to rename">${esc(r.activity||"New activity")}</div><button type="button" class="block-delete" aria-label="Delete actual activity" title="Delete">×</button><span class="resize-handle bottom" data-resize="end"></span></div>`}).join("");
+  const rows=loadActualTimes(date);html+=rows.map((r,i)=>{const g=blockGeom(r.start,r.end);return `<div class="timeline-actual ${i===selectedTimeRow?'selected':''}" data-i="${i}" style="top:${g.top}px;height:${g.height}px"><span class="resize-handle top" data-resize="start"></span><div class="tl-time">${r.start}–${r.end}</div><div class="tl-name">${esc(r.activity||"New activity")}</div><button type="button" class="edit-name" aria-label="Edit activity name" title="Edit name">✎</button><button type="button" class="block-delete" aria-label="Delete actual activity" title="Delete">×</button><span class="resize-handle bottom" data-resize="end"></span></div>`}).join("");
   canvas.innerHTML=html;bindTimelinePointers(date);renderTimelineEditor(date);renderTimeSummary(date,rows);
 }
 function pointerMinute(e,canvas){const r=canvas.getBoundingClientRect();return snapMin((e.clientY-r.top)*(1440/r.height))}
 function bindTimelinePointers(date){
  const canvas=document.getElementById("timelineCanvas");
  const beginDrag=(el,e,kind)=>{
-   if(e.target.closest(".block-delete")||e.target.closest(".inline-name-input")||e.detail>1)return;
+   if(e.target.closest(".block-delete")||e.target.closest(".edit-name")||e.target.closest(".inline-name-input"))return;
    e.preventDefault();e.stopPropagation();
    const i=+(kind==="plan"?el.dataset.pi:el.dataset.i),rows=kind==="plan"?loadPlannedTimes(date):loadActualTimes(date),r=rows[i];
    if(!r)return;
@@ -2028,12 +2030,14 @@ function bindTimelinePointers(date){
  };
  canvas.querySelectorAll(".timeline-plan").forEach(el=>{
    el.addEventListener("pointerdown",e=>beginDrag(el,e,"plan"));
-   el.querySelector(".tl-name").addEventListener("dblclick",e=>{e.preventDefault();e.stopPropagation();startInlineRename(el,date,"plan",+el.dataset.pi)});
+   el.querySelector(".edit-name").addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation()});
+   el.querySelector(".edit-name").addEventListener("click",e=>{e.preventDefault();e.stopPropagation();startInlineRename(el,date,"plan",+el.dataset.pi)});
    el.querySelector(".block-delete").addEventListener("click",e=>{e.stopPropagation();const rows=loadPlannedTimes(date);rows.splice(+el.dataset.pi,1);savePlannedTimes(date,rows);selectedPlanRow=null;renderTimeline(date)});
  });
  canvas.querySelectorAll(".timeline-actual").forEach(el=>{
    el.addEventListener("pointerdown",e=>beginDrag(el,e,"actual"));
-   el.querySelector(".tl-name").addEventListener("dblclick",e=>{e.preventDefault();e.stopPropagation();startInlineRename(el,date,"actual",+el.dataset.i)});
+   el.querySelector(".edit-name").addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation()});
+   el.querySelector(".edit-name").addEventListener("click",e=>{e.preventDefault();e.stopPropagation();startInlineRename(el,date,"actual",+el.dataset.i)});
    el.querySelector(".block-delete").addEventListener("click",e=>{e.stopPropagation();const rows=loadActualTimes(date);rows.splice(+el.dataset.i,1);saveActualTimes(date,rows);selectedTimeRow=null;renderTimeline(date)});
  });
  canvas.addEventListener("pointerdown",e=>{if(e.target!==canvas)return;const m=pointerMinute(e,canvas);timelineDrag={kind:"actual",mode:"create",startY:m,current:m};selectedTimeRow=null;selectedPlanRow=null;canvas.setPointerCapture(e.pointerId)});
