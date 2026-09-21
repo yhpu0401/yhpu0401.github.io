@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piano Study Plan — Yahan Pu</title>
+
+<style>
+:root{
+  --bg:#f5f5f2;
+  --card:#ffffff;
+  --text:#171717;
+  --muted:#777777;
+  --line:#deded8;
+  --accent:#385d50;
+  --accent-soft:#e8efec;
+  --done:#eaf3ec;
+  --missed:#f7e9e6;
+  --missed-text:#9a453b;
+  --weekend:#f4eee6;
+  --today:#eef2f0;
+  --carry:#f7f0df;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.65;
+}
+
+.wrap{
+  width:min(1180px,94%);
+  margin:auto;
+  padding:54px 0 80px;
+}
+
+a{color:inherit}
+
+.eyebrow{
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+h1{
+  font-size:clamp(40px,6vw,68px);
+  line-height:1;
+  margin:10px 0 18px;
+  letter-spacing:-2px;
+}
+
+.lead{
+  font-size:18px;
+  color:var(--muted);
+  max-width:820px;
+}
+
+.pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:20px;
+}
+
+.pill{
+  font-size:13px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:999px;
+  padding:7px 11px;
+}
+
+.progressbox{margin:28px 0 34px}
+
+.progressrow{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+.progress{
+  height:10px;
+  background:#e2e2dc;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress>div{
+  height:100%;
+  background:var(--accent);
+  width:0;
+  transition:.2s;
+}
+
+h2.section{
+  font-size:28px;
+  margin:42px 0 8px;
+}
+
+.sub{
+  margin:0 0 18px;
+  color:var(--muted);
+}
+
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 16px;
+  margin:14px 0 18px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+.dot{
+  width:11px;
+  height:11px;
+  border-radius:3px;
+  border:1px solid rgba(0,0,0,.06);
+}
+
+.dot.done{background:var(--done)}
+.dot.missed{background:var(--missed)}
+.dot.today{background:var(--today);outline:2px solid var(--accent)}
+.dot.weekend{background:var(--weekend)}
+
+.calendar-shell{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:22px;
+  padding:17px;
+  overflow:auto;
+}
+
+.weekheads,.calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:7px;
+  min-width:840px;
+}
+
+.weekheads div{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:4px;
+}
+
+.daycard{
+  min-height:150px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+  padding:10px;
+  position:relative;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.daycard:hover{
+  transform:translateY(-1px);
+  border-color:#aaa;
+}
+
+.daycard.weekend{background:var(--weekend)}
+.daycard.done{background:var(--done)}
+.daycard.missed{background:var(--missed)}
+.daycard.today{background:var(--today)}
+.daycard.today.carry{background:var(--carry)}
+.daycard.future.carry{background:#fbf7ec}
+
+.daycard.selected{
+  outline:2px solid var(--accent);
+  outline-offset:1px;
+}
+
+.daytop{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.date{
+  font-weight:700;
+  font-size:14px;
+}
+
+.wtag{
+  font-size:10px;
+  color:var(--muted);
+}
+
+.status{
+  display:inline-block;
+  margin-top:7px;
+  padding:2px 7px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:600;
+  background:rgba(255,255,255,.65);
+}
+
+.status.missed{color:var(--missed-text)}
+.status.done{color:var(--accent)}
+
+.short{
+  font-size:12px;
+  line-height:1.35;
+  margin-top:7px;
+  color:#3f3f3f;
+  font-weight:600;
+}
+
+.origin{
+  margin-top:5px;
+  font-size:10px;
+  line-height:1.35;
+  color:var(--muted);
+}
+
+.minutes{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.checkline{
+  position:absolute;
+  right:8px;
+  bottom:7px;
+  display:flex;
+  gap:5px;
+  align-items:center;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.checkline input,.bigdone input,.taskcheck{
+  accent-color:var(--accent);
+}
+
+.checkline input:disabled{
+  cursor:not-allowed;
+  opacity:.45;
+}
+
+.detail{
+  margin-top:22px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:22px;
+  padding:clamp(20px,4vw,36px);
+}
+
+.detailhead{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:20px;
+}
+
+.detail h2{
+  font-size:30px;
+  margin:2px 0 3px;
+}
+
+.meta{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.bigdone{
+  white-space:nowrap;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fafafa;
+}
+
+.bigdone input{
+  width:20px;
+  height:20px;
+}
+
+.bigdone.disabled{
+  opacity:.55;
+}
+
+.notice{
+  border-radius:12px;
+  padding:12px 14px;
+  margin-top:12px;
+  font-size:14px;
+}
+
+.notice.carry{background:var(--carry)}
+.notice.missed{background:var(--missed);color:#71372f}
+.notice.done{background:var(--done)}
+.notice.weekend{background:var(--weekend)}
+
+.block{
+  padding:22px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.block:last-child{border-bottom:0}
+
+.label{
+  font-size:12px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+.block h3{
+  font-size:21px;
+  margin:0 0 10px;
+}
+
+.callout{
+  background:var(--accent-soft);
+  border-radius:14px;
+  padding:15px 17px;
+  margin:12px 0;
+}
+
+.tasklist{
+  display:grid;
+  gap:12px;
+}
+
+.taskrow{
+  display:grid;
+  grid-template-columns:24px 1fr;
+  gap:12px;
+  padding:16px;
+  background:#f2f2ee;
+  border-radius:14px;
+}
+
+.taskcheck{
+  width:18px;
+  height:18px;
+  margin-top:4px;
+}
+
+.tasktitle{
+  font-size:18px;
+  font-weight:700;
+}
+
+.taskdesc{
+  color:var(--muted);
+  font-size:14px;
+  margin-top:3px;
+}
+
+.directlinks{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:11px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  min-height:38px;
+  padding:7px 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  text-decoration:none;
+  background:#fff;
+  font-size:13px;
+}
+
+.btn:hover{border-color:#999}
+
+.library{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.theory{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:15px;
+  padding:17px;
+}
+
+.theory h3{
+  font-size:18px;
+  margin:0 0 8px;
+}
+
+.theory p{
+  font-size:14px;
+  color:#555;
+  margin:7px 0;
+}
+
+footer{
+  margin-top:48px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+@media(max-width:760px){
+  .library{grid-template-columns:1fr}
+  .detailhead{flex-direction:column}
+}
+
+.skate-tag{
+  display:inline-block;
+  margin-top:6px;
+  padding:2px 7px;
+  border-radius:999px;
+  background:#edf0f4;
+  color:#475569;
+  font-size:10px;
+  font-weight:600;
+}
+.skate-tag.optional{
+  background:#f3f1eb;
+  color:#786b58;
+}
+.skate-tag.complete{
+  background:#e6f1e8;
+  color:#385d50;
+}
+.skate-block{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#f7f8fa;
+}
+.skate-block.optional{
+  background:#f7f4ed;
+}
+.skate-head{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+}
+.skate-head h3{
+  margin:0;
+  font-size:20px;
+}
+.skate-check{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+  font-size:13px;
+}
+.skate-check input{
+  width:18px;
+  height:18px;
+  accent-color:var(--accent);
+}
+.skate-plan{
+  margin:12px 0 0;
+  padding-left:20px;
+  color:#555;
+  font-size:14px;
+}
+
+
+.sport-tag{
+  display:inline-block;
+  margin-top:6px;
+  margin-right:4px;
+  padding:2px 7px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:600;
+}
+.sport-tag.skate{
+  background:#edf0f4;
+  color:#475569;
+}
+.sport-tag.swim{
+  background:#e9f2f6;
+  color:#35637a;
+}
+.sport-tag.tennis{
+  background:#edf3e8;
+  color:#4f6b3c;
+}
+.sport-tag.optional{
+  background:#f3f1eb;
+  color:#786b58;
+}
+.sport-tag.complete{
+  outline:1px solid var(--accent);
+}
+.sport-block{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#f7f8fa;
+}
+.sport-block.swim{
+  background:#f2f7f9;
+}
+.sport-block.tennis{
+  background:#f3f7ef;
+}
+.sport-block.optional{
+  background:#f7f4ed;
+}
+.sport-head{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+}
+.sport-head h3{
+  margin:0;
+  font-size:20px;
+}
+.sport-check{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+  font-size:13px;
+}
+.sport-check input{
+  width:18px;
+  height:18px;
+  accent-color:var(--accent);
+}
+.sport-plan{
+  margin:12px 0 0;
+  padding-left:20px;
+  color:#555;
+  font-size:14px;
+}
+.balance-box{
+  margin:18px 0;
+  padding:14px 16px;
+  border-radius:14px;
+  background:#f2f2ee;
+  font-size:14px;
+  color:#555;
+}
+
+
+/* --------------------------
+   Daily Time Log · draggable 24h timeline
+-------------------------- */
+.time-log-card{margin-top:22px;border:1px solid var(--line);background:#fff;border-radius:22px;padding:clamp(18px,3vw,30px)}
+.time-log-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.time-log-head h3{font-size:24px;margin:2px 0 4px}.time-log-nav{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.time-log-nav button,.time-log-nav input,.timeline-editor input,.timeline-editor button{font:inherit;border:1px solid var(--line);border-radius:10px;background:#fff;padding:7px 10px;color:var(--text)}
+.time-log-nav button,.timeline-editor button{cursor:pointer}.time-log-nav button:hover,.timeline-editor button:hover{border-color:#999}
+.timeline-legend{display:flex;gap:14px;flex-wrap:wrap;margin:16px 0 10px;font-size:12px;color:var(--muted)}
+.timeline-legend span{display:flex;align-items:center;gap:6px}.tl-swatch{width:18px;height:10px;border-radius:3px;border:1px solid rgba(0,0,0,.08)}
+.tl-swatch.plan{background:rgba(56,93,80,.10);border-style:dashed}.tl-swatch.actual{background:rgba(56,93,80,.52)}
+.timeline-wrap{display:grid;grid-template-columns:64px minmax(0,1fr);position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;user-select:none}
+.timeline-hours{position:relative;height:1440px;background:#fafaf8;border-right:1px solid var(--line)}
+.timeline-hour-label{position:absolute;right:10px;transform:translateY(-50%);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.timeline-hour-label:first-child{transform:none}.timeline-canvas{position:relative;height:1440px;touch-action:pan-y;background:repeating-linear-gradient(to bottom,transparent 0,transparent 59px,rgba(90,90,90,.34) 59px,rgba(90,90,90,.34) 60px);background-size:100% 60px}
+.timeline-canvas::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0,transparent 14px,rgba(90,90,90,.11) 14px,rgba(90,90,90,.11) 15px);opacity:.55}
+.timeline-plan,.timeline-actual{position:absolute;left:8px;right:8px;border-radius:8px;padding:4px 8px;overflow:hidden;font-size:12px;line-height:1.25;z-index:2}
+.timeline-plan{background:rgba(56,93,80,.07);border:1px dashed rgba(56,93,80,.22);color:rgba(23,23,23,.38);pointer-events:none}
+.timeline-actual{left:18%;right:8px;background:rgba(56,93,80,.58);border:1px solid rgba(56,93,80,.65);color:#fff;cursor:grab;z-index:4;touch-action:none}
+.timeline-actual.selected{outline:2px solid var(--accent);outline-offset:2px;background:rgba(56,93,80,.72)}
+.timeline-actual .tl-time{font-size:10px;opacity:.88}.timeline-actual .tl-name{font-weight:700;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.resize-handle{position:absolute;left:0;right:0;height:10px;cursor:ns-resize}.resize-handle.top{top:-2px}.resize-handle.bottom{bottom:-2px}
+.timeline-now{position:absolute;left:0;right:0;height:2px;background:#9a453b;z-index:5;pointer-events:none}.timeline-now::before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:#9a453b}
+.timeline-hint{font-size:12px;color:var(--muted);margin:8px 0 0}.timeline-editor{margin-top:14px;padding:14px;border-radius:14px;background:#f5f5f2;display:grid;grid-template-columns:105px 105px minmax(150px,1fr) auto;gap:8px;align-items:center}
+.timeline-editor input{min-width:0;width:100%;background:#fff}.timeline-editor .delete{color:#8a4d45}.timeline-editor-empty{grid-column:1/-1;color:var(--muted);font-size:13px}
+.time-summary{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}.time-chip{font-size:12px;border-radius:999px;background:#f2f2ee;padding:6px 9px}.time-chip.total{background:var(--accent-soft);font-weight:700}.time-diff{margin-top:9px;font-size:12px;color:var(--muted)}
+@media(max-width:700px){.timeline-wrap{grid-template-columns:52px minmax(0,1fr)}.timeline-hour-label{right:7px}.timeline-editor{grid-template-columns:1fr 1fr}.timeline-editor .activity{grid-column:1/-1}.timeline-editor button{min-height:42px}}
+
+</style>
+</head>
+
+<body>
+<main class="wrap">
+
+<header>
+  <div class="eyebrow">Classical Piano · Rolling Study Plan</div>
+  <h1>Piano Study Plan</h1>
+  <p class="lead">
+    这是一个会自动顺延的钢琴学习日历：如果某天没有勾选完成，该课程会在第二天继续出现，
+    后面的课程依次后移；原来的日期仍保留为“未学习”，因此可以直接看出哪天真正学习了、哪天中断了。
+    每个任务下面都直接附视频、讲解、练习或乐谱。日历同时加入运动安排：
+    周一/周三/周五滑冰，周二游泳，周六网球；周四作为运动休息日，周日最多选择一次轻松游泳或第 4 次滑冰。
+  </p>
+
+  <div class="pills">
+    <span class="pill">56 lessons</span>
+    <span class="pill">未完成 → 次日自动顺延</span>
+    <span class="pill">Weekdays ≈ 60 min</span>
+    <span class="pill">Weekends ≈ 90–120 min</span>
+    <span class="pill">⛸ Skate: Mon / Wed / Fri</span>
+    <span class="pill">🏊 Swim: Tue</span>
+    <span class="pill">🎾 Tennis: Sat</span>
+    <span class="pill">Thu: recovery / no sport</span>
+    <span class="pill">🥾 Sun: Hiking / Outdoor Day</span>
+  </div>
+</header>
+
+<section class="progressbox">
+  <div class="progressrow">
+    <b>Piano progress</b>
+    <span id="progressText"></span>
+  </div>
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <div class="progressrow" style="margin-top:18px">
+    <b>Skating progress</b>
+    <span id="skateProgressText"></span>
+  </div>
+  <div class="progress"><div id="skateProgressBar"></div></div>
+
+  <div class="progressrow" style="margin-top:18px">
+    <b>Swimming progress</b>
+    <span id="swimProgressText"></span>
+  </div>
+  <div class="progress"><div id="swimProgressBar"></div></div>
+
+  <div class="progressrow" style="margin-top:18px">
+    <b>Tennis progress</b>
+    <span id="tennisProgressText"></span>
+  </div>
+  <div class="progress"><div id="tennisProgressBar"></div></div>
+</section>
+
+<h2 class="section">Calendar</h2>
+<p class="sub">
+  绿色 = 当天学习完成；红色 = 当天没有学习；描边 = 今天。
+  如果出现“↪ 顺延自…”，表示这节课原本安排在更早的日期。
+</p>
+
+<div class="legend">
+  <span><i class="dot done"></i> 已学习</span>
+  <span><i class="dot missed"></i> 未学习</span>
+  <span><i class="dot today"></i> 今天</span>
+  <span><i class="dot weekend"></i> 周末长练习</span>
+  <span>⛸ 滑冰</span>
+  <span>🏊 游泳</span>
+  <span>🎾 网球</span>
+  <span>○ 周末可选运动（最多一次）</span>
+</div>
+
+<div class="balance-box">
+  <b>Weekly balance：</b>
+  固定安排为 3 次滑冰 + 1 次游泳 + 1 次网球。
+  周四不安排运动，留作恢复；周六早上 08:00–10:00 家教，晚上网球；周日默认预留给徒步 / 户外，并保留晚间钢琴。
+  如果某周不徒步，周日可以直接作为自由恢复日。
+</div>
+
+<div class="calendar-shell">
+  <div class="weekheads">
+    <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div>
+    <div>Fri</div><div>Sat</div><div>Sun</div>
+  </div>
+  <div id="calendar" class="calendar"></div>
+</div>
+
+<section id="timeLog" class="time-log-card">
+  <div class="time-log-head">
+    <div>
+      <div class="label">Daily Time Log</div>
+      <h3>24-hour Schedule</h3>
+      <div class="meta">浅色 = 原计划；拖动空白时间轴创建实际记录。实际记录可以整体拖动，也可以拖上下边缘调整时间。</div>
+    </div>
+    <div class="time-log-nav">
+      <button type="button" id="timePrev">←</button><input type="date" id="timeDate"><button type="button" id="timeToday">Today</button><button type="button" id="timeNext">→</button>
+    </div>
+  </div>
+  <div class="timeline-legend"><span><i class="tl-swatch plan"></i> Planned</span><span><i class="tl-swatch actual"></i> Actual</span><span>15 min snapping</span></div>
+  <div class="timeline-wrap">
+    <div id="timelineHours" class="timeline-hours"></div>
+    <div id="timelineCanvas" class="timeline-canvas" aria-label="24 hour draggable schedule"></div>
+  </div>
+  <div class="timeline-hint">在空白处按住并上下拖动即可加入一段时间；点击已有色块后，可在下面精确输入时间和活动名称。</div>
+  <div id="timelineEditor" class="timeline-editor"><div class="timeline-editor-empty">选择一条实际记录，或直接在时间轴上拖动创建。</div></div>
+  <div id="timeSummary" class="time-summary"></div><div id="timeDiff" class="time-diff"></div>
+</section>
+
+<section id="detail" class="detail"></section>
+
+
+
+
+
+<h2 class="section">Sports Learning Roadmap</h2>
+<p class="sub">按照你现在的水平，运动不只是“去运动”，而是每周有明确技能目标。</p>
+
+<div class="library">
+  <article class="theory">
+    <h3>⛸ Figure Skating</h3>
+    <p><b>当前：</b>单足蛇形、后压步。</p>
+    <p><b>8周路线：</b>单足蛇形稳定 → 后压步两侧 → 单脚内外刃 → 三转准备与基础 → 后滑单脚 → 一足旋转准备 → 基础步法连接。</p>
+    <p><b>暂时不急：</b>不把跳跃作为这8周主目标。先把刃、单脚控制和转向打稳。</p>
+  </article>
+
+  <article class="theory">
+    <h3>🏊 Swimming</h3>
+    <p><b>当前：</b>会蛙泳，正在学自由泳。</p>
+    <p><b>8周路线：</b>身体位置 + 水下呼气 → 侧向换气 → 打腿/划臂 → 25m连续自由泳 → 50m自由泳 → 节奏与效率。</p>
+    <p><b>蛙泳作用：</b>用作热身、恢复和耐力，不再作为主要技术目标。</p>
+  </article>
+
+  <article class="theory">
+    <h3>🎾 Tennis</h3>
+    <p><b>当前：</b>正手、反手入门。</p>
+    <p><b>8周路线：</b>固定动作框架 → 击球点 → 正反手交替 → 小碎步与回位 → 半场连续对拉 → 发球入门 → 简单回合。</p>
+    <p><b>当前优先：</b>稳定性和击球点高于球速。</p>
+  </article>
+
+  <article class="theory">
+    <h3>Weekly Load</h3>
+    <p><b>固定：</b>滑冰3次 + 游泳1次 + 网球1次。</p>
+    <p><b>周日：</b>默认预留给徒步 / 户外，不再默认叠加游泳或第4次滑冰；晚上保留钢琴。</p>
+    <p><b>恢复规则：</b>如果本周疲劳明显或没有徒步安排，周日直接作为恢复日；不需要补做运动。</p>
+  </article>
+</div>
+
+<h2 class="section">Music Theory Library</h2>
+<p class="sub">每一个乐理概念都附视频、文字讲解和在线练习。</p>
+<div id="library" class="library"></div>
+
+<footer>
+  © 2026 Yahan Pu · Completion history and task progress are stored locally in this browser.
+</footer>
+
+</main>
+
+<script>
+const TOPICS={"staff": {"title": "五线谱、谱号与大谱表", "what": "五线谱用音符在线和间上的位置表示音高。钢琴通常同时使用高音谱号与低音谱号，两者组成 Grand Staff（大谱表）。中央 C 位于两套谱表之间，是最重要的初始参照点之一。", "explain": "不要一开始死背所有线间口诀。先建立 landmark notes：中央C、右手G、右手高C、左手F、左手低C。之后从地标音判断音符向上/向下以及相隔多少。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note", "learn_name": "谱表与谱号讲解", "exercise_name": "Note Identification 认音"}, "treble": {"title": "高音谱号", "what": "高音谱号主要覆盖钢琴中高音区。今天重点把 C4、G4、C5 建成立即反应的地标音。", "explain": "读右手谱时，先找最近的地标音，再通过方向和音程读其余音，不要每个音都重新从中央C开始数。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note", "learn_name": "高音谱号讲解", "exercise_name": "高音谱号认音练习"}, "bass": {"title": "低音谱号", "what": "低音谱号主要覆盖钢琴中低音区。很多初学者左手慢，真正瓶颈其实是低音谱号没有形成直接反应。", "explain": "先固定中央C、F3、C3。读出第一个音后，尽量继续依靠上下方向和距离读后续音符。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs", "learn": "https://www.musictheory.net/lessons/10", "exercise": "https://www.musictheory.net/exercises/note", "learn_name": "低音谱号讲解", "exercise_name": "低音谱号认音练习"}, "duration": {"title": "音符时值", "what": "音符既表示音高，也表示时值。常见有全音符、二分音符、四分音符、八分音符与十六分音符。", "explain": "在4/4拍里，可以先把四分音符理解为1拍，二分音符2拍，全音符4拍，两个八分音符合计1拍。", "video": "https://www.youtube.com/watch?v=FefxxV9PVJQ", "learn": "https://www.musictheory.net/lessons/11", "exercise": "https://www.musictheory.net/exercises", "learn_name": "音符时值讲解", "exercise_name": "节奏练习"}, "time": {"title": "拍号与小节", "what": "拍号说明每个小节如何组织拍子。4/4、3/4、2/4 的重拍组织不同；拍号本身不是速度。", "explain": "视奏前一定先看拍号。先数拍子，再读音高，能显著减少弹到一半节奏崩掉的情况。", "video": "https://www.youtube.com/watch?v=FefxxV9PVJQ", "learn": "https://www.musictheory.net/lessons/12", "exercise": "https://www.musictheory.net/exercises", "learn_name": "拍号讲解", "exercise_name": "节奏综合练习"}, "rests": {"title": "休止符", "what": "休止符表示一段时间内不发声，但拍子仍然继续。", "explain": "遇到休止符时手可以不按键，但嘴里或心里的节拍不能停。", "video": "https://www.youtube.com/watch?v=FefxxV9PVJQ", "learn": "https://www.musictheory.net/lessons/13", "exercise": "https://www.musictheory.net/exercises", "learn_name": "休止符讲解", "exercise_name": "节奏练习"}, "dots": {"title": "附点、Tie 与 Slur", "what": "附点把原时值增加一半；Tie 连接相同音高并延长时值；Slur 覆盖一组不同音高，提示连贯的乐句或连奏。", "explain": "看到弧线时先判断两端是否同音：相同音更可能是 tie，不同音通常是 slur。", "video": "https://www.youtube.com/watch?v=CzMITEddpkM", "learn": "https://www.musictheory.net/lessons/14", "exercise": "https://www.musictheory.net/exercises", "learn_name": "附点与连线讲解", "exercise_name": "综合基础练习"}, "eighth": {"title": "八分音符与细分", "what": "一拍可平均分成两个八分音符，可用 1-&-2-&-3-&-4-& 来稳定细分。", "explain": "八分音符不是“弹快”，而是把每一拍均匀分成两个位置。", "video": "https://www.youtube.com/watch?v=FefxxV9PVJQ", "learn": "https://www.musictheory.net/lessons/11", "exercise": "https://www.musictheory.net/exercises", "learn_name": "八分音符讲解", "exercise_name": "节奏练习"}, "intervals": {"title": "音程", "what": "音程是两个音之间的距离。二度、三度、四度、五度等能让你从逐音读取升级到读取音乐形状。", "explain": "例如 C→D 是二度，C→E 是三度，C→G 是五度。先判断方向，再判断距离。", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "learn": "https://www.musictheory.net/lessons/30", "exercise": "https://www.musictheory.net/exercises/interval", "learn_name": "音程讲解", "exercise_name": "Interval Identification"}, "interval_quality": {"title": "大、小、纯音程", "what": "同样的音程数字可以有不同半音距离，因此会有大三度、小三度、纯四度、纯五度等。", "explain": "先在键盘上听：C-E 是大三度，C-E♭ 是小三度，C-F 是纯四度，C-G 是纯五度。", "video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "learn": "https://www.musictheory.net/lessons/31", "exercise": "https://www.musictheory.net/exercises/keyboard-interval", "learn_name": "音程性质讲解", "exercise_name": "Keyboard Interval"}, "steps": {"title": "半音、全音与升降号", "what": "钢琴上相邻两个琴键之间通常是半音，两个半音组成全音。♯ 升高半音，♭ 降低半音，♮ 还原。", "explain": "E-F、B-C 中间没有黑键，因此本身就是半音。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/20", "exercise": "https://www.musictheory.net/exercises/keyboard", "learn_name": "半音/全音讲解", "exercise_name": "Keyboard Note 练习"}, "major": {"title": "大调音阶", "what": "大调音阶结构为 全-全-半-全-全-全-半（W-W-H-W-W-W-H）。", "explain": "C大调全是白键；G大调需要F♯；F大调需要B♭。要知道这些升降号为什么出现，而不是只背指法。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/21", "exercise": "https://www.musictheory.net/exercises/scale", "learn_name": "大调音阶讲解", "exercise_name": "Scale Identification"}, "triad": {"title": "三和弦", "what": "三和弦通常由根音、三音、五音组成。C-E-G 是 C 大三和弦，A-C-E 是 A 小三和弦。", "explain": "视奏时逐渐把 C-E-G 读成一个 C major chord，而不是三个完全独立的音。", "video": "https://www.youtube.com/watch?v=J5EDGTyGzQY", "learn": "https://www.musictheory.net/lessons/40", "exercise": "https://www.musictheory.net/exercises/chord", "learn_name": "三和弦讲解", "exercise_name": "Chord Identification"}, "inversion": {"title": "和弦转位", "what": "同一个和弦的音可以重新排列。根音在最低是原位，三音最低是第一转位，五音最低是第二转位。", "explain": "C-E-G、E-G-C、G-C-E 都属于 C 大三和弦。", "video": "https://www.youtube.com/watch?v=J5EDGTyGzQY", "learn": "https://www.musictheory.net/lessons/42", "exercise": "https://www.musictheory.net/exercises/keyboard-chord", "learn_name": "转位讲解", "exercise_name": "Keyboard Chord"}, "diatonic": {"title": "I–IV–V–I", "what": "在 C 大调中，I=C-E-G，IV=F-A-C，V=G-B-D。I 最稳定，V 往往强烈倾向回到 I。", "explain": "弹 I→IV→V→I，听“稳定→离开→紧张→回家”的方向感。", "video": "https://www.youtube.com/watch?v=J5EDGTyGzQY", "learn": "https://www.musictheory.net/lessons/43", "exercise": "https://www.musictheory.net/exercises/keyboard-chord", "learn_name": "调内和弦讲解", "exercise_name": "和弦键盘练习"}, "minor": {"title": "小调音阶", "what": "常见有自然小调、和声小调与旋律小调。A自然小调与C大调使用相同的音集合，但主音不同。", "explain": "A和声小调把第7级G升为G♯，增强回到A的倾向。旋律小调在传统古典教学中上行常升6、7级。", "video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "learn": "https://www.musictheory.net/lessons/22", "exercise": "https://www.musictheory.net/exercises/scale", "learn_name": "小调音阶讲解", "exercise_name": "Scale Identification"}, "keysig": {"title": "调号", "what": "调号是在谱表开头固定出现的升号或降号，规定作品中哪些音默认升高或降低。", "explain": "例如 G大调有F♯，D大调有F♯和C♯，F大调有B♭。", "video": "https://www.youtube.com/watch?v=cvDzjnGQiSo", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig", "learn_name": "调号讲解", "exercise_name": "Key Signature Identification"}, "circle": {"title": "五度圈", "what": "五度圈把12个调按五度关系排列。顺时针逐渐增加升号，逆时针逐渐增加降号。", "explain": "先掌握 C→G→D→A 和 C→F→B♭→E♭，不要一次死背完整圆环。", "video": "https://www.youtube.com/watch?v=cvDzjnGQiSo", "learn": "https://www.musictheory.net/lessons/24", "exercise": "https://www.musictheory.net/exercises/keysig", "learn_name": "调号/五度圈讲解", "exercise_name": "调号识别"}, "roman": {"title": "罗马数字与调内和弦", "what": "罗马数字按照和弦在调中的位置命名。C大调的 I-IV-V 是 C-F-G；G大调的 I-IV-V 是 G-C-D。", "explain": "这种写法让你看到同一种和声功能在不同调中的对应关系。", "video": "https://www.youtube.com/watch?v=J5EDGTyGzQY", "learn": "https://www.musictheory.net/lessons/44", "exercise": "https://www.musictheory.net/exercises/chord", "learn_name": "罗马数字讲解", "exercise_name": "和弦识别"}, "phrase": {"title": "乐句与终止式", "what": "Phrase 像音乐的一句话；Cadence 常出现在乐句末尾，制造暂停、未完或结束感。", "explain": "半终止常停在V，听起来还没结束；V→I 的正格终止结束感更强。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs", "learn": "https://www.musictheory.net/lessons/55", "exercise": "https://www.musictheory.net/exercises", "learn_name": "终止式讲解", "exercise_name": "理论综合练习"}, "analysis": {"title": "完整作品分析", "what": "乐理最终要回到实际作品：先看调号、拍号、重复、乐句、和弦与终止式，再决定如何弹。", "explain": "拿到谱不要立刻按第一音。先花几分钟理解作品结构，之后学习速度会更快。", "video": "https://www.youtube.com/watch?v=ftoXQsJtKPs", "learn": "https://www.musictheory.net/lessons", "exercise": "https://www.musictheory.net/exercises", "learn_name": "乐理课程总目录", "exercise_name": "综合练习"}};
+const BASE_DAYS=[{"date": "2026-09-21", "weekday": "Mon", "weekday_zh": "周一", "week": 1, "topic": "staff", "short": "五线谱 + 大谱表 + 中央C", "tech": "C大调五指位；Hanon 1；Czerny 599 No.1 试读", "piece": "Petzold：Minuet in G, BWV Anh.114 前8小节右手", "drill": "圈出中央C；认音10题。", "minutes": 60, "weekend": false}, {"date": "2026-09-22", "weekday": "Tue", "weekday_zh": "周二", "week": 1, "topic": "treble", "short": "高音谱号地标音", "tech": "C大调五指位；Hanon 1；Czerny 599 No.1", "piece": "BWV Anh.114 前8小节双手分开", "drill": "高音谱号认音10题。", "minutes": 60, "weekend": false}, {"date": "2026-09-23", "weekday": "Wed", "weekday_zh": "周三", "week": 1, "topic": "bass", "short": "低音谱号地标音", "tech": "C大调分手1八度；Hanon 1；Czerny 599 No.1", "piece": "BWV Anh.114 左手前8小节", "drill": "低音谱号认音10题。", "minutes": 60, "weekend": false}, {"date": "2026-09-24", "weekday": "Thu", "weekday_zh": "周四", "week": 1, "topic": "duration", "short": "全/二分/四分音符", "tech": "C大调分手；Hanon 1；Czerny 599 No.1–2", "piece": "BWV Anh.114 前8小节极慢合手", "drill": "拍4/4节奏5分钟。", "minutes": 60, "weekend": false}, {"date": "2026-09-25", "weekday": "Fri", "weekday_zh": "周五", "week": 1, "topic": "staff", "short": "Week 1 读谱整合", "tech": "C大调慢速双手；Hanon 1；Czerny 599 No.2", "piece": "BWV Anh.114 前8小节不断拍", "drill": "陌生8小节，预读30秒后只弹1–2遍。", "minutes": 60, "weekend": false}, {"date": "2026-09-26", "weekday": "Sat", "weekday_zh": "周六", "week": 1, "topic": "staff", "short": "周六｜大谱表强化 + 长视奏", "tech": "C大调1八度；Hanon 1×2轮；Czerny No.1–2", "piece": "BWV Anh.114 前8小节分手→合手；再选一段陌生8小节", "drill": "认音30题；高低音谱号各15题；完成一轮整周复习。", "minutes": 100, "weekend": true}, {"date": "2026-09-27", "weekday": "Sun", "weekday_zh": "周日", "week": 1, "topic": "staff", "short": "周日｜Week 1 总复习 + 完整小段", "tech": "C大调1–2八度；Hanon 1；Czerny No.2", "piece": "BWV Anh.114 前8小节完整慢速，录一次", "drill": "先看视频复习；认音20题；陌生谱2段，每段只弹2次。", "minutes": 90, "weekend": true}, {"date": "2026-09-28", "weekday": "Mon", "weekday_zh": "周一", "week": 2, "topic": "time", "short": "2/4、3/4、4/4", "tech": "C大调2八度分手；Hanon 1–2；Czerny No.2", "piece": "BWV Anh.114 第9–16小节分手", "drill": "找三段谱，只判断拍号。", "minutes": 60, "weekend": false}, {"date": "2026-09-29", "weekday": "Tue", "weekday_zh": "周二", "week": 2, "topic": "rests", "short": "休止符", "tech": "C大调；Hanon 2；Czerny No.2–3", "piece": "BWV Anh.114 第9–16小节合手", "drill": "休止处继续数拍。", "minutes": 60, "weekend": false}, {"date": "2026-09-30", "weekday": "Wed", "weekday_zh": "周三", "week": 2, "topic": "dots", "short": "附点 / Tie / Slur", "tech": "C大调；G大调五指位；Hanon 2", "piece": "BWV Anh.114 找所有 slur", "drill": "写附点时值并在琴上保持。", "minutes": 60, "weekend": false}, {"date": "2026-10-01", "weekday": "Thu", "weekday_zh": "周四", "week": 2, "topic": "eighth", "short": "八分音符", "tech": "C/G五指位；Hanon 2；Czerny No.3", "piece": "BWV Anh.114 难处循环2小节", "drill": "节拍器60，拍 1-&-2-&。", "minutes": 60, "weekend": false}, {"date": "2026-10-02", "weekday": "Fri", "weekday_zh": "周五", "week": 2, "topic": "duration", "short": "Week 2 节奏整合", "tech": "C大调2八度；G大调分手；Hanon 1–2", "piece": "BWV Anh.114 完整慢速", "drill": "陌生8小节先拍节奏再弹。", "minutes": 60, "weekend": false}, {"date": "2026-10-03", "weekday": "Sat", "weekday_zh": "周六", "week": 2, "topic": "time", "short": "周六｜节奏强化训练", "tech": "C/G五指位；Hanon 1–2；Czerny No.2–3", "piece": "BWV Anh.114 第1–16小节连起来", "drill": "节拍器60：四分/八分/休止/附点各练；节奏综合20分钟。", "minutes": 100, "weekend": true}, {"date": "2026-10-04", "weekday": "Sun", "weekday_zh": "周日", "week": 2, "topic": "duration", "short": "周日｜Week 2 节奏 + 作品整合", "tech": "C大调2八度；G大调分手；Hanon 2", "piece": "BWV Anh.114 尝试完整慢速", "drill": "先拍后弹两段陌生谱；完整曲录音一次。", "minutes": 90, "weekend": true}, {"date": "2026-10-05", "weekday": "Mon", "weekday_zh": "周一", "week": 3, "topic": "intervals", "short": "二度与三度", "tech": "C/G大调；Hanon 2；Czerny No.3–4", "piece": "BWV Anh.115 前8小节", "drill": "音程识别10题；圈 step / skip。", "minutes": 60, "weekend": false}, {"date": "2026-10-06", "weekday": "Tue", "weekday_zh": "周二", "week": 3, "topic": "intervals", "short": "四度与五度", "tech": "C/G大调；Hanon 2–3；Czerny No.4", "piece": "BWV Anh.115 前8小节分手", "drill": "琴上弹P4/P5。", "minutes": 60, "weekend": false}, {"date": "2026-10-07", "weekday": "Wed", "weekday_zh": "周三", "week": 3, "topic": "interval_quality", "short": "大三度与小三度", "tech": "C/G大调；Hanon 3；Czerny No.4", "piece": "BWV Anh.115 前8小节合手", "drill": "比较 C-E 与 C-E♭。", "minutes": 60, "weekend": false}, {"date": "2026-10-08", "weekday": "Thu", "weekday_zh": "周四", "week": 3, "topic": "intervals", "short": "六、七、八度", "tech": "C/G/F五指位；Hanon 3；Czerny No.4–5", "piece": "BWV Anh.115 第9–16小节", "drill": "音程识别15题。", "minutes": 60, "weekend": false}, {"date": "2026-10-09", "weekday": "Fri", "weekday_zh": "周五", "week": 3, "topic": "intervals", "short": "按音程读谱", "tech": "C/G大调；Hanon 2–3；Czerny No.5", "piece": "BWV Anh.115 继续", "drill": "陌生8小节仅标第一个音，后面靠方向与距离。", "minutes": 60, "weekend": false}, {"date": "2026-10-10", "weekday": "Sat", "weekday_zh": "周六", "week": 3, "topic": "intervals", "short": "周六｜音程强化 + 视奏", "tech": "C/G/F；Hanon 2–3；Czerny No.4–5", "piece": "BWV Anh.115 分手→合手", "drill": "音程识别30题；键盘上弹2–8度；陌生谱按音程读。", "minutes": 100, "weekend": true}, {"date": "2026-10-11", "weekday": "Sun", "weekday_zh": "周日", "week": 3, "topic": "interval_quality", "short": "周日｜Week 3 音程总复习", "tech": "C/G音阶；Hanon 3；Czerny No.5", "piece": "BWV Anh.115 慢速完整段落", "drill": "大/小三度、纯四/五/八度各听辨和弹奏。", "minutes": 90, "weekend": true}, {"date": "2026-10-12", "weekday": "Mon", "weekday_zh": "周一", "week": 4, "topic": "steps", "short": "半音与全音", "tech": "C/G大调；Hanon 3；Czerny No.5", "piece": "BWV Anh.115 完成", "drill": "每个白键向上找半音与全音。", "minutes": 60, "weekend": false}, {"date": "2026-10-13", "weekday": "Tue", "weekday_zh": "周二", "week": 4, "topic": "steps", "short": "♯ ♭ ♮", "tech": "C/G大调；Hanon 3；Czerny No.5–6", "piece": "Musette in D, BWV Anh.126 前8小节右手", "drill": "随机5个音：升、降、还原。", "minutes": 60, "weekend": false}, {"date": "2026-10-14", "weekday": "Wed", "weekday_zh": "周三", "week": 4, "topic": "major", "short": "大调公式", "tech": "C大调2八度双手慢速；Hanon 3–4", "piece": "Musette 前8小节分手", "drill": "写 W-W-H-W-W-W-H 并在键盘验证。", "minutes": 60, "weekend": false}, {"date": "2026-10-15", "weekday": "Thu", "weekday_zh": "周四", "week": 4, "topic": "major", "short": "G大调与F♯", "tech": "G大调2八度分手；Hanon 4；Czerny No.6", "piece": "Musette 前8小节合手", "drill": "从G自己推导F♯。", "minutes": 60, "weekend": false}, {"date": "2026-10-16", "weekday": "Fri", "weekday_zh": "周五", "week": 4, "topic": "major", "short": "F大调与B♭", "tech": "F大调2八度分手；Hanon 4；Czerny No.6", "piece": "Musette 继续", "drill": "从F推导B♭。", "minutes": 60, "weekend": false}, {"date": "2026-10-17", "weekday": "Sat", "weekday_zh": "周六", "week": 4, "topic": "major", "short": "周六｜大调音阶强化", "tech": "C/G/F 每条2八度；Hanon 3–4；Czerny No.5–6", "piece": "Musette in D 前半段", "drill": "写并弹 C/G/F 大调；每条说出升降号；做Scale练习。", "minutes": 105, "weekend": true}, {"date": "2026-10-18", "weekday": "Sun", "weekday_zh": "周日", "week": 4, "topic": "major", "short": "周日｜Week 4 调性整合", "tech": "C/G/F慢速双手；Hanon 4", "piece": "Musette 前半段连贯演奏", "drill": "不看答案从主音推导 G、F大调；陌生谱先判断调号。", "minutes": 90, "weekend": true}, {"date": "2026-10-19", "weekday": "Mon", "weekday_zh": "周一", "week": 5, "topic": "triad", "short": "三和弦", "tech": "C/G/F大调；Hanon 4；Czerny No.6–7", "piece": "Burgmüller Op.100 No.1 La Candeur 前8小节右手", "drill": "弹 C-E-G / F-A-C / G-B-D。", "minutes": 60, "weekend": false}, {"date": "2026-10-20", "weekday": "Tue", "weekday_zh": "周二", "week": 5, "topic": "triad", "short": "大三和弦 / 小三和弦", "tech": "C/G/F大调；Hanon 4；Czerny No.7", "piece": "La Candeur 前8小节分手", "drill": "比较 C-E-G 与 C-E♭-G。", "minutes": 60, "weekend": false}, {"date": "2026-10-21", "weekday": "Wed", "weekday_zh": "周三", "week": 5, "topic": "triad", "short": "减三和弦 + 调内三和弦", "tech": "C大调 + C/F/G和弦；Hanon 4", "piece": "La Candeur 前8小节合手", "drill": "C大调每一级叠三度。", "minutes": 60, "weekend": false}, {"date": "2026-10-22", "weekday": "Thu", "weekday_zh": "周四", "week": 5, "topic": "inversion", "short": "和弦转位", "tech": "C/F/G 原位+转位；Hanon 4–5；Czerny No.7", "piece": "La Candeur 第9–16小节", "drill": "弹 CEG→EGC→GCE。", "minutes": 60, "weekend": false}, {"date": "2026-10-23", "weekday": "Fri", "weekday_zh": "周五", "week": 5, "topic": "diatonic", "short": "I–IV–V–I", "tech": "C大调 I-IV-V-I；Hanon 5；Czerny No.7–8", "piece": "La Candeur 继续", "drill": "弹 C→F→G→C，再试G大调。", "minutes": 60, "weekend": false}, {"date": "2026-10-24", "weekday": "Sat", "weekday_zh": "周六", "week": 5, "topic": "triad", "short": "周六｜和弦强化", "tech": "C/F/G + 转位；Hanon 4–5；Czerny No.7", "piece": "La Candeur 前16小节", "drill": "Chord Identification 30题；C大调所有调内三和弦。", "minutes": 105, "weekend": true}, {"date": "2026-10-25", "weekday": "Sun", "weekday_zh": "周日", "week": 5, "topic": "diatonic", "short": "周日｜I–IV–V + 作品分析", "tech": "C与G调 I-IV-V-I；Hanon 5", "piece": "La Candeur 前16小节连贯", "drill": "在作品里圈可能的和弦；听V→I解决。", "minutes": 90, "weekend": true}, {"date": "2026-10-26", "weekday": "Mon", "weekday_zh": "周一", "week": 6, "topic": "minor", "short": "自然小调", "tech": "A自然小调；Hanon 5；Czerny No.8", "piece": "La Candeur 完成/精修", "drill": "比较A小调与C大调。", "minutes": 60, "weekend": false}, {"date": "2026-10-27", "weekday": "Tue", "weekday_zh": "周二", "week": 6, "topic": "minor", "short": "和声小调", "tech": "A和声小调；Hanon 5；Czerny No.8", "piece": "Burgmüller Op.100 No.2 Arabesque 前8小节", "drill": "A自然小调的G升为G♯。", "minutes": 60, "weekend": false}, {"date": "2026-10-28", "weekday": "Wed", "weekday_zh": "周三", "week": 6, "topic": "minor", "short": "旋律小调", "tech": "A旋律小调；Hanon 5；Czerny No.8–9", "piece": "Arabesque 前8小节分手", "drill": "上行升6、7级；下行还原。", "minutes": 60, "weekend": false}, {"date": "2026-10-29", "weekday": "Thu", "weekday_zh": "周四", "week": 6, "topic": "minor", "short": "相对大小调", "tech": "C↔Am、G↔Em、F↔Dm；Hanon 5", "piece": "Arabesque 前8小节合手", "drill": "写共同调号，再弹主和弦。", "minutes": 60, "weekend": false}, {"date": "2026-10-30", "weekday": "Fri", "weekday_zh": "周五", "week": 6, "topic": "minor", "short": "小调整合", "tech": "Am/Em/Dm 选两条；Czerny No.9", "piece": "Arabesque 继续", "drill": "Scale Identification 10题。", "minutes": 60, "weekend": false}, {"date": "2026-10-31", "weekday": "Sat", "weekday_zh": "周六", "week": 6, "topic": "minor", "short": "周六｜三种小调强化", "tech": "Am natural/harmonic/melodic；Em自然小调；Czerny No.8–9", "piece": "Arabesque 前8–16小节", "drill": "三种A小调各写1次、弹2次；Scale练习20题。", "minutes": 105, "weekend": true}, {"date": "2026-11-01", "weekday": "Sun", "weekday_zh": "周日", "week": 6, "topic": "minor", "short": "周日｜大小调关系整合", "tech": "C↔Am、G↔Em、F↔Dm；Hanon 5", "piece": "Arabesque 继续或回到 La Candeur 做精修", "drill": "每组说调号、主音、主和弦；陌生谱判断可能大小调。", "minutes": 90, "weekend": true}, {"date": "2026-11-02", "weekday": "Mon", "weekday_zh": "周一", "week": 7, "topic": "keysig", "short": "升号调号", "tech": "G/D/A大调；Hanon 5；Czerny No.9", "piece": "Arabesque / Anna Magdalena 复习", "drill": "记升号顺序，重点G/D/A。", "minutes": 60, "weekend": false}, {"date": "2026-11-03", "weekday": "Tue", "weekday_zh": "周二", "week": 7, "topic": "keysig", "short": "降号调号", "tech": "F/B♭/E♭；Hanon 5", "piece": "Musette / Minuet 任选", "drill": "记降号顺序，重点F/B♭/E♭。", "minutes": 60, "weekend": false}, {"date": "2026-11-04", "weekday": "Wed", "weekday_zh": "周三", "week": 7, "topic": "circle", "short": "五度圈顺时针", "tech": "C→G→D→A；Czerny No.9–10", "piece": "作品继续", "drill": "自己画升号侧。", "minutes": 60, "weekend": false}, {"date": "2026-11-05", "weekday": "Thu", "weekday_zh": "周四", "week": 7, "topic": "circle", "short": "五度圈逆时针", "tech": "C→F→B♭→E♭；Hanon 5", "piece": "作品继续", "drill": "自己画降号侧+相对小调。", "minutes": 60, "weekend": false}, {"date": "2026-11-06", "weekday": "Fri", "weekday_zh": "周五", "week": 7, "topic": "keysig", "short": "调号快速识别", "tech": "复习6个常见调；Czerny No.10", "piece": "完整演奏本周作品", "drill": "调号识别20题。", "minutes": 60, "weekend": false}, {"date": "2026-11-07", "weekday": "Sat", "weekday_zh": "周六", "week": 7, "topic": "circle", "short": "周六｜五度圈强化", "tech": "C/G/D/A/F/B♭/E♭；Czerny No.9–10", "piece": "本周作品精修", "drill": "手画完整基础五度圈；调号识别30题。", "minutes": 105, "weekend": true}, {"date": "2026-11-08", "weekday": "Sun", "weekday_zh": "周日", "week": 7, "topic": "keysig", "short": "周日｜调号速度训练", "tech": "六个常见调复习；Hanon 5", "piece": "完整演奏本周作品", "drill": "每个调号目标5秒内认出；错的单独再练10题。", "minutes": 90, "weekend": true}, {"date": "2026-11-09", "weekday": "Mon", "weekday_zh": "周一", "week": 8, "topic": "roman", "short": "罗马数字", "tech": "C大调调内三和弦；Hanon 5", "piece": "选 BWV Anh.114 或 La Candeur 做毕业分析", "drill": "写 I ii iii IV V vi vii°。", "minutes": 60, "weekend": false}, {"date": "2026-11-10", "weekday": "Tue", "weekday_zh": "周二", "week": 8, "topic": "phrase", "short": "乐句", "tech": "复习最弱2个调；Czerny No.10", "piece": "毕业曲划分乐句", "drill": "判断逗号/句号/未完感。", "minutes": 60, "weekend": false}, {"date": "2026-11-11", "weekday": "Wed", "weekday_zh": "周三", "week": 8, "topic": "phrase", "short": "终止式", "tech": "I-IV-V-I；V-I；V-i", "piece": "毕业曲找终止", "drill": "比较V→I和停在V。", "minutes": 60, "weekend": false}, {"date": "2026-11-12", "weekday": "Thu", "weekday_zh": "周四", "week": 8, "topic": "analysis", "short": "完整作品分析", "tech": "音阶+和弦；Hanon 1–5任选", "piece": "毕业曲标调号、拍号、重复、I/IV/V、力度", "drill": "先分析10分钟再弹。", "minutes": 60, "weekend": false}, {"date": "2026-11-13", "weekday": "Fri", "weekday_zh": "周五", "week": 8, "topic": "analysis", "short": "8周整合", "tech": "任选四个调；Czerny复习一条", "piece": "毕业曲完整慢速演奏并录音", "drill": "30秒预读陌生8–16小节，不停拍。", "minutes": 60, "weekend": false}, {"date": "2026-11-14", "weekday": "Sat", "weekday_zh": "周六", "week": 8, "topic": "analysis", "short": "周六｜完整作品分析 + 长练", "tech": "所有已学音阶选6条；Hanon任选2；Czerny复习2条", "piece": "毕业曲：分析→分段→合成；录音一次", "drill": "标调号、拍号、乐句、I/IV/V、终止、力度；写1页学习总结。", "minutes": 120, "weekend": true}, {"date": "2026-11-15", "weekday": "Sun", "weekday_zh": "周日", "week": 8, "topic": "analysis", "short": "周日｜8周毕业日", "tech": "选四个音阶+I-IV-V-I；Hanon最熟1条；Czerny最熟1条", "piece": "毕业曲完整演奏；陌生8–16小节视奏测试", "drill": "对比Week1：认音20题、调号10题、音程10题；记录下一阶段三项弱点。", "minutes": 100, "weekend": true}];
+const RES={"anna": "https://imslp.org/wiki/Klavierb%C3%BCchlein_f%C3%BCr_Anna_Magdalena_Bach_1722_%28Bach%2C_Johann_Sebastian%29", "burg": "https://imslp.org/wiki/25_Etudes_Faciles%2C_Op.100_%28Burgmuller%2C_Johann_Friedrich%29", "hanon": "https://imslp.org/wiki/The_Virtuoso_Pianist_%28Hanon%2C_Charles-Louis%29", "czerny": "https://imslp.org/wiki/Practical_Exercises_for_Beginners%2C_Op.599_%28Czerny%2C_Carl%29", "note_ex": "https://www.musictheory.net/exercises/note", "interval_ex": "https://www.musictheory.net/exercises/interval", "keysig_ex": "https://www.musictheory.net/exercises/keysig", "scale_ex": "https://www.musictheory.net/exercises/scale", "chord_ex": "https://www.musictheory.net/exercises/chord", "lessons": "https://www.musictheory.net/lessons", "sight_video": "https://www.youtube.com/watch?v=qtmlozITJqc", "read_video": "https://www.youtube.com/watch?v=ftoXQsJtKPs", "rhythm_video": "https://www.youtube.com/watch?v=FefxxV9PVJQ", "scale_video": "https://www.youtube.com/watch?v=zUTw_I5-x3k", "chord_video": "https://www.youtube.com/watch?v=J5EDGTyGzQY", "circle_video": "https://www.youtube.com/watch?v=cvDzjnGQiSo", "interval_video": "https://www.youtube.com/watch?v=Hi9bUcnHLBo", "symbols_video": "https://www.youtube.com/watch?v=CzMITEddpkM"};
+
+const LESSONS=BASE_DAYS.map((d,i)=>({
+  ...d,
+  id:"L"+String(i+1).padStart(2,"0"),
+  originalDate:d.date,
+  originalIndex:i
+}));
+
+const LESSON_MAP=new Map(LESSONS.map(x=>[x.id,x]));
+const START_ISO=LESSONS[0].originalDate;
+const BASE_END_ISO=LESSONS[LESSONS.length-1].originalDate;
+
+const cal=document.getElementById("calendar");
+const detail=document.getElementById("detail");
+const library=document.getElementById("library");
+
+let schedule=[];
+let selectedDate=null;
+
+/* --------------------------
+   Date helpers
+-------------------------- */
+
+function parseISO(iso){
+  const [y,m,d]=iso.split("-").map(Number);
+  return new Date(y,m-1,d,12,0,0,0);
+}
+
+function toISO(date){
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+}
+
+function addDays(iso,n){
+  const d=parseISO(iso);
+  d.setDate(d.getDate()+n);
+  return toISO(d);
+}
+
+function compareISO(a,b){
+  return a===b ? 0 : (a<b ? -1 : 1);
+}
+
+function todayISO(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function formatMD(iso){
+  const [y,m,d]=iso.split("-").map(Number);
+  return `${m}/${d}`;
+}
+
+function weekdayInfo(iso){
+  const d=parseISO(iso);
+  const js=d.getDay();
+  const zh=["周日","周一","周二","周三","周四","周五","周六"][js];
+  return {
+    js,
+    zh,
+    weekend:js===0||js===6,
+    saturday:js===6,
+    sunday:js===0
+  };
+}
+
+/* --------------------------
+   Storage
+-------------------------- */
+
+function completionKey(date){
+  return "piano-roll-completion-"+date;
+}
+
+function taskKey(lessonId,i){
+  return "piano-roll-task-"+lessonId+"-"+i;
+}
+
+function completionOn(date){
+  const id=localStorage.getItem(completionKey(date));
+  return LESSON_MAP.has(id) ? id : null;
+}
+
+
+/* --------------------------
+   Sports schedule
+   Fixed:
+   Mon / Wed / Fri = skating
+   Tue = swimming
+   Thu = tennis
+
+   Optional:
+   Sat = easy swim
+   Sun = light skating
+
+   Weekend optional sessions are mutually exclusive.
+-------------------------- */
+
+function sportKey(type,date){
+  return "sport-"+type+"-complete-"+date;
+}
+
+function sportDone(type,date){
+  return localStorage.getItem(sportKey(type,date))==="1";
+}
+
+function weekMondayISO(date){
+  const d=parseISO(date);
+  const js=d.getDay();
+  const diff=(js+6)%7;
+  d.setDate(d.getDate()-diff);
+  return toISO(d);
+}
+
+function optionalWeekendDates(date){
+  const monday=weekMondayISO(date);
+  return {
+    sunday:addDays(monday,6)
+  };
+}
+
+function setSportDone(type,date,value,optional=false){
+  if(value && optional){
+    const w=optionalWeekendDates(date);
+
+    /* Only one optional weekend sport per week */
+    localStorage.removeItem(sportKey("swim",w.sunday));
+    localStorage.removeItem(sportKey("skate",w.sunday));
+  }
+
+  if(value){
+    localStorage.setItem(sportKey(type,date),"1");
+  }else{
+    localStorage.removeItem(sportKey(type,date));
+  }
+}
+
+function skatingForDate(date){
+  const wd=weekdayInfo(date);
+
+  if(wd.js===1){
+    return {
+      scheduled:true,type:"skate",emoji:"⛸",optional:false,minutes:85,
+      title:"Monday · Skating Technique",
+      summary:"基础滑行、刃、交叉步、三转 / 旋转",
+      plan:[
+        "10 min 热身：前滑、后滑、轻松蹬冰",
+        "15 min 内刃 / 外刃与重心控制",
+        "20 min 前后交叉步与倒滑",
+        "20 min 三转或当周重点技术",
+        "15 min 旋转 / 自由练习",
+        "5 min 放松滑行"
+      ]
+    };
+  }
+
+  if(wd.js===3){
+    return {
+      scheduled:true,type:"skate",emoji:"⛸",optional:false,minutes:85,
+      title:"Wednesday · Skating Control",
+      summary:"控制、倒滑、刃与动作质量",
+      plan:[
+        "10 min 热身",
+        "15 min 基础刃与单脚平衡",
+        "20 min 倒滑与后交叉",
+        "20 min 三转 / 转向动作",
+        "15 min 旋转或薄弱项",
+        "5 min 放松"
+      ]
+    };
+  }
+
+  if(wd.js===5){
+    return {
+      scheduled:true,type:"skate",emoji:"⛸",optional:false,minutes:90,
+      title:"Friday · Skating Consolidation",
+      summary:"整周技术巩固 + 连贯滑行",
+      plan:[
+        "10 min 热身",
+        "15 min 刃与步法",
+        "20 min 交叉步 / 倒滑",
+        "20 min 本周最弱动作",
+        "20 min 连贯滑行、旋转或自由练习",
+        "5 min 放松"
+      ]
+    };
+  }
+
+  if(wd.js===0){
+    return {
+      scheduled:true,type:"skate",emoji:"⛸",optional:true,minutes:65,
+      title:"Sunday · Optional Light Skate",
+      summary:"第 4 次滑冰，只做轻量技术与流畅性；与轻松游泳二选一",
+      plan:[
+        "10 min 轻松热身",
+        "15 min 刃与流畅性",
+        "15 min 交叉步 / 倒滑",
+        "15 min 轻量三转或旋转",
+        "10 min 自由滑与放松",
+        "如果今天选择游泳，就不再滑冰；如果整体疲劳，两项都不做"
+      ]
+    };
+  }
+
+  return {scheduled:false,type:"skate"};
+}
+
+function swimmingForDate(date){
+  const wd=weekdayInfo(date);
+
+  if(wd.js===2){
+    return {
+      scheduled:true,type:"swim",emoji:"🏊",optional:false,minutes:50,
+      title:"Tuesday · Swimming",
+      summary:"轻中等强度，有氧 + 自由泳技术",
+      plan:[
+        "5–10 min 轻松热身",
+        "10 min 打腿 / 呼吸 / 流线型技术",
+        "20–25 min 自由泳主练，保持可以控制动作的强度",
+        "5–10 min 轻松游放松",
+        "目标不是游到力竭，第二天还要滑冰"
+      ]
+    };
+  }
+
+  if(wd.js===0){
+    return {
+      scheduled:true,type:"swim",emoji:"🏊",optional:true,minutes:50,
+      title:"Sunday · Optional Easy Swim",
+      summary:"恢复型游泳；与第 4 次滑冰二选一",
+      plan:[
+        "10 min 轻松游",
+        "10 min 自由泳技术",
+        "20 min 舒适配速连续游或分组游",
+        "10 min 放松",
+        "如果这周滑冰疲劳更明显，优先选择游泳；如果整体疲劳，直接休息"
+      ]
+    };
+  }
+
+  return {scheduled:false,type:"swim"};
+}
+
+function tennisForDate(date){
+  const wd=weekdayInfo(date);
+
+  if(wd.js===6){
+    return {
+      scheduled:true,type:"tennis",emoji:"🎾",optional:false,minutes:75,
+      title:"Saturday · Tennis",
+      summary:"一周一次，保持球感、步伐和基本技术",
+      plan:[
+        "10 min 动态热身 + 小场对打",
+        "15 min 正反手稳定性",
+        "15 min 步伐与移动击球",
+        "15 min 发球 / 接发",
+        "15 min 对拉或比赛分",
+        "5 min 放松"
+      ]
+    };
+  }
+
+  return {scheduled:false,type:"tennis"};
+}
+
+function sportsForDate(date){
+  const week=sportsTrainingWeek(date);
+
+  return [
+    skatingForDate(date),
+    swimmingForDate(date),
+    tennisForDate(date)
+  ]
+  .filter(x=>x.scheduled)
+  .map(s=>{
+    if(s.type==="skate"){
+      const wd=weekdayInfo(date);
+      const session=wd.js===1 ? "mon" : (wd.js===3 ? "wed" : (wd.js===5 ? "fri" : "sun"));
+      const p=skatingWeekPlan(week,session);
+      return {...s,trainingWeek:week,focus:p.focus,goals:p.goals,plan:p.plan};
+    }
+
+    if(s.type==="swim"){
+      const p=swimmingWeekPlan(week,s.optional);
+      return {...s,trainingWeek:week,focus:p.focus,goal:p.goal,plan:p.plan};
+    }
+
+    if(s.type==="tennis"){
+      const p=tennisWeekPlan(week);
+      return {...s,trainingWeek:week,focus:p.focus,goal:p.goal,plan:p.plan};
+    }
+
+    return s;
+  });
+}
+
+function sportsTrainingWeek(date){
+  const start=parseISO(START_ISO);
+  const d=parseISO(date);
+  const diff=Math.floor((d.getTime()-start.getTime())/86400000);
+  return Math.min(8,Math.max(1,Math.floor(diff/7)+1));
+}
+
+function skatingWeekPlan(week,session){
+  const plans={
+    1:{
+      focus:"稳定单足蛇形 + 后压步基础",
+      goals:[
+        "单足蛇形左右脚都能连续做，不急着追速度",
+        "后压步先保证交叉、重心和圆弧，不要只追圈数",
+        "单脚前滑 5–8 秒，左右脚差距逐渐缩小"
+      ],
+      sessions:{
+        mon:[
+          "10 min 热身：前滑、后滑、前压步",
+          "15 min 单脚前滑 + 单足蛇形，左右脚各做多组",
+          "20 min 后压步：先大圆、慢速，重点重心在支撑脚",
+          "15 min 内外刃基础：半圆/大弧线",
+          "15 min 双足旋转 + 进旋转控制",
+          "10 min 自由滑，把蛇形和压步连进路线"
+        ],
+        wed:[
+          "10 min 热身",
+          "20 min 单足蛇形：弱侧优先",
+          "20 min 后压步：左右方向都练",
+          "15 min 后滑单脚稳定与后葫芦",
+          "15 min 前外刃 / 前内刃大弧线",
+          "5 min 放松"
+        ],
+        fri:[
+          "10 min 热身",
+          "15 min 单足蛇形连续性测试",
+          "25 min 后压步：大圆 → 小一点的圆",
+          "15 min 前后方向切换基础",
+          "15 min 双足旋转、停转控制",
+          "10 min 连贯滑行"
+        ],
+        sun:[
+          "10 min 轻松热身",
+          "15 min 单足蛇形弱侧",
+          "15 min 后压步轻复习",
+          "15 min 刃与单脚滑",
+          "10 min 自由滑"
+        ]
+      }
+    },
+    2:{
+      focus:"后压步稳定 + 单脚刃控制",
+      goals:[
+        "后压步左右方向都能保持圆弧",
+        "开始区分单脚内刃与外刃",
+        "单足蛇形减少上身晃动"
+      ],
+      sessions:{
+        mon:["10 min 热身","15 min 单足蛇形：减少上身扭动","20 min 后压步左右方向","20 min 单脚前外刃/前内刃半圆","15 min 双足旋转","5 min 放松"],
+        wed:["10 min 热身","15 min 单脚滑 + 刃转换","20 min 后压步：重心与膝盖弯曲","20 min 后滑与后外刃/内刃感觉","15 min 转向准备：前进→后退双足转","5 min 放松"],
+        fri:["10 min 热身","20 min 后压步整圈","15 min 单足蛇形连续","20 min 前内/外刃大弧线","15 min 双足旋转进出控制","10 min 路线连贯"],
+        sun:["10 min 热身","15 min 单足蛇形","15 min 后压步","15 min 刃练习","10 min 轻旋转/自由滑"]
+      }
+    },
+    3:{
+      focus:"前外/内刃 + 三转准备",
+      goals:[
+        "能在单脚弧线上保持稳定",
+        "理解三转前的入刃、转体和出刃",
+        "后压步开始更流畅而不是一步一步想"
+      ],
+      sessions:{
+        mon:["10 min 热身","15 min 前外刃/内刃连续半圆","20 min 三转准备：弧线、转肩、双足模仿","20 min 后压步","15 min 单足蛇形弱侧","5 min 放松"],
+        wed:["10 min 热身","15 min 单脚刃","20 min 前外三转分解（先在老师/安全环境下）","20 min 后压步 + 后滑单脚","15 min 双足旋转","5 min 放松"],
+        fri:["10 min 热身","15 min 前内/外刃","20 min 三转分解与少量完整动作","20 min 后压步整圈","15 min 连贯步法","10 min 自由滑"],
+        sun:["10 min 热身","15 min 刃","15 min 后压步","15 min 三转分解","10 min 自由滑"]
+      }
+    },
+    4:{
+      focus:"三转基础 + 后滑单脚控制",
+      goals:[
+        "至少一个方向的前外三转开始成形",
+        "后滑单脚稳定提升",
+        "后压步不再依赖大幅度上身扭动"
+      ],
+      sessions:{
+        mon:["10 min 热身","15 min 前外/内刃","25 min 三转：弱侧少量、强侧重点","15 min 后滑单脚","15 min 后压步","5 min 放松"],
+        wed:["10 min 热身","20 min 三转","15 min 后外/内刃感觉","20 min 后压步 + 后滑","15 min 双足旋转→重心向单脚集中","5 min 放松"],
+        fri:["10 min 热身","20 min 三转","20 min 后压步","15 min 单足蛇形速度控制","15 min 连贯步法","10 min 自由滑"],
+        sun:["10 min 热身","15 min 三转轻练","15 min 后压步","15 min 单脚刃","10 min 自由滑"]
+      }
+    },
+    5:{
+      focus:"三转巩固 + 一足旋转准备",
+      goals:[
+        "三转动作更小、更稳",
+        "开始一足旋转的站姿和重心练习",
+        "步法之间能自然衔接"
+      ],
+      sessions:{
+        mon:["10 min 热身","15 min 刃","20 min 三转","20 min 一足旋转准备：中心、自由腿位置、转入","15 min 后压步","5 min 放松"],
+        wed:["10 min 热身","20 min 三转两侧","15 min 后滑单脚","20 min 一足旋转准备/少量尝试","15 min 后压步","5 min 放松"],
+        fri:["10 min 热身","15 min 单足蛇形与刃","20 min 三转","20 min 后压步→步法连接","15 min 旋转基础","10 min 自由滑"],
+        sun:["10 min 热身","15 min 三转","15 min 后压步","15 min 一足旋转准备","10 min 自由滑"]
+      }
+    },
+    6:{
+      focus:"控制与连接：蛇形、压步、三转",
+      goals:[
+        "不单练一个动作，而是开始组合",
+        "转向后能继续滑，不需要完全停下",
+        "旋转基础重心更集中"
+      ],
+      sessions:{
+        mon:["10 min 热身","15 min 刃","20 min 蛇形→三转连接","20 min 后压步→后滑连接","15 min 一足旋转准备","5 min 放松"],
+        wed:["10 min 热身","20 min 三转","20 min 后压步","15 min 转向后继续滑","15 min 旋转","5 min 放松"],
+        fri:["10 min 热身","20 min 连贯步法小组合","20 min 后压步与圆弧","15 min 三转弱侧","15 min 旋转","10 min 自由滑"],
+        sun:["10 min 热身","15 min 小组合","15 min 三转","15 min 后压步","10 min 自由滑"]
+      }
+    },
+    7:{
+      focus:"动作质量 + 弱侧补强",
+      goals:[
+        "减少左右侧差异",
+        "在不加速的情况下让动作更干净",
+        "能完成一段 20–30 秒连续基础步法"
+      ],
+      sessions:{
+        mon:["10 min 热身","20 min 弱侧单足蛇形/刃","20 min 弱侧后压步","20 min 三转弱侧","10 min 旋转","5 min 放松"],
+        wed:["10 min 热身","20 min 刃与三转","20 min 后压步","20 min 20秒基础步法组合","10 min 旋转","5 min 放松"],
+        fri:["10 min 热身","20 min 小组合","20 min 三转","15 min 后压步","15 min 旋转","10 min 自由滑"],
+        sun:["10 min 热身","15 min 弱侧","15 min 小组合","15 min 旋转/自由滑","10 min 放松"]
+      }
+    },
+    8:{
+      focus:"8 周整合与技能测试",
+      goals:[
+        "单足蛇形、后压步、刃、三转都有可重复表现",
+        "能完成一段连续基础滑行组合",
+        "明确下一阶段是否进入更完整的一足旋转、Mohawk/Choctaw 或跳跃准备"
+      ],
+      sessions:{
+        mon:["10 min 热身","15 min 单足蛇形测试","20 min 后压步测试","20 min 三转测试","15 min 旋转基础","5 min 放松"],
+        wed:["10 min 热身","20 min 刃与单脚滑","20 min 连贯组合","20 min 三转弱侧","10 min 旋转","5 min 放松"],
+        fri:["10 min 热身","20 min 完整基础路线","20 min 后压步 + 三转","15 min 单足蛇形","15 min 旋转","10 min 录一段视频做8周对比"],
+        sun:["10 min 热身","15 min 最弱动作","15 min 最强动作","15 min 连贯滑行","10 min 自由滑"]
+      }
+    }
+  };
+
+  const p=plans[week]||plans[8];
+  return {focus:p.focus,goals:p.goals,plan:p.sessions[session]||p.sessions.mon};
+}
+
+function swimmingWeekPlan(week,optional=false){
+  const plans={
+    1:{focus:"自由泳身体位置 + 水下呼气",goal:"能放松漂浮并连续水下呼气",plan:["10 min 蛙泳轻松热身","10 min 流线型蹬壁 + 漂浮","10 min 扶板自由泳打腿","10 min 侧身/水下连续呼气练习","10 min 6–8×25m 自由泳尝试，累了就停"]},
+    2:{focus:"打腿 + 侧身换气",goal:"25m 内尝试稳定侧向吸气",plan:["10 min 蛙泳热身","10 min 自由泳打腿","10 min 侧踢/单臂换气练习","15 min 6×25m 自由泳，重点呼气不断","5 min 放松"]},
+    3:{focus:"手臂入水与高肘抱水基础",goal:"减少乱划，建立抓水方向",plan:["8 min 蛙泳热身","8 min 打腿","10 min 单臂自由泳","10 min Catch-up drill 或慢动作完整划臂","10 min 6×25m 自由泳","5 min 放松"]},
+    4:{focus:"呼吸与划臂配合",goal:"能连续游25m，不因换气完全停顿",plan:["8 min 热身","8 min 打腿","10 min 侧呼吸练习","15 min 8×25m 自由泳，每趟动作优先","8 min 蛙泳放松"]},
+    5:{focus:"25m 稳定自由泳",goal:"多数25m可以连续完成",plan:["8 min 热身","8 min 技术 drill","20 min 8–10×25m 自由泳，休息20–40秒","8 min 2×50m 蛙泳轻松","5 min 放松"]},
+    6:{focus:"从25m过渡到50m",goal:"至少完成几组50m自由泳",plan:["8 min 热身","8 min 技术 drill","20 min 4×50m 自由泳，动作乱就拆回25m","10 min 蛙泳轻松游","5 min 放松"]},
+    7:{focus:"自由泳效率 + 节奏",goal:"50m内动作更均匀、呼吸更从容",plan:["8 min 热身","10 min 技术 drill","20 min 4–6×50m 自由泳","8 min 轻松混合蛙泳/自由泳","5 min 放松"]},
+    8:{focus:"8周整合",goal:"能用可控动作连续自由泳50m，建立下一阶段基线",plan:["8 min 热身","10 min 打腿/呼吸复习","20 min 4×50m 自由泳","5 min 尝试1次舒适连续距离，不追速度","7 min 蛙泳放松"]}
+  };
+  const p=plans[week]||plans[8];
+  if(optional){
+    return {focus:"恢复型自由泳技术",goal:"保持水感但不制造额外疲劳",plan:["10 min 蛙泳/自由泳混合热身","10 min 呼吸和流线型 drill","20 min 轻松25m/50m自由泳","10 min 放松，不做力竭练习"]};
+  }
+  return p;
+}
+
+function tennisWeekPlan(week){
+  const plans={
+    1:{focus:"正反手动作框架",goal:"能从准备姿势稳定完成慢速正反手",plan:["10 min 动态热身 + 小场拍球","15 min 正手：握拍、转肩、击球点","15 min 反手：握拍、转肩、击球点","15 min 教练/搭档喂球，正反手分开","15 min 小场慢速对拉","5 min 放松"]},
+    2:{focus:"正反手稳定性",goal:"固定击球点，减少纯手臂挥拍",plan:["10 min 小场热身","15 min 正手重复","15 min 反手重复","15 min 正反手交替喂球","15 min 迷你网对拉，目标连续3–5拍","5 min 放松"]},
+    3:{focus:"移动到位再击球",goal:"学会小碎步调整，不站死打球",plan:["10 min 热身","10 min split step 入门","15 min 正手移动击球","15 min 反手移动击球","15 min 左右交替喂球","10 min 小场对拉"]},
+    4:{focus:"底线正反手 + 回位",goal:"击球后回到中间位置",plan:["10 min 热身","15 min 正手深度控制","15 min 反手深度控制","15 min 左右移动 + 回位","15 min 半场对拉","5 min 放松"]},
+    5:{focus:"连续对拉",goal:"迷你网或半场能连续5拍以上",plan:["10 min 热身","10 min 正反手技术复习","20 min 半场对拉","15 min 定点正反手","15 min 简单计数对拉挑战","5 min 放松"]},
+    6:{focus:"发球动作入门",goal:"理解抛球与挥拍链条，不追求速度",plan:["10 min 热身","15 min 正反手对拉","15 min 发球抛球练习","15 min 半发球动作/近距离发球","15 min 对拉","5 min 放松"]},
+    7:{focus:"底线 + 发球基础",goal:"能用基础发球开始简单一分",plan:["10 min 热身","15 min 正反手移动","15 min 发球","15 min 接发准备姿势","15 min 3拍以上简单分","5 min 放松"]},
+    8:{focus:"8周整合",goal:"正反手都有可重复动作，能完成基础对拉与发球",plan:["10 min 热身","15 min 正手测试","15 min 反手测试","15 min 发球","15 min 半场/底线对拉","5 min 记录最弱项"]}
+  };
+  return plans[week]||plans[8];
+}
+
+/* Migrate checkmarks from the previous version */
+function migrateOldData(){
+  LESSONS.forEach((lesson)=>{
+    const newKey=completionKey(lesson.originalDate);
+
+    if(!localStorage.getItem(newKey)){
+      const oldDone=
+        localStorage.getItem("piano56-day-"+lesson.originalDate)==="1" ||
+        localStorage.getItem("piano-day-"+lesson.originalDate)==="1";
+
+      if(oldDone){
+        localStorage.setItem(newKey,lesson.id);
+      }
+    }
+
+    for(let i=0;i<6;i++){
+      const nk=taskKey(lesson.id,i);
+      if(localStorage.getItem(nk)!==null) continue;
+
+      const old1=localStorage.getItem("piano56-task-"+lesson.originalDate+"-"+i);
+      const old2=localStorage.getItem("piano-task-"+lesson.originalDate+"-"+i);
+      const val=old1!==null ? old1 : old2;
+
+      if(val!==null){
+        localStorage.setItem(nk,val);
+      }
+    }
+  });
+}
+
+/* --------------------------
+   Rolling schedule engine
+-------------------------- */
+
+function firstUncompleted(completed){
+  for(const lesson of LESSONS){
+    if(!completed.has(lesson.id)) return lesson;
+  }
+  return null;
+}
+
+function calculateEndDate(){
+  const today=todayISO();
+
+  if(compareISO(today,START_ISO)<0){
+    return BASE_END_ISO;
+  }
+
+  const completed=new Set();
+  let missed=0;
+  let date=START_ISO;
+
+  while(compareISO(date,today)<0 && completed.size<LESSONS.length){
+    const id=completionOn(date);
+
+    if(id && !completed.has(id)){
+      completed.add(id);
+    }else if(!id){
+      missed++;
+    }
+
+    date=addDays(date,1);
+  }
+
+  let end=addDays(BASE_END_ISO,missed);
+
+  if(completed.size<LESSONS.length && compareISO(end,today)<0){
+    end=today;
+  }
+
+  return end;
+}
+
+function buildSchedule(){
+  const today=todayISO();
+  const end=calculateEndDate();
+  const entries=[];
+
+  const actualCompleted=new Set();
+  let date=START_ISO;
+
+  /* History + today */
+  while(compareISO(date,end)<=0 && compareISO(date,today)<=0){
+    const storedId=completionOn(date);
+    let lesson=firstUncompleted(actualCompleted);
+    let status="empty";
+
+    if(storedId){
+      lesson=LESSON_MAP.get(storedId) || lesson;
+
+      if(lesson){
+        actualCompleted.add(lesson.id);
+      }
+
+      status="done";
+    }else if(lesson){
+      status=compareISO(date,today)<0 ? "missed" : "today";
+    }
+
+    entries.push(makeEntry(date,lesson,status));
+    date=addDays(date,1);
+  }
+
+  /* Future preview assumes today's current lesson gets completed today */
+  const virtualCompleted=new Set(actualCompleted);
+
+  if(compareISO(today,START_ISO)>=0 && compareISO(today,end)<=0){
+    const todayEntry=entries.find(x=>x.date===today);
+
+    if(todayEntry && todayEntry.status==="today" && todayEntry.lesson){
+      virtualCompleted.add(todayEntry.lesson.id);
+    }
+  }
+
+  /* Before plan starts: future preview starts from L01 */
+  if(compareISO(today,START_ISO)<0){
+    date=START_ISO;
+  }
+
+  while(compareISO(date,end)<=0){
+    const lesson=firstUncompleted(virtualCompleted);
+
+    if(!lesson){
+      entries.push(makeEntry(date,null,"empty"));
+    }else{
+      entries.push(makeEntry(date,lesson,"future"));
+      virtualCompleted.add(lesson.id);
+    }
+
+    date=addDays(date,1);
+  }
+
+  return entries;
+}
+
+function makeEntry(date,lesson,status){
+  const wd=weekdayInfo(date);
+
+  let minutes=lesson ? lesson.minutes : 0;
+
+  /* If a weekday lesson rolls onto the weekend,
+     the actual weekend still gets a longer practice block. */
+  if(lesson && wd.saturday){
+    minutes=Math.max(minutes,105);
+  }
+
+  if(lesson && wd.sunday){
+    minutes=Math.max(minutes,90);
+  }
+
+  return {
+    date,
+    lesson,
+    status,
+    weekend:wd.weekend,
+    saturday:wd.saturday,
+    sunday:wd.sunday,
+    weekday_zh:wd.zh,
+    minutes,
+    shifted:!!lesson && lesson.originalDate!==date
+  };
+}
+
+/* --------------------------
+   Calendar
+-------------------------- */
+
+function renderCalendar(){
+  schedule=buildSchedule();
+  cal.innerHTML="";
+
+  if(!selectedDate){
+    const t=todayISO();
+    const todayEntry=schedule.find(x=>x.date===t);
+    selectedDate=todayEntry ? t : schedule[0].date;
+  }
+
+  schedule.forEach(entry=>{
+    const lesson=entry.lesson;
+    const el=document.createElement("div");
+
+    let classes="daycard";
+
+    if(entry.weekend) classes+=" weekend";
+    if(entry.status==="done") classes+=" done";
+    if(entry.status==="missed") classes+=" missed";
+    if(entry.status==="today") classes+=" today";
+    if(entry.status==="future") classes+=" future";
+    if(entry.shifted) classes+=" carry";
+    if(entry.date===selectedDate) classes+=" selected";
+
+    el.className=classes;
+    el.tabIndex=0;
+
+    let statusText="计划";
+    let statusClass="";
+
+    if(entry.status==="done"){
+      statusText="✓ 已学习";
+      statusClass="done";
+    }else if(entry.status==="missed"){
+      statusText="未学习";
+      statusClass="missed";
+    }else if(entry.status==="today"){
+      statusText="今天";
+    }
+
+    const original=lesson && entry.shifted
+      ? `<div class="origin">↪ 顺延自 ${formatMD(lesson.originalDate)}</div>`
+      : "";
+
+    const checkboxAllowed=
+      entry.status==="done" ||
+      entry.status==="missed" ||
+      entry.status==="today";
+
+    el.innerHTML=`
+      <div class="daytop">
+        <span class="date">${formatMD(entry.date)}</span>
+        <span class="wtag">${lesson ? "Plan W"+lesson.week : ""}</span>
+      </div>
+
+      <span class="status ${statusClass}">${statusText}</span>
+
+      <div class="short">
+        ${lesson ? lesson.short : "全部课程已完成"}
+      </div>
+
+      ${original}
+
+      ${(() => {
+        const sports=sportsForDate(entry.date);
+        if(!sports.length) return "";
+
+        return sports.map(s=>`
+          <span class="sport-tag ${s.type} ${s.optional ? "optional" : ""} ${sportDone(s.type,entry.date) ? "complete" : ""}">
+            ${sportDone(s.type,entry.date) ? "✓ " : ""}${s.optional ? "○ " : ""}${s.emoji}
+            ${s.type==="skate" ? "Skate" : (s.type==="swim" ? "Swim" : "Tennis")}
+            · ${s.minutes} min
+          </span>
+        `).join("");
+      })()}
+
+      <div class="minutes">
+        ${lesson ? entry.minutes+" min" : ""}
+      </div>
+
+      ${checkboxAllowed && lesson ? `
+        <label class="checkline">
+          <span>${entry.status==="done" ? "Done" : "完成?"}</span>
+          <input type="checkbox" ${entry.status==="done" ? "checked" : ""}>
+        </label>
+      ` : ""}
+    `;
+
+    const cb=el.querySelector("input");
+
+    if(cb){
+      cb.addEventListener("click",e=>e.stopPropagation());
+
+      cb.addEventListener("change",()=>{
+        if(cb.checked){
+          localStorage.setItem(completionKey(entry.date),lesson.id);
+        }else{
+          localStorage.removeItem(completionKey(entry.date));
+        }
+
+        selectedDate=entry.date;
+        renderAll(false);
+      });
+    }
+
+    const choose=()=>{
+      selectedDate=entry.date;
+      renderCalendar();
+      renderDetail();
+      detail.scrollIntoView({behavior:"smooth",block:"start"});
+    };
+
+    el.addEventListener("click",choose);
+    el.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){
+        e.preventDefault();
+        choose();
+      }
+    });
+
+    cal.appendChild(el);
+  });
+}
+
+/* --------------------------
+   Detail
+-------------------------- */
+
+function scoreLink(piece){
+  return piece.includes("Burgmüller") ||
+         piece.includes("La Candeur") ||
+         piece.includes("Arabesque")
+    ? RES.burg
+    : RES.anna;
+}
+
+function taskHTML(title,desc,links,i,lessonId){
+  const checked=localStorage.getItem(taskKey(lessonId,i))==="1";
+
+  return `
+    <label class="taskrow">
+      <input
+        class="taskcheck"
+        data-ti="${i}"
+        type="checkbox"
+        ${checked ? "checked" : ""}
+      >
+      <div>
+        <div class="tasktitle">${title}</div>
+        <div class="taskdesc">${desc}</div>
+        <div class="directlinks">
+          ${links.map(l=>`
+            <a
+              class="btn"
+              target="_blank"
+              rel="noopener"
+              href="${l[1]}"
+            >${l[0]} ↗</a>
+          `).join("")}
+        </div>
+      </div>
+    </label>
+  `;
+}
+
+function renderDetail(){
+  const entry=schedule.find(x=>x.date===selectedDate) || schedule[0];
+
+  if(!entry || !entry.lesson){
+    detail.innerHTML=`
+      <div class="detailhead">
+        <div>
+          <div class="label">Course status</div>
+          <h2>全部课程已完成</h2>
+          <div class="meta">${entry ? entry.date : ""}</div>
+        </div>
+      </div>
+      <div class="block">
+        <p>56 节基础课程已经全部完成。下一阶段可以进入 Czerny Op.599 后段 / Op.849、Bach 小前奏曲与更系统的曲目训练。</p>
+      </div>
+    `;
+    return;
+  }
+
+  const x=entry.lesson;
+  const t=TOPICS[x.topic];
+
+  const longSession=entry.minutes>=90;
+  const sightMin=longSession ? 20 : 15;
+  const theoryMin=longSession ? 20 : 10;
+  const techMin=longSession ? 20 : 10;
+  const etudeMin=longSession ? 20 : 10;
+  const pieceMin=Math.max(13,entry.minutes-(sightMin+theoryMin+techMin+etudeMin+2));
+
+  const theoryLinks=[
+    ["▶ 看今天的乐理视频",t.video],
+    [t.learn_name,t.learn],
+    [t.exercise_name,t.exercise]
+  ];
+
+  const sightLinks=[
+    ["▶ 视奏练习视频",RES.sight_video],
+    [
+      "在线认音 / 理论练习",
+      x.topic==="intervals"||x.topic==="interval_quality"
+        ? RES.interval_ex
+        : (x.topic==="keysig"||x.topic==="circle"
+            ? RES.keysig_ex
+            : RES.note_ex)
+    ]
+  ];
+
+  const techLinks=[
+    ["Hanon 完整乐谱",RES.hanon],
+    ["Czerny Op.599 完整乐谱",RES.czerny],
+    ["▶ 音阶教学",RES.scale_video]
+  ];
+
+  const etudeLinks=[
+    ["Czerny Op.599 乐谱",RES.czerny],
+    ["Hanon 乐谱",RES.hanon]
+  ];
+
+  const pieceLinks=[
+    ["打开今天的作品谱",scoreLink(x.piece)]
+  ];
+
+  let notice="";
+
+  if(entry.status==="missed"){
+    notice=`
+      <div class="notice missed">
+        <b>这一天没有完成。</b>
+        这节课已经自动顺延到后面的日期；这里仍保留“未学习”记录，
+        方便你回看实际学习轨迹。
+      </div>
+    `;
+  }else if(entry.status==="done"){
+    notice=`
+      <div class="notice done">
+        <b>这一天已完成学习。</b>
+        ${entry.shifted ? "完成的是一节顺延课程。" : ""}
+      </div>
+    `;
+  }else if(entry.shifted){
+    notice=`
+      <div class="notice carry">
+        <b>↪ 顺延课程。</b>
+        这节课原计划在 ${formatMD(x.originalDate)}，
+        因为前面存在未完成日期，现在移动到 ${formatMD(entry.date)}。
+      </div>
+    `;
+  }
+
+  if(entry.weekend){
+    notice+=`
+      <div class="notice weekend">
+        <b>Weekend long session：</b>
+        今天按周末长训练安排，实际计划约 ${entry.minutes} 分钟。
+      </div>
+    `;
+  }
+
+  const isFuture=entry.status==="future";
+
+  detail.innerHTML=`
+    <div class="detailhead">
+      <div>
+        <div class="label">Daily lesson</div>
+        <h2>${x.short}</h2>
+        <div class="meta">
+          ${entry.date} · ${entry.weekday_zh} · 约 ${entry.minutes} min
+          ${entry.shifted ? " · 原计划 "+x.originalDate : ""}
+        </div>
+        ${notice}
+      </div>
+
+      <label class="bigdone ${isFuture ? "disabled" : ""}">
+        <input
+          id="bigDone"
+          type="checkbox"
+          ${entry.status==="done" ? "checked" : ""}
+          ${isFuture ? "disabled" : ""}
+        >
+        ${isFuture ? "未来计划" : (entry.status==="missed" ? "补记为完成" : "今天完成")}
+      </label>
+    </div>
+
+    <div class="block">
+      <div class="label">Theory · 先理解今天的概念</div>
+      <h3>${t.title}</h3>
+      <p><b>是什么：</b>${t.what}</p>
+      <div class="callout"><b>怎么理解：</b>${t.explain}</div>
+      <div class="directlinks">
+        ${theoryLinks.map(l=>`
+          <a class="btn" target="_blank" rel="noopener" href="${l[1]}">
+            ${l[0]} ↗
+          </a>
+        `).join("")}
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label">Practice · 今天具体做什么</div>
+
+      <div class="tasklist">
+        ${taskHTML(
+          `视奏 · ${sightMin} min`,
+          `先看调号、拍号和起始音，预读30秒。使用明显低于最高演奏水平的陌生谱，慢速从头到尾；错音尽量不停拍。`,
+          sightLinks,0,x.id
+        )}
+
+        ${taskHTML(
+          `乐理 · ${theoryMin} min`,
+          x.drill,
+          theoryLinks,1,x.id
+        )}
+
+        ${taskHTML(
+          `音阶 / 技术 · ${techMin} min`,
+          x.tech,
+          techLinks,2,x.id
+        )}
+
+        ${taskHTML(
+          `Hanon / Czerny · ${etudeMin} min`,
+          `按照今天标出的编号练。动作放松、声音均匀；如果手腕或前臂紧张就降速。`,
+          etudeLinks,3,x.id
+        )}
+
+        ${taskHTML(
+          `作品 · ${pieceMin} min`,
+          x.piece,
+          pieceLinks,4,x.id
+        )}
+
+        ${taskHTML(
+          `结束 · 2 min`,
+          `写一句今天最卡的是：读音 / 节奏 / 左右手协调 / 指法 / 放松。下一次先处理它。`,
+          [],5,x.id
+        )}
+      </div>
+    </div>
+    ${(() => {
+      const sports=sportsForDate(entry.date);
+
+      if(!sports.length) return "";
+
+      return sports.map(s=>`
+        <div class="block">
+          <div class="label">
+            ${s.type==="skate" ? "Ice Skating" : (s.type==="swim" ? "Swimming" : "Tennis")}
+            · ${s.optional ? "Optional session" : "Scheduled session"}
+          </div>
+
+          <div class="sport-block ${s.type} ${s.optional ? "optional" : ""}">
+            <div class="sport-head">
+              <div>
+                <h3>${s.emoji} ${s.title}</h3>
+                <div class="meta">Sports Week ${s.trainingWeek} · ${s.summary} · 约 ${s.minutes} min</div>
+                <div class="callout" style="margin-top:10px">
+                  <b>本周学习重点：</b>${s.focus}
+                  ${s.goals ? `<br><b>本周目标：</b>${s.goals.join("；")}` : ""}
+                  ${s.goal ? `<br><b>本周目标：</b>${s.goal}` : ""}
+                </div>
+              </div>
+
+              <label class="sport-check">
+                <input
+                  class="sportDoneBox"
+                  data-sport="${s.type}"
+                  data-optional="${s.optional ? "1" : "0"}"
+                  type="checkbox"
+                  ${sportDone(s.type,entry.date) ? "checked" : ""}
+                  ${entry.status==="future" ? "disabled" : ""}
+                >
+                ${s.optional ? "今天选择了这项" : "完成"}
+              </label>
+            </div>
+
+            <ul class="sport-plan">
+              ${s.plan.map(x=>`<li>${x}</li>`).join("")}
+            </ul>
+
+            ${s.optional ? `
+              <div class="notice weekend">
+                周日可选运动最多一次：轻松游泳和第 4 次滑冰二选一。
+                如果本周恢复一般，两项都不做。
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `).join("");
+    })()}
+
+    <div class="block">
+      <div class="label">How rollover works</div>
+      <h3>自动顺延规则</h3>
+      <p>
+        只有当整天的“完成”被勾选时，这一课才算通过。
+        如果今天没有勾选，明天打开网页时同一节课会自动移动到明天；
+        明天原本的课程以及后面的课程全部向后顺延。
+        旧日期仍会显示为红色“未学习”，不会被覆盖。
+      </p>
+    </div>
+  `;
+
+  const big=document.getElementById("bigDone");
+
+  if(big && !isFuture){
+    big.addEventListener("change",()=>{
+      if(big.checked){
+        localStorage.setItem(completionKey(entry.date),x.id);
+      }else{
+        localStorage.removeItem(completionKey(entry.date));
+      }
+
+      selectedDate=entry.date;
+      renderAll(false);
+    });
+  }
+
+  detail.querySelectorAll(".taskcheck").forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      localStorage.setItem(
+        taskKey(x.id,cb.dataset.ti),
+        cb.checked ? "1" : "0"
+      );
+    });
+  });
+
+  detail.querySelectorAll(".sportDoneBox").forEach(box=>{
+    if(box.disabled) return;
+
+    box.addEventListener("change",()=>{
+      const type=box.dataset.sport;
+      const optional=box.dataset.optional==="1";
+
+      setSportDone(type,entry.date,box.checked,optional);
+
+      renderCalendar();
+      renderDetail();
+      updateProgress();
+    });
+  });
+}
+
+/* --------------------------
+   Progress
+-------------------------- */
+
+function completedLessonIds(){
+  const set=new Set();
+
+  schedule.forEach(e=>{
+    const id=completionOn(e.date);
+    if(id) set.add(id);
+  });
+
+  return set;
+}
+
+function updateProgress(){
+  const completed=completedLessonIds();
+  const actualStudyDays=schedule.filter(e=>e.status==="done").length;
+  const missedDays=schedule.filter(e=>e.status==="missed").length;
+
+  document.getElementById("progressText").textContent=
+    `${completed.size} / ${LESSONS.length} lessons · 学习 ${actualStudyDays} 天 · 未学习 ${missedDays} 天`;
+
+  document.getElementById("progressBar").style.width=
+    `${completed.size/LESSONS.length*100}%`;
+
+  const today=todayISO();
+
+  function updateSportProgress(type,progressTextId,progressBarId){
+    const eligible=schedule.filter(e=>{
+      const sport=sportsForDate(e.date).find(s=>s.type===type);
+      return sport && !sport.optional && compareISO(e.date,today)<=0;
+    });
+
+    const completed=eligible.filter(e=>sportDone(type,e.date)).length;
+
+    const optionalCompleted=schedule.filter(e=>{
+      const sport=sportsForDate(e.date).find(s=>s.type===type);
+      return sport && sport.optional && compareISO(e.date,today)<=0 && sportDone(type,e.date);
+    }).length;
+
+    document.getElementById(progressTextId).textContent=
+      `${completed} / ${eligible.length} fixed` +
+      (optionalCompleted ? ` · +${optionalCompleted} optional` : "");
+
+    document.getElementById(progressBarId).style.width=
+      eligible.length ? `${completed/eligible.length*100}%` : "0%";
+  }
+
+  updateSportProgress("skate","skateProgressText","skateProgressBar");
+  updateSportProgress("swim","swimProgressText","swimProgressBar");
+  updateSportProgress("tennis","tennisProgressText","tennisProgressBar");
+}
+
+/* --------------------------
+   Theory library
+-------------------------- */
+
+function renderLibrary(){
+  library.innerHTML="";
+
+  Object.values(TOPICS).forEach(t=>{
+    const a=document.createElement("article");
+    a.className="theory";
+
+    a.innerHTML=`
+      <h3>${t.title}</h3>
+      <p><b>是什么：</b>${t.what}</p>
+      <p><b>怎么理解：</b>${t.explain}</p>
+
+      <div class="directlinks">
+        <a class="btn" target="_blank" rel="noopener" href="${t.video}">视频 ▶</a>
+        <a class="btn" target="_blank" rel="noopener" href="${t.learn}">${t.learn_name} ↗</a>
+        <a class="btn" target="_blank" rel="noopener" href="${t.exercise}">${t.exercise_name} ↗</a>
+      </div>
+    `;
+
+    library.appendChild(a);
+  });
+}
+
+
+
+/* --------------------------
+   Daily draggable 24h schedule
+-------------------------- */
+const WEEKLY_TIME_PLAN={
+  1:[ // Monday · lesson between two research blocks
+    ["08:30","09:15","Wake + breakfast"],["09:30","12:15","Research"],["12:15","12:45","Lunch"],
+    ["12:45","13:15","Research institute → rink"],["13:15","13:45","Skating warm-up"],["13:45","14:45","Figure skating lesson"],
+    ["14:45","15:30","Rink → research institute"],["15:30","18:30","Research"],["18:30","19:15","Dinner"],
+    ["19:15","20:30","Light research / wrap-up"],["20:30","21:00","Research institute → home"],["21:15","22:15","Piano"],
+    ["22:15","00:15","Shower + free time"]
+  ],
+  2:[ // Tuesday · swim before going home
+    ["08:30","09:15","Wake + breakfast"],["09:30","12:30","Research"],["12:30","13:20","Lunch"],
+    ["13:20","16:20","Research"],["16:40","18:30","Light research"],["18:30","19:15","Dinner"],
+    ["19:15","20:15","Research / wrap-up"],["20:15","20:30","Go to pool"],["20:30","21:20","Swimming"],
+    ["21:20","22:00","Home + shower"],["22:10","22:50","Light piano"],["22:50","00:15","Free time"]
+  ],
+  3:[
+    ["08:30","09:15","Wake + breakfast"],["09:30","12:30","Research"],["12:30","13:20","Lunch"],
+    ["13:20","16:20","Research"],["16:40","18:15","Light research"],["18:15","19:00","Dinner"],
+    ["19:00","20:00","Piano"],["20:00","20:15","Prepare / go to rink"],["20:15","21:45","Figure skating"],
+    ["21:45","22:30","Home + shower"],["22:30","00:15","Free time"]
+  ],
+  4:[
+    ["08:30","09:15","Wake + breakfast"],["09:30","12:30","Research"],["12:30","13:20","Lunch"],
+    ["13:20","16:20","Research"],["16:45","18:30","Light research"],["18:30","19:15","Dinner"],
+    ["19:30","20:30","Piano"],["20:30","00:15","Recovery / free time"]
+  ],
+  5:[
+    ["08:30","09:15","Wake + breakfast"],["09:30","12:30","Research"],["12:30","13:20","Lunch"],
+    ["13:20","16:20","Research"],["16:40","18:15","Light research"],["18:15","19:00","Dinner"],
+    ["19:00","20:00","Piano"],["20:00","20:15","Prepare / go to rink"],["20:15","21:45","Figure skating"],
+    ["21:45","22:30","Home + shower"],["22:30","00:15","Free time"]
+  ],
+  6:[
+    ["07:15","07:45","Wake + breakfast"],["08:00","10:00","Tutoring"],["10:00","11:00","Home / rest"],
+    ["11:00","12:30","Research / light tasks"],["12:30","13:30","Lunch"],["14:00","15:30","Piano"],
+    ["15:45","17:15","Research / free time"],["17:15","18:30","Dinner + free time"],
+    ["19:00","20:15","Tennis"],["20:15","00:15","Free time / recovery"]
+  ],
+  0:[
+    ["08:00","09:00","Wake + breakfast / hiking prep"],["09:00","17:00","Hiking / Outdoor"],
+    ["17:00","18:30","Home + shower / rest"],["18:30","19:30","Dinner"],
+    ["20:00","21:30","Piano"],["21:30","00:15","Free time / recovery"]
+  ]
+};
+const TL_PX_PER_MIN=1, TL_SNAP=15, TL_MIN_BLOCK=15;
+let selectedTimeRow=null, timelineDrag=null;
+function timeLogKey(date){return `daily_time_log_v1_${date}`}
+function loadActualTimes(date){try{return JSON.parse(localStorage.getItem(timeLogKey(date))||"[]")}catch(e){return []}}
+function saveActualTimes(date,rows){localStorage.setItem(timeLogKey(date),JSON.stringify(rows))}
+function hmToMin(t){if(!t)return 0;const [h,m]=t.split(":").map(Number);return h*60+m}
+function minToHM(m){m=((Math.round(m)%1440)+1440)%1440;return `${String(Math.floor(m/60)).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`}
+function snapMin(m){return Math.max(0,Math.min(1440,Math.round(m/TL_SNAP)*TL_SNAP))}
+function minutesBetween(start,end){if(!start||!end)return 0;let a=hmToMin(start),b=hmToMin(end);if(b<a)b+=1440;return Math.max(0,b-a)}
+function fmtMinutes(m){const h=Math.floor(m/60),mm=m%60;return h?`${h}h${mm?` ${mm}m`:""}`:`${mm}m`}
+function activityGroup(name){const n=(name||"").toLowerCase();if(/research|论文|科研|coding|code|paper|analysis/.test(n))return "Research";if(/piano|钢琴/.test(n))return "Piano";if(/skating|skate|滑冰|swim|游泳|tennis|网球|hiking|hike|徒步|outdoor|户外|gym|运动|workout/.test(n))return "Exercise";if(/lunch|dinner|breakfast|meal|吃饭|午饭|晚饭|早餐/.test(n))return "Meals";if(/sleep|nap|rest|free|睡|午睡|休息|自由/.test(n))return "Rest / Free";return name&&name.trim()?"Other":""}
+function plannedForDate(date){return WEEKLY_TIME_PLAN[new Date(date+"T12:00:00").getDay()]||[]}
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function blockGeom(start,end){let a=hmToMin(start),b=hmToMin(end);if(b===0&&a>0)b=1440;if(b<a)b=1440;return {top:a*TL_PX_PER_MIN,height:Math.max(TL_MIN_BLOCK,(b-a)*TL_PX_PER_MIN)}}
+function renderTimeline(date){
+  const input=document.getElementById("timeDate");if(!input)return;input.value=date;
+  const hours=document.getElementById("timelineHours"),canvas=document.getElementById("timelineCanvas");
+  hours.innerHTML=Array.from({length:25},(_,h)=>`<div class="timeline-hour-label" style="top:${Math.min(h*60,1438)}px">${h===24?"24:00":String(h).padStart(2,"0")+":00"}</div>`).join("");
+  const plans=plannedForDate(date);let html=plans.map(p=>{const g=blockGeom(p[0],p[1]);return `<div class="timeline-plan" style="top:${g.top}px;height:${g.height}px"><b>${p[0]}–${p[1]}</b> · ${esc(p[2])}</div>`}).join("");
+  const rows=loadActualTimes(date);html+=rows.map((r,i)=>{const g=blockGeom(r.start,r.end);return `<div class="timeline-actual ${i===selectedTimeRow?'selected':''}" data-i="${i}" style="top:${g.top}px;height:${g.height}px"><span class="resize-handle top" data-resize="start"></span><div class="tl-time">${r.start}–${r.end}</div><div class="tl-name">${esc(r.activity||"New activity")}</div><span class="resize-handle bottom" data-resize="end"></span></div>`}).join("");
+  if(date===todayISO()){const now=new Date(),m=now.getHours()*60+now.getMinutes();html+=`<div class="timeline-now" style="top:${m}px"></div>`}
+  canvas.innerHTML=html;bindTimelinePointers(date);renderTimelineEditor(date);renderTimeSummary(date,rows);
+}
+function pointerMinute(e,canvas){const r=canvas.getBoundingClientRect();return snapMin((e.clientY-r.top)*(1440/r.height))}
+function bindTimelinePointers(date){
+ const canvas=document.getElementById("timelineCanvas");
+ canvas.querySelectorAll(".timeline-actual").forEach(el=>el.addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();const i=+el.dataset.i,rows=loadActualTimes(date),r=rows[i];selectedTimeRow=i;const mode=e.target.dataset.resize||"move";timelineDrag={mode,i,startY:pointerMinute(e,canvas),origStart:hmToMin(r.start),origEnd:(r.end==="00:00"?1440:hmToMin(r.end))};el.setPointerCapture(e.pointerId);renderTimelineEditor(date);el.classList.add("selected")}));
+ canvas.addEventListener("pointerdown",e=>{if(e.target!==canvas)return;const m=pointerMinute(e,canvas);timelineDrag={mode:"create",startY:m,current:m};selectedTimeRow=null;canvas.setPointerCapture(e.pointerId)});
+ canvas.addEventListener("pointermove",e=>{if(!timelineDrag)return;const m=pointerMinute(e,canvas),d=timelineDrag,rows=loadActualTimes(date);if(d.mode==="create"){d.current=m;return}let r=rows[d.i];if(!r)return;if(d.mode==="move"){let dur=d.origEnd-d.origStart,ns=Math.max(0,Math.min(1440-dur,d.origStart+(m-d.startY)));ns=snapMin(ns);r.start=minToHM(ns);r.end=ns+dur>=1440?"00:00":minToHM(ns+dur)}else if(d.mode==="start"){let ns=Math.min(d.origEnd-TL_MIN_BLOCK,m);r.start=minToHM(Math.max(0,ns))}else{let ne=Math.max(d.origStart+TL_MIN_BLOCK,m);ne=Math.min(1440,ne);r.end=ne===1440?"00:00":minToHM(ne)}saveActualTimes(date,rows);renderTimelineVisualOnly(date)});
+ const finish=e=>{if(!timelineDrag)return;const d=timelineDrag;timelineDrag=null;if(d.mode==="create"){const m=pointerMinute(e,canvas),a=Math.min(d.startY,m),b=Math.max(d.startY,m);if(b-a>=TL_MIN_BLOCK){const rows=loadActualTimes(date);rows.push({start:minToHM(a),end:b===1440?"00:00":minToHM(b),activity:""});selectedTimeRow=rows.length-1;saveActualTimes(date,rows)}}renderTimeline(date)};canvas.addEventListener("pointerup",finish);canvas.addEventListener("pointercancel",()=>{timelineDrag=null;renderTimeline(date)});
+ canvas.querySelectorAll(".timeline-actual").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();selectedTimeRow=+el.dataset.i;renderTimeline(date)}));
+}
+function renderTimelineVisualOnly(date){const rows=loadActualTimes(date),els=document.querySelectorAll(".timeline-actual");els.forEach(el=>{const r=rows[+el.dataset.i];if(!r)return;const g=blockGeom(r.start,r.end);el.style.top=g.top+"px";el.style.height=g.height+"px";el.querySelector(".tl-time").textContent=`${r.start}–${r.end}`});renderTimelineEditor(date);renderTimeSummary(date,rows)}
+function renderTimelineEditor(date){const box=document.getElementById("timelineEditor"),rows=loadActualTimes(date),r=selectedTimeRow==null?null:rows[selectedTimeRow];if(!r){box.innerHTML='<div class="timeline-editor-empty">选择一条实际记录，或直接在时间轴上拖动创建。</div>';return}box.innerHTML=`<input id="tlEditStart" type="time" value="${r.start}" aria-label="Start time"><input id="tlEditEnd" type="time" value="${r.end}" aria-label="End time"><input id="tlEditActivity" class="activity" type="text" value="${esc(r.activity)}" placeholder="What did you actually do?" aria-label="Activity"><button type="button" id="tlDelete" class="delete">Delete</button>`;const save=()=>{const v=loadActualTimes(date),x=v[selectedTimeRow];if(!x)return;x.start=document.getElementById("tlEditStart").value||x.start;x.end=document.getElementById("tlEditEnd").value||x.end;x.activity=document.getElementById("tlEditActivity").value.trim();saveActualTimes(date,v);renderTimeline(date)};box.querySelectorAll("input").forEach(x=>x.addEventListener("change",save));document.getElementById("tlEditActivity").addEventListener("blur",save);document.getElementById("tlDelete").addEventListener("click",()=>{const v=loadActualTimes(date);v.splice(selectedTimeRow,1);saveActualTimes(date,v);selectedTimeRow=null;renderTimeline(date)})}
+function renderTimeSummary(date,rows){const totals={},total=rows.reduce((sum,r)=>{const m=minutesBetween(r.start,r.end),g=activityGroup(r.activity);if(g)totals[g]=(totals[g]||0)+m;return sum+m},0),summary=document.getElementById("timeSummary");summary.innerHTML=total?`<span class="time-chip total">Logged ${fmtMinutes(total)}</span>`+Object.entries(totals).filter(x=>x[1]>0).map(([k,v])=>`<span class="time-chip">${k} ${fmtMinutes(v)}</span>`).join(""):`<span class="time-chip">No time logged yet</span>`;let plannedResearch=0;plannedForDate(date).forEach(x=>{if(activityGroup(x[2])==="Research")plannedResearch+=minutesBetween(x[0],x[1])});const actualResearch=totals.Research||0,diff=actualResearch-plannedResearch;document.getElementById("timeDiff").textContent=actualResearch||rows.length?`Research: planned ${fmtMinutes(plannedResearch)} → actual ${fmtMinutes(actualResearch)} (${diff>=0?"+":"−"}${fmtMinutes(Math.abs(diff))})`:""}
+function shiftISO(date,days){const d=new Date(date+"T12:00:00");d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
+function initTimeLog(){const input=document.getElementById("timeDate");if(!input)return;const start=selectedDate||todayISO();renderTimeline(start);input.addEventListener("change",()=>{selectedTimeRow=null;if(input.value)renderTimeline(input.value)});document.getElementById("timePrev").addEventListener("click",()=>{selectedTimeRow=null;renderTimeline(shiftISO(input.value,-1))});document.getElementById("timeNext").addEventListener("click",()=>{selectedTimeRow=null;renderTimeline(shiftISO(input.value,1))});document.getElementById("timeToday").addEventListener("click",()=>{selectedTimeRow=null;renderTimeline(todayISO())})}
+
+/* --------------------------
+   Initialize
+-------------------------- */
+
+function renderAll(scroll=false){
+  schedule=buildSchedule();
+
+  if(!selectedDate || !schedule.some(x=>x.date===selectedDate)){
+    const today=todayISO();
+    selectedDate=schedule.some(x=>x.date===today)
+      ? today
+      : schedule[0].date;
+  }
+
+  renderCalendar();
+  renderDetail();
+  updateProgress();
+
+  if(scroll){
+    detail.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+}
+
+migrateOldData();
+renderLibrary();
+renderAll();
+initTimeLog();
+</script>
+
+</body>
+</html>
