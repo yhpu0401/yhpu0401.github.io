@@ -586,16 +586,22 @@ footer{
 .timeline-hour-label:first-child{transform:none}.timeline-canvas{position:relative;height:1440px;touch-action:pan-y;background:repeating-linear-gradient(to bottom,transparent 0,transparent 59px,rgba(90,90,90,.34) 59px,rgba(90,90,90,.34) 60px);background-size:100% 60px}
 .timeline-canvas::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0,transparent 14px,rgba(90,90,90,.11) 14px,rgba(90,90,90,.11) 15px);opacity:.55}
 .timeline-plan,.timeline-actual{position:absolute;left:8px;right:8px;border-radius:8px;padding:4px 8px;overflow:hidden;font-size:12px;line-height:1.25;z-index:2}
-.timeline-plan{background:rgba(56,93,80,.07);border:1px dashed rgba(56,93,80,.22);color:rgba(23,23,23,.38);pointer-events:none}
+.timeline-plan{background:rgba(56,93,80,.09);border:1px dashed rgba(56,93,80,.30);color:rgba(23,23,23,.55);cursor:grab;z-index:3;touch-action:none}
+.timeline-plan.selected{outline:2px solid rgba(56,93,80,.55);outline-offset:2px;background:rgba(56,93,80,.14)}
+.timeline-plan .tl-time{font-size:10px;opacity:.8}.timeline-plan .tl-name{font-weight:650;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
 .timeline-actual{left:18%;right:8px;background:rgba(56,93,80,.58);border:1px solid rgba(56,93,80,.65);color:#fff;cursor:grab;z-index:4;touch-action:none}
 .timeline-actual.selected{outline:2px solid var(--accent);outline-offset:2px;background:rgba(56,93,80,.72)}
 .timeline-actual .tl-time{font-size:10px;opacity:.88}.timeline-actual .tl-name{font-weight:700;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
 .resize-handle{position:absolute;left:0;right:0;height:10px;cursor:ns-resize}.resize-handle.top{top:-2px}.resize-handle.bottom{bottom:-2px}
-.timeline-now{position:absolute;left:0;right:0;height:2px;background:#9a453b;z-index:5;pointer-events:none}.timeline-now::before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:#9a453b}
-.timeline-hint{font-size:12px;color:var(--muted);margin:8px 0 0}.timeline-editor{margin-top:14px;padding:14px;border-radius:14px;background:#f5f5f2;display:grid;grid-template-columns:105px 105px minmax(150px,1fr) auto;gap:8px;align-items:center}
+.timeline-hint{font-size:12px;color:var(--muted);margin:8px 0 0}.timeline-editor{display:none}
+.tl-name{cursor:text}
+.inline-name-input{width:calc(100% - 22px);min-width:0;border:0;border-radius:4px;padding:1px 4px;font:inherit;font-weight:700;color:inherit;background:rgba(255,255,255,.92);outline:2px solid rgba(56,93,80,.28)}
+.timeline-plan .inline-name-input{color:#222}.timeline-actual .inline-name-input{color:#222}
+.block-delete{position:absolute;right:3px;top:3px;width:18px;height:18px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.72);color:#777;font-size:14px;line-height:18px;text-align:center;cursor:pointer;opacity:0;z-index:8}
+.timeline-plan:hover .block-delete,.timeline-actual:hover .block-delete,.timeline-plan.selected .block-delete,.timeline-actual.selected .block-delete{opacity:1}
 .timeline-editor input{min-width:0;width:100%;background:#fff}.timeline-editor .delete{color:#8a4d45}.timeline-editor-empty{grid-column:1/-1;color:var(--muted);font-size:13px}
 .time-summary{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}.time-chip{font-size:12px;border-radius:999px;background:#f2f2ee;padding:6px 9px}.time-chip.total{background:var(--accent-soft);font-weight:700}.time-diff{margin-top:9px;font-size:12px;color:var(--muted)}
-@media(max-width:700px){.timeline-wrap{grid-template-columns:52px minmax(0,1fr)}.timeline-hour-label{right:7px}.timeline-editor{grid-template-columns:1fr 1fr}.timeline-editor .activity{grid-column:1/-1}.timeline-editor button{min-height:42px}}
+@media(max-width:700px){.timeline-wrap{grid-template-columns:52px minmax(0,1fr)}.timeline-hour-label{right:7px}.block-delete{opacity:.78}}
 
 </style>
 </head>
@@ -700,8 +706,7 @@ footer{
     <div id="timelineHours" class="timeline-hours"></div>
     <div id="timelineCanvas" class="timeline-canvas" aria-label="24 hour draggable schedule"></div>
   </div>
-  <div class="timeline-hint">在空白处按住并上下拖动即可加入一段时间；点击已有色块后，可在下面精确输入时间和活动名称。</div>
-  <div id="timelineEditor" class="timeline-editor"><div class="timeline-editor-empty">选择一条实际记录，或直接在时间轴上拖动创建。</div></div>
+    <div id="timelineEditor" class="timeline-editor" aria-hidden="true"></div>
   <div id="timeSummary" class="time-summary"></div><div id="timeDiff" class="time-diff"></div>
 </section>
 
@@ -1983,7 +1988,11 @@ const WEEKLY_TIME_PLAN={
   ]
 };
 const TL_PX_PER_MIN=1, TL_SNAP=15, TL_MIN_BLOCK=15;
-let selectedTimeRow=null, timelineDrag=null;
+let selectedTimeRow=null, selectedPlanRow=null, timelineDrag=null;
+function planKey(date){return `daily_plan_override_v1_${date}`}
+function loadPlannedTimes(date){try{const raw=localStorage.getItem(planKey(date));if(raw!==null)return JSON.parse(raw);return (WEEKLY_TIME_PLAN[new Date(date+"T12:00:00").getDay()]||[]).map(x=>({start:x[0],end:x[1],activity:x[2]}))}catch(e){return []}}
+function savePlannedTimes(date,rows){localStorage.setItem(planKey(date),JSON.stringify(rows))}
+function resetPlannedTimes(date){localStorage.removeItem(planKey(date));selectedPlanRow=null;renderTimeline(date)}
 function timeLogKey(date){return `daily_time_log_v1_${date}`}
 function loadActualTimes(date){try{return JSON.parse(localStorage.getItem(timeLogKey(date))||"[]")}catch(e){return []}}
 function saveActualTimes(date,rows){localStorage.setItem(timeLogKey(date),JSON.stringify(rows))}
@@ -1993,32 +2002,69 @@ function snapMin(m){return Math.max(0,Math.min(1440,Math.round(m/TL_SNAP)*TL_SNA
 function minutesBetween(start,end){if(!start||!end)return 0;let a=hmToMin(start),b=hmToMin(end);if(b<a)b+=1440;return Math.max(0,b-a)}
 function fmtMinutes(m){const h=Math.floor(m/60),mm=m%60;return h?`${h}h${mm?` ${mm}m`:""}`:`${mm}m`}
 function activityGroup(name){const n=(name||"").toLowerCase();if(/research|论文|科研|coding|code|paper|analysis/.test(n))return "Research";if(/piano|钢琴/.test(n))return "Piano";if(/skating|skate|滑冰|swim|游泳|tennis|网球|hiking|hike|徒步|outdoor|户外|gym|运动|workout/.test(n))return "Exercise";if(/lunch|dinner|breakfast|meal|吃饭|午饭|晚饭|早餐/.test(n))return "Meals";if(/sleep|nap|rest|free|睡|午睡|休息|自由/.test(n))return "Rest / Free";return name&&name.trim()?"Other":""}
-function plannedForDate(date){return WEEKLY_TIME_PLAN[new Date(date+"T12:00:00").getDay()]||[]}
+function plannedForDate(date){return loadPlannedTimes(date).map(x=>[x.start,x.end,x.activity])}
 function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
 function blockGeom(start,end){let a=hmToMin(start),b=hmToMin(end);if(b===0&&a>0)b=1440;if(b<a)b=1440;return {top:a*TL_PX_PER_MIN,height:Math.max(TL_MIN_BLOCK,(b-a)*TL_PX_PER_MIN)}}
 function renderTimeline(date){
   const input=document.getElementById("timeDate");if(!input)return;input.value=date;
   const hours=document.getElementById("timelineHours"),canvas=document.getElementById("timelineCanvas");
   hours.innerHTML=Array.from({length:25},(_,h)=>`<div class="timeline-hour-label" style="top:${Math.min(h*60,1438)}px">${h===24?"24:00":String(h).padStart(2,"0")+":00"}</div>`).join("");
-  const plans=plannedForDate(date);let html=plans.map(p=>{const g=blockGeom(p[0],p[1]);return `<div class="timeline-plan" style="top:${g.top}px;height:${g.height}px"><b>${p[0]}–${p[1]}</b> · ${esc(p[2])}</div>`}).join("");
-  const rows=loadActualTimes(date);html+=rows.map((r,i)=>{const g=blockGeom(r.start,r.end);return `<div class="timeline-actual ${i===selectedTimeRow?'selected':''}" data-i="${i}" style="top:${g.top}px;height:${g.height}px"><span class="resize-handle top" data-resize="start"></span><div class="tl-time">${r.start}–${r.end}</div><div class="tl-name">${esc(r.activity||"New activity")}</div><span class="resize-handle bottom" data-resize="end"></span></div>`}).join("");
-  if(date===todayISO()){const now=new Date(),m=now.getHours()*60+now.getMinutes();html+=`<div class="timeline-now" style="top:${m}px"></div>`}
+  const plans=loadPlannedTimes(date);let html=plans.map((p,i)=>{const g=blockGeom(p.start,p.end);return `<div class="timeline-plan ${i===selectedPlanRow?'selected':''}" data-pi="${i}" style="top:${g.top}px;height:${g.height}px"><span class="resize-handle top" data-resize="start"></span><div class="tl-time">${p.start}–${p.end}</div><div class="tl-name" title="Double-click to rename">${esc(p.activity||"Planned activity")}</div><button type="button" class="block-delete" aria-label="Delete planned activity" title="Delete">×</button><span class="resize-handle bottom" data-resize="end"></span></div>`}).join("");
+  const rows=loadActualTimes(date);html+=rows.map((r,i)=>{const g=blockGeom(r.start,r.end);return `<div class="timeline-actual ${i===selectedTimeRow?'selected':''}" data-i="${i}" style="top:${g.top}px;height:${g.height}px"><span class="resize-handle top" data-resize="start"></span><div class="tl-time">${r.start}–${r.end}</div><div class="tl-name" title="Double-click to rename">${esc(r.activity||"New activity")}</div><button type="button" class="block-delete" aria-label="Delete actual activity" title="Delete">×</button><span class="resize-handle bottom" data-resize="end"></span></div>`}).join("");
   canvas.innerHTML=html;bindTimelinePointers(date);renderTimelineEditor(date);renderTimeSummary(date,rows);
 }
 function pointerMinute(e,canvas){const r=canvas.getBoundingClientRect();return snapMin((e.clientY-r.top)*(1440/r.height))}
 function bindTimelinePointers(date){
  const canvas=document.getElementById("timelineCanvas");
- canvas.querySelectorAll(".timeline-actual").forEach(el=>el.addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();const i=+el.dataset.i,rows=loadActualTimes(date),r=rows[i];selectedTimeRow=i;const mode=e.target.dataset.resize||"move";timelineDrag={mode,i,startY:pointerMinute(e,canvas),origStart:hmToMin(r.start),origEnd:(r.end==="00:00"?1440:hmToMin(r.end))};el.setPointerCapture(e.pointerId);renderTimelineEditor(date);el.classList.add("selected")}));
- canvas.addEventListener("pointerdown",e=>{if(e.target!==canvas)return;const m=pointerMinute(e,canvas);timelineDrag={mode:"create",startY:m,current:m};selectedTimeRow=null;canvas.setPointerCapture(e.pointerId)});
- canvas.addEventListener("pointermove",e=>{if(!timelineDrag)return;const m=pointerMinute(e,canvas),d=timelineDrag,rows=loadActualTimes(date);if(d.mode==="create"){d.current=m;return}let r=rows[d.i];if(!r)return;if(d.mode==="move"){let dur=d.origEnd-d.origStart,ns=Math.max(0,Math.min(1440-dur,d.origStart+(m-d.startY)));ns=snapMin(ns);r.start=minToHM(ns);r.end=ns+dur>=1440?"00:00":minToHM(ns+dur)}else if(d.mode==="start"){let ns=Math.min(d.origEnd-TL_MIN_BLOCK,m);r.start=minToHM(Math.max(0,ns))}else{let ne=Math.max(d.origStart+TL_MIN_BLOCK,m);ne=Math.min(1440,ne);r.end=ne===1440?"00:00":minToHM(ne)}saveActualTimes(date,rows);renderTimelineVisualOnly(date)});
- const finish=e=>{if(!timelineDrag)return;const d=timelineDrag;timelineDrag=null;if(d.mode==="create"){const m=pointerMinute(e,canvas),a=Math.min(d.startY,m),b=Math.max(d.startY,m);if(b-a>=TL_MIN_BLOCK){const rows=loadActualTimes(date);rows.push({start:minToHM(a),end:b===1440?"00:00":minToHM(b),activity:""});selectedTimeRow=rows.length-1;saveActualTimes(date,rows)}}renderTimeline(date)};canvas.addEventListener("pointerup",finish);canvas.addEventListener("pointercancel",()=>{timelineDrag=null;renderTimeline(date)});
- canvas.querySelectorAll(".timeline-actual").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();selectedTimeRow=+el.dataset.i;renderTimeline(date)}));
+ const beginDrag=(el,e,kind)=>{
+   if(e.target.closest(".block-delete")||e.target.closest(".inline-name-input")||e.detail>1)return;
+   e.preventDefault();e.stopPropagation();
+   const i=+(kind==="plan"?el.dataset.pi:el.dataset.i),rows=kind==="plan"?loadPlannedTimes(date):loadActualTimes(date),r=rows[i];
+   if(!r)return;
+   if(kind==="plan"){selectedPlanRow=i;selectedTimeRow=null}else{selectedTimeRow=i;selectedPlanRow=null}
+   const mode=e.target.dataset.resize||"move";
+   timelineDrag={kind,mode,i,startY:pointerMinute(e,canvas),origStart:hmToMin(r.start),origEnd:(r.end==="00:00"?1440:hmToMin(r.end))};
+   el.setPointerCapture(e.pointerId);el.classList.add("selected");
+ };
+ canvas.querySelectorAll(".timeline-plan").forEach(el=>{
+   el.addEventListener("pointerdown",e=>beginDrag(el,e,"plan"));
+   el.querySelector(".tl-name").addEventListener("dblclick",e=>{e.preventDefault();e.stopPropagation();startInlineRename(el,date,"plan",+el.dataset.pi)});
+   el.querySelector(".block-delete").addEventListener("click",e=>{e.stopPropagation();const rows=loadPlannedTimes(date);rows.splice(+el.dataset.pi,1);savePlannedTimes(date,rows);selectedPlanRow=null;renderTimeline(date)});
+ });
+ canvas.querySelectorAll(".timeline-actual").forEach(el=>{
+   el.addEventListener("pointerdown",e=>beginDrag(el,e,"actual"));
+   el.querySelector(".tl-name").addEventListener("dblclick",e=>{e.preventDefault();e.stopPropagation();startInlineRename(el,date,"actual",+el.dataset.i)});
+   el.querySelector(".block-delete").addEventListener("click",e=>{e.stopPropagation();const rows=loadActualTimes(date);rows.splice(+el.dataset.i,1);saveActualTimes(date,rows);selectedTimeRow=null;renderTimeline(date)});
+ });
+ canvas.addEventListener("pointerdown",e=>{if(e.target!==canvas)return;const m=pointerMinute(e,canvas);timelineDrag={kind:"actual",mode:"create",startY:m,current:m};selectedTimeRow=null;selectedPlanRow=null;canvas.setPointerCapture(e.pointerId)});
+ canvas.addEventListener("pointermove",e=>{if(!timelineDrag)return;const m=pointerMinute(e,canvas),d=timelineDrag;if(d.mode==="create"){d.current=m;return}const rows=d.kind==="plan"?loadPlannedTimes(date):loadActualTimes(date);let r=rows[d.i];if(!r)return;if(d.mode==="move"){let dur=d.origEnd-d.origStart,ns=Math.max(0,Math.min(1440-dur,d.origStart+(m-d.startY)));ns=snapMin(ns);r.start=minToHM(ns);r.end=ns+dur>=1440?"00:00":minToHM(ns+dur)}else if(d.mode==="start"){let ns=Math.min(d.origEnd-TL_MIN_BLOCK,m);r.start=minToHM(Math.max(0,ns))}else{let ne=Math.max(d.origStart+TL_MIN_BLOCK,m);ne=Math.min(1440,ne);r.end=ne===1440?"00:00":minToHM(ne)}if(d.kind==="plan")savePlannedTimes(date,rows);else saveActualTimes(date,rows);renderTimelineVisualOnly(date)});
+ const finish=e=>{if(!timelineDrag)return;const d=timelineDrag;timelineDrag=null;if(d.mode==="create"){const m=pointerMinute(e,canvas),a=Math.min(d.startY,m),b=Math.max(d.startY,m);if(b-a>=TL_MIN_BLOCK){const rows=loadActualTimes(date);rows.push({start:minToHM(a),end:b===1440?"00:00":minToHM(b),activity:"New activity"});selectedTimeRow=rows.length-1;selectedPlanRow=null;saveActualTimes(date,rows)}}renderTimeline(date)};
+ canvas.addEventListener("pointerup",finish);canvas.addEventListener("pointercancel",()=>{timelineDrag=null;renderTimeline(date)});
 }
-function renderTimelineVisualOnly(date){const rows=loadActualTimes(date),els=document.querySelectorAll(".timeline-actual");els.forEach(el=>{const r=rows[+el.dataset.i];if(!r)return;const g=blockGeom(r.start,r.end);el.style.top=g.top+"px";el.style.height=g.height+"px";el.querySelector(".tl-time").textContent=`${r.start}–${r.end}`});renderTimelineEditor(date);renderTimeSummary(date,rows)}
-function renderTimelineEditor(date){const box=document.getElementById("timelineEditor"),rows=loadActualTimes(date),r=selectedTimeRow==null?null:rows[selectedTimeRow];if(!r){box.innerHTML='<div class="timeline-editor-empty">选择一条实际记录，或直接在时间轴上拖动创建。</div>';return}box.innerHTML=`<input id="tlEditStart" type="time" value="${r.start}" aria-label="Start time"><input id="tlEditEnd" type="time" value="${r.end}" aria-label="End time"><input id="tlEditActivity" class="activity" type="text" value="${esc(r.activity)}" placeholder="What did you actually do?" aria-label="Activity"><button type="button" id="tlDelete" class="delete">Delete</button>`;const save=()=>{const v=loadActualTimes(date),x=v[selectedTimeRow];if(!x)return;x.start=document.getElementById("tlEditStart").value||x.start;x.end=document.getElementById("tlEditEnd").value||x.end;x.activity=document.getElementById("tlEditActivity").value.trim();saveActualTimes(date,v);renderTimeline(date)};box.querySelectorAll("input").forEach(x=>x.addEventListener("change",save));document.getElementById("tlEditActivity").addEventListener("blur",save);document.getElementById("tlDelete").addEventListener("click",()=>{const v=loadActualTimes(date);v.splice(selectedTimeRow,1);saveActualTimes(date,v);selectedTimeRow=null;renderTimeline(date)})}
+function renderTimelineVisualOnly(date){
+ const prows=loadPlannedTimes(date);document.querySelectorAll(".timeline-plan").forEach(el=>{const r=prows[+el.dataset.pi];if(!r)return;const g=blockGeom(r.start,r.end);el.style.top=g.top+"px";el.style.height=g.height+"px";el.querySelector(".tl-time").textContent=`${r.start}–${r.end}`});
+ const rows=loadActualTimes(date);document.querySelectorAll(".timeline-actual").forEach(el=>{const r=rows[+el.dataset.i];if(!r)return;const g=blockGeom(r.start,r.end);el.style.top=g.top+"px";el.style.height=g.height+"px";el.querySelector(".tl-time").textContent=`${r.start}–${r.end}`});renderTimelineEditor(date);renderTimeSummary(date,rows)
+}
+function renderTimelineEditor(date){
+ const box=document.getElementById("timelineEditor");
+ if(box) box.innerHTML="";
+}
+function startInlineRename(el,date,kind,idx){
+ const nameEl=el.querySelector(".tl-name");if(!nameEl||nameEl.querySelector("input"))return;
+ const rows=kind==="plan"?loadPlannedTimes(date):loadActualTimes(date),r=rows[idx];if(!r)return;
+ const old=r.activity||"";
+ const input=document.createElement("input");input.type="text";input.className="inline-name-input";input.value=old;input.setAttribute("aria-label","Activity name");
+ nameEl.textContent="";nameEl.appendChild(input);input.focus();input.select();
+ let finished=false;
+ const finish=(save=true)=>{if(finished)return;finished=true;const current=kind==="plan"?loadPlannedTimes(date):loadActualTimes(date),x=current[idx];if(x&&save){x.activity=input.value.trim()||old;if(kind==="plan")savePlannedTimes(date,current);else saveActualTimes(date,current)}renderTimeline(date)};
+ input.addEventListener("pointerdown",e=>e.stopPropagation());
+ input.addEventListener("dblclick",e=>e.stopPropagation());
+ input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();finish(true)}else if(e.key==="Escape"){e.preventDefault();finish(false)}});
+ input.addEventListener("blur",()=>finish(true));
+}
 function renderTimeSummary(date,rows){const totals={},total=rows.reduce((sum,r)=>{const m=minutesBetween(r.start,r.end),g=activityGroup(r.activity);if(g)totals[g]=(totals[g]||0)+m;return sum+m},0),summary=document.getElementById("timeSummary");summary.innerHTML=total?`<span class="time-chip total">Logged ${fmtMinutes(total)}</span>`+Object.entries(totals).filter(x=>x[1]>0).map(([k,v])=>`<span class="time-chip">${k} ${fmtMinutes(v)}</span>`).join(""):`<span class="time-chip">No time logged yet</span>`;let plannedResearch=0;plannedForDate(date).forEach(x=>{if(activityGroup(x[2])==="Research")plannedResearch+=minutesBetween(x[0],x[1])});const actualResearch=totals.Research||0,diff=actualResearch-plannedResearch;document.getElementById("timeDiff").textContent=actualResearch||rows.length?`Research: planned ${fmtMinutes(plannedResearch)} → actual ${fmtMinutes(actualResearch)} (${diff>=0?"+":"−"}${fmtMinutes(Math.abs(diff))})`:""}
 function shiftISO(date,days){const d=new Date(date+"T12:00:00");d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
-function initTimeLog(){const input=document.getElementById("timeDate");if(!input)return;const start=selectedDate||todayISO();renderTimeline(start);input.addEventListener("change",()=>{selectedTimeRow=null;if(input.value)renderTimeline(input.value)});document.getElementById("timePrev").addEventListener("click",()=>{selectedTimeRow=null;renderTimeline(shiftISO(input.value,-1))});document.getElementById("timeNext").addEventListener("click",()=>{selectedTimeRow=null;renderTimeline(shiftISO(input.value,1))});document.getElementById("timeToday").addEventListener("click",()=>{selectedTimeRow=null;renderTimeline(todayISO())})}
+function initTimeLog(){const input=document.getElementById("timeDate");if(!input)return;const start=selectedDate||todayISO();renderTimeline(start);input.addEventListener("change",()=>{selectedTimeRow=null;selectedPlanRow=null;if(input.value)renderTimeline(input.value)});document.getElementById("timePrev").addEventListener("click",()=>{selectedTimeRow=null;selectedPlanRow=null;renderTimeline(shiftISO(input.value,-1))});document.getElementById("timeNext").addEventListener("click",()=>{selectedTimeRow=null;selectedPlanRow=null;renderTimeline(shiftISO(input.value,1))});document.getElementById("timeToday").addEventListener("click",()=>{selectedTimeRow=null;selectedPlanRow=null;renderTimeline(todayISO())});const rp=document.getElementById("resetPlan");if(rp)rp.addEventListener("click",()=>resetPlannedTimes(input.value))}
 
 /* --------------------------
    Initialize
